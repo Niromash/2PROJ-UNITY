@@ -1,4 +1,0 @@
-repository "2PROJ@mulet2proj@cloud"
-  path "/"
-    br "/main"
-    co "/main"

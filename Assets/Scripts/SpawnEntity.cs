@@ -12,7 +12,7 @@ public class SpawnEntity : MonoBehaviour
     public void Click()
     {
         GameObject spawnedObject = Instantiate(spawnObjectPrefab, spawnPosition, Quaternion.identity);
-        
+        spawnedObject.SetActive(true);
         gameManager.AddEntity(spawnedObject);
     }
 }

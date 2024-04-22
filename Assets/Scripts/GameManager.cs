@@ -18,13 +18,14 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         StartCoroutine(MoveEntities());
-        
+
         // Move the camera using directional keys
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
         Camera.main.transform.position += new Vector3(horizontal, vertical, 0) * Time.deltaTime * 10;
         // Move the background with the camera
-        GameObject.Find("BackgroundCanvas").transform.position += new Vector3(horizontal, vertical, 0) * Time.deltaTime * 10;
+        GameObject.Find("BackgroundCanvas").transform.position +=
+            new Vector3(horizontal, vertical, 0) * Time.deltaTime * 10;
     }
 
     private IEnumerator MoveEntities()
@@ -33,9 +34,10 @@ public class GameManager : MonoBehaviour
         {
             MoveEntity(entity);
         }
+
         yield return new WaitForSeconds(1);
     }
-    
+
     public IEnumerator CreateEntity()
     {
         // Get the gameObject from the Scene with name "perso1test" in scene "SampleScene"
@@ -62,7 +64,7 @@ public class GameManager : MonoBehaviour
     {
         entities.Add(go);
     }
-    
+
     public Entity GetEntity(GameObject go)
     {
         foreach (Entity entity in entities)
@@ -75,7 +77,7 @@ public class GameManager : MonoBehaviour
 
         return null;
     }
-    
+
     private void MoveEntity(Entity entity)
     {
         if (entity == null)
@@ -86,17 +88,14 @@ public class GameManager : MonoBehaviour
         // Move the entity
         Rigidbody2D rb = entity.GetGameObject().GetComponent<Rigidbody2D>();
         Vector3 velocity = Vector3.zero;
-        if (rb.velocity.x < 5.0f)
-        {
-            float horizontalMovement = 5.0f;
-            if (entity.GetSide() == Side.Enemy)
-            {
-                horizontalMovement *= -1;
-            }
 
-            Vector3 targetVelocity = new Vector2(horizontalMovement, rb.velocity.y);
-            rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref velocity, 0.05f);
+        float horizontalMovement = 5.0f;
+        if (entity.GetSide() == Side.Enemy)
+        {
+            horizontalMovement *= -1;
         }
+
+        Vector3 targetVelocity = new Vector2(horizontalMovement, rb.velocity.y);
+        rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref velocity, 0.05f);
     }
-    
 }

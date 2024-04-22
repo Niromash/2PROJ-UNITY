@@ -10,22 +10,30 @@ public class SpawnEntity : MonoBehaviour
     public Vector2 spawnPosition;
 
 
-    public void InfantrySpawn()
+    public void InfantryPlayerSpawn()
     {
-        Debug.Log("Infantry Spawn");
-        Spawn(infantryPrefab);
+        Spawn(infantryPrefab, Side.Player);
     }
 
-    public void AntiArmorSpawn()
+    public void InfantryEnemySpawn()
     {
-        Debug.Log("AntiArmor Spawn");
-        Spawn(antiArmorPrefab);
+        Spawn(infantryPrefab, Side.Enemy);
     }
 
-    private void Spawn(GameObject prefab)
+    public void AntiArmorPlayerSpawn()
+    {
+        Spawn(antiArmorPrefab, Side.Player);
+    }
+    
+    public void AntiArmorEnemySpawn()
+    {
+        Spawn(antiArmorPrefab, Side.Enemy);
+    }
+
+    private void Spawn(GameObject prefab, Side side)
     {
         GameObject spawnedObject = Instantiate(prefab, spawnPosition, Quaternion.identity);
         spawnedObject.SetActive(true);
-        gameManager.AddEntity(spawnedObject);
+        gameManager.AddEntity(new Entity(spawnedObject, side));
     }
 }

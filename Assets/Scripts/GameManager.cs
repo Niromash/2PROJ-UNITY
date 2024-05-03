@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
         while (true)
         {
             // Create a new entity
-            GameObject baseEntity = Instantiate(prefab, new Vector3(5.5f, -0.6f, 0), Quaternion.identity);
+            GameObject baseEntity = Instantiate(prefab, new Vector3(25, -0.6f, 0), Quaternion.identity);
             baseEntity.SetActive(true);
             AddEntity(new Entity(baseEntity, Side.Enemy));
 
@@ -89,7 +89,7 @@ public class GameManager : MonoBehaviour
         Rigidbody2D rb = entity.GetGameObject().GetComponent<Rigidbody2D>();
         Vector3 velocity = Vector3.zero;
 
-        float horizontalMovement = 5.0f;
+        float horizontalMovement = 10.0f;
         if (entity.GetSide() == Side.Enemy)
         {
             horizontalMovement *= -1;

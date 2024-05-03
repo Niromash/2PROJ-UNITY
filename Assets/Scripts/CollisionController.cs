@@ -14,6 +14,22 @@ public class CollisionController : MonoBehaviour
         
         if (collidedSource == null || collidedTarget == null)
         {
+            if (collidedSource == null)
+            {
+                Turret turret = gameManager.GetTurret(collision.gameObject);
+                if (turret == null)
+                {
+                    return;
+                }
+                // la target à tapé un turret
+                Debug.Log(turret.GetSide());
+            }
+        }
+
+        
+        
+        if (collidedSource == null || collidedTarget == null)
+        {
             return;
         }
         

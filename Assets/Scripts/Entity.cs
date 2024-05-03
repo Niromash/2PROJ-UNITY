@@ -52,7 +52,7 @@ public class Entity
     public void TakeDamage(Entity entity)
     {
         healthAmount -= 10;
-        healthBar.transform.localScale = new Vector3(healthAmount / 100, 0.15f, 2);
+        healthBar.transform.localScale = new Vector3(healthAmount / 50, 0.2f, 1);
         Debug.Log("Health: " + healthAmount);
     }
 }

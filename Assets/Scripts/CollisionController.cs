@@ -17,14 +17,35 @@ public class CollisionController : MonoBehaviour
             return;
         }
         
+        collidedSource.SetCollide(collidedTarget);
+        collidedTarget.SetCollide(collidedSource);
+        
         if (collidedSource.GetSide().Equals(collidedTarget.GetSide()))
         {
             Debug.Log("Same side, no damage taken");
             return;
         }
         
-        // collidedSource.TakeDamage(collidedTarget);
+        if (collidedSource.GetHealth() > 0)
+        {
+            StartCoroutine(DamageOverTime(collidedSource, collidedTarget));
+        }
         
-        Debug.Log("Collision detected, damage taken");
+        
+    }
+    
+    IEnumerator DamageOverTime(Entity source, Entity target)
+    {
+        while (source.GetHealth() > 0 && target.GetHealth() > 0)
+        {
+            target.TakeDamage(source);
+            yield return new WaitForSeconds(1);
+        }
+        
+        if (source.GetHealth() <= 0)
+        {
+            gameManager.RemoveEntity(source);
+            Destroy(source.GetGameObject());
+        }
     }
 }

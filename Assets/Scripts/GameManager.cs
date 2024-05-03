@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     {
         StartCoroutine(MoveEntities());
 
+        // Move the camera using directional keys
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
@@ -93,9 +94,12 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
-
+        
+        // tries entities en fonction des collisions avec les adversaires
+        
+        
         // Move the entity
-        Rigidbody2D rb = entity.GetGameObject().GetComponent<Rigidbody2D>();
+        Rigidbody2D rb = entity.GetRigidbody();
         Vector3 velocity = Vector3.zero;
 
         float horizontalMovement = 10.0f;
@@ -107,4 +111,11 @@ public class GameManager : MonoBehaviour
         Vector3 targetVelocity = new Vector2(horizontalMovement, rb.velocity.y);
         rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref velocity, 0.05f);
     }
+    
+    public void RemoveEntity(Entity entity)
+    {
+        entities.Remove(entity);
+        Destroy(entity.GetGameObject());
+    }
+    
 }

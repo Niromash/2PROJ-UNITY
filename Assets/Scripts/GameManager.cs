@@ -19,13 +19,22 @@ public class GameManager : MonoBehaviour
     {
         StartCoroutine(MoveEntities());
 
-        // Move the camera using directional keys
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
-        Camera.main.transform.position += new Vector3(horizontal, vertical, 0) * Time.deltaTime * 10;
-        // Move the background with the camera
-        GameObject.Find("BackgroundCanvas").transform.position +=
-            new Vector3(horizontal, vertical, 0) * Time.deltaTime * 10;
+
+        Vector3 newCameraPosition = Camera.main.transform.position + new Vector3(horizontal, vertical, 0) * Time.deltaTime * 10;
+
+        newCameraPosition.y = Mathf.Clamp(newCameraPosition.y, 0.97f, 1.90f);
+        newCameraPosition.x = Mathf.Clamp(newCameraPosition.x, -1.62f, 23.09f);
+
+        Camera.main.transform.position = newCameraPosition;
+
+        Vector3 newBackgroundPosition = GameObject.Find("BackgroundCanvas").transform.position + new Vector3(horizontal, vertical, 0) * Time.deltaTime * 10;
+
+        newBackgroundPosition.y = Mathf.Clamp(newBackgroundPosition.y, 0.97f, 1.90f);
+        newBackgroundPosition.x = Mathf.Clamp(newBackgroundPosition.x, -1.62f, 23.09f);
+
+        GameObject.Find("BackgroundCanvas").transform.position = newBackgroundPosition;
     }
 
     private IEnumerator MoveEntities()

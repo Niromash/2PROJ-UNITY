@@ -56,12 +56,33 @@ public class Entity
     {
         return collidedEntity != null;
     }
+    
+    public void UpdateHealthBar()
+    {
+        // Get the current health of the entity
+        float currentHealth = stats.Health;
+
+        // Calculate the health percentage
+        float healthPercentage = currentHealth / 50f; // Assuming 100 is the maximum health
+
+        // Get the health bar's current local scale
+        Vector3 healthBarScale = healthBar.transform.localScale;
+
+        // Set the x value of the health bar's local scale to the health percentage
+        healthBarScale.x = healthPercentage;
+
+        // Apply the new local scale to the health bar
+        healthBar.transform.localScale = healthBarScale;
+    }
+    
     public void TakeDamage(Entity entity)
     {
         Debug.Log("healthAmount: " + entity.GetStats().Health);
         entity.GetStats().Health -= entity.GetStats().DamagePerSecond;
-        healthBar.transform.localScale = new Vector3(GetStats().Health / 50, 0.2f, 1);
-    }  
+
+        // Update the health bar
+        UpdateHealthBar();
+    }
     
     public void Kill()
     {

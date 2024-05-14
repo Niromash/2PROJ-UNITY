@@ -32,7 +32,7 @@ public class AntiArmorStats : CharacterStats
     public AntiArmorStats()
     {
         Health = 200f;
-        DamagePerSecond = 10f;
+        DamagePerSecond = 30f;
         AttackSpeed = 70f;
         BlockPerSecondMovementSpeed = 60f;
         Range = 100f;

@@ -8,6 +8,21 @@ public class GameManager : MonoBehaviour
     private List<Entity> entities;
     private List<Turret> turrets;
 
+    private int gold = 0;
+    private int experience = 0;
+
+    public int Gold
+    {
+        get { return gold; }
+        set { gold = value; }
+    }
+
+    public int Experience
+    {
+        get { return experience; }
+        set { experience = value;  }
+    }
+
     void Start()
     {
         entities = new List<Entity>();
@@ -24,6 +39,8 @@ public class GameManager : MonoBehaviour
 
         // Async task to create a new entity
         StartCoroutine(CreateEntity());
+
+        StartCoroutine(GainGoldRoutine());
     }
 
     void Update()
@@ -59,6 +76,27 @@ public class GameManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(1);
+    }
+
+    private IEnumerator GainGoldRoutine()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(3);
+            AddGold(10);
+        }
+    }
+
+    public void AddGold(int amount)
+    {
+        gold += amount;
+        Debug.Log("Gain de" + amount + "gold");
+    }
+
+    public void AddExperience(int amount)
+    {
+        experience += amount;
+        Debug.Log("Gain de " + amount + " d'experience!");
     }
 
     public IEnumerator CreateEntity()

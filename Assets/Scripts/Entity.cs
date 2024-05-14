@@ -1,21 +1,25 @@
-﻿using UnityEngine;
+﻿using Unity.VisualScripting.Antlr3.Runtime.Misc;
+using UnityEngine;
 
 public class Entity
 {
     private GameObject gameObject;
     private GameObject healthBar;
     private Side side;
-    private float healthAmount;
     private Rigidbody2D rb;
     private Entity collidedEntity;
+    private GameManager gameManager;
+    
+    private CharacterStats stats;
 
-    public Entity(GameObject go, Side side)
+    public Entity(GameObject go, Side side, CharacterStats stats)
     {
         rb = go.GetComponent<Rigidbody2D>();
         
+        this.stats = stats;
+        
         gameObject = go;
         
-        healthAmount = 100;
         this.side = side;
         
         healthBar = gameObject.transform.GetChild(0).gameObject;
@@ -30,9 +34,10 @@ public class Entity
     {
         return side;
     }
-    public float GetHealth()
+    
+    public CharacterStats GetStats()
     {
-        return healthAmount;
+        return stats;
     }
     
     public Rigidbody2D GetRigidbody()
@@ -51,8 +56,14 @@ public class Entity
     }
     public void TakeDamage(Entity entity)
     {
-        healthAmount -= 10;
-        healthBar.transform.localScale = new Vector3(healthAmount / 50, 0.2f, 1);
-        Debug.Log("Health: " + healthAmount);
+        Debug.Log("healthAmount: " + entity.GetStats().Health);
+        entity.GetStats().Health -= entity.GetStats().DamagePerSecond;
+        healthBar.transform.localScale = new Vector3(GetStats().Health / 50, 0.2f, 1);
+    }  
+    
+    public void Kill()
+    {
+        gameManager.RemoveEntity(this);
+        Object.Destroy(this.GetGameObject());
     }
 }

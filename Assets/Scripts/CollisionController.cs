@@ -42,7 +42,7 @@ public class CollisionController : MonoBehaviour
             return;
         }
         
-        if (collidedSource.GetHealth() > 0)
+        if (collidedSource.GetStats().Health > 0 && collidedTarget.GetStats().Health > 0)
         {
             StartCoroutine(DamageOverTime(collidedSource, collidedTarget));
         }
@@ -52,16 +52,19 @@ public class CollisionController : MonoBehaviour
     
     IEnumerator DamageOverTime(Entity source, Entity target)
     {
-        while (source.GetHealth() > 0 && target.GetHealth() > 0)
+        while (source.GetStats().Health > 0 && target.GetStats().Health > 0)
         {
             target.TakeDamage(source);
             yield return new WaitForSeconds(1);
         }
         
-        if (source.GetHealth() <= 0)
+        if (source.GetStats().Health <= 0)
+        { 
+            source.Kill();   
+        }
+        if (target.GetStats().Health <= 0)
         {
-            gameManager.RemoveEntity(source);
-            Destroy(source.GetGameObject());
+            target.Kill();
         }
     }
 }

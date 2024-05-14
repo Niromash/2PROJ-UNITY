@@ -34,6 +34,7 @@ public class SpawnEntity : MonoBehaviour
     {
         GameObject spawnedObject = Instantiate(prefab, spawnPosition, Quaternion.identity);
         spawnedObject.SetActive(true);
+        
         gameManager.AddEntity(new Entity(spawnedObject, side));
     }
 }

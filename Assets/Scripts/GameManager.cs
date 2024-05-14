@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
             // Create a new entity
             GameObject baseEntity = Instantiate(prefab, new Vector3(25, -0.6f, 0), Quaternion.identity);
             baseEntity.SetActive(true);
-            AddEntity(new Entity(baseEntity, Side.Enemy));
+            AddEntity(new Entity(baseEntity, Side.Enemy, new InfantryStats()));
 
             // Wait for 10 seconds before creating another entity
             yield return new WaitForSeconds(10);

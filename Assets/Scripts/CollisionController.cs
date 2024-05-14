@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,8 +26,6 @@ public class CollisionController : MonoBehaviour
                 Debug.Log(turret.GetSide());
             }
         }
-
-        
         
         if (collidedSource == null || collidedTarget == null)
         {
@@ -38,7 +37,7 @@ public class CollisionController : MonoBehaviour
         
         if (collidedSource.GetSide().Equals(collidedTarget.GetSide()))
         {
-            Debug.Log("Same side, no damage taken");
+            // Debug.Log("Same side, no damage taken");
             return;
         }
         
@@ -46,10 +45,8 @@ public class CollisionController : MonoBehaviour
         {
             StartCoroutine(DamageOverTime(collidedSource, collidedTarget));
         }
-        
-        
     }
-    
+
     IEnumerator DamageOverTime(Entity source, Entity target)
     {
         while (source.GetHealth() > 0 && target.GetHealth() > 0)
@@ -60,8 +57,18 @@ public class CollisionController : MonoBehaviour
         
         if (source.GetHealth() <= 0)
         {
+            source.SetCollide(null);
+            target.SetCollide(null);
             gameManager.RemoveEntity(source);
             Destroy(source.GetGameObject());
+        }
+        
+        if (target.GetHealth() <= 0)
+        {
+            source.SetCollide(null);
+            target.SetCollide(null);
+            gameManager.RemoveEntity(target);
+            Destroy(target.GetGameObject());
         }
     }
 }

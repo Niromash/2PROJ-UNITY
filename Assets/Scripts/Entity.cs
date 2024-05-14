@@ -43,6 +43,7 @@ public class Entity
     public void SetCollide(Entity entity)
     {
         collidedEntity = entity;
+        GetRigidbody().isKinematic = entity != null;
     }
     
     public bool GetCollide()
@@ -53,6 +54,6 @@ public class Entity
     {
         healthAmount -= 10;
         healthBar.transform.localScale = new Vector3(healthAmount / 50, 0.2f, 1);
-        Debug.Log("Health: " + healthAmount);
+        // Debug.Log("Health: " + healthAmount);
     }
 }

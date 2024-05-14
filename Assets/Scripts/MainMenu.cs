@@ -7,7 +7,8 @@ public class MainMenuButtons : MonoBehaviour
 {
     public void LoadSinglePlayer()
     { 
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.UnloadSceneAsync("MainMenu");
+        SceneManager.LoadSceneAsync("SampleScene");
     }
 
     public void Quit()

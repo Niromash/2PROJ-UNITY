@@ -34,7 +34,7 @@ public class SpawnEntity : MonoBehaviour
         GameObject spawnedObject = Instantiate(prefab, spawnPosition, Quaternion.identity);
         spawnedObject.SetActive(true);
 
-        Entity entity = new Entity(spawnedObject, side, stats);
+        Entity entity = new Entity(spawnedObject, side, stats, gameManager);
         
         Debug.Log("stats vie: " + entity.GetStats().Health);
 

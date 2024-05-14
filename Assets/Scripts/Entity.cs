@@ -12,7 +12,7 @@ public class Entity
     
     private CharacterStats stats;
 
-    public Entity(GameObject go, Side side, CharacterStats stats)
+    public Entity(GameObject go, Side side, CharacterStats stats, GameManager gameManager)
     {
         rb = go.GetComponent<Rigidbody2D>();
         
@@ -23,6 +23,8 @@ public class Entity
         this.side = side;
         
         healthBar = gameObject.transform.GetChild(0).gameObject;
+        
+        this.gameManager = gameManager;
     }
     
     public GameObject GetGameObject()
@@ -64,6 +66,5 @@ public class Entity
     public void Kill()
     {
         gameManager.RemoveEntity(this);
-        Object.Destroy(this.GetGameObject());
     }
 }

@@ -472,7 +472,7 @@ MonoBehaviour:
   gameManager: {fileID: 600312218}
   infantryPrefab: {fileID: 1014623023}
   antiArmorPrefab: {fileID: 894787029}
-  spawnPosition: {x: -6.5, y: -0.6}
+  spawnPosition: {x: -6.5, y: 0}
 --- !u!114 &544143591
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1111,7 +1111,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 6
 --- !u!212 &894787032
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1439,7 +1439,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 6
 --- !u!61 &1014623027
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -7,31 +7,26 @@ public class Entity
     private GameObject healthBar;
     private Side side;
     private Rigidbody2D rb;
-    private Entity collidedEntity;
+    private Entity collidedEntityForwards;
+    private Entity collidedEntityBackwards;
     private GameManager gameManager;
-    
     private CharacterStats stats;
 
     public Entity(GameObject go, Side side, CharacterStats stats, GameManager gameManager)
     {
         rb = go.GetComponent<Rigidbody2D>();
-        
         this.stats = stats;
-        
         gameObject = go;
-        
         this.side = side;
-        
         healthBar = gameObject.transform.GetChild(0).gameObject;
-        
         this.gameManager = gameManager;
     }
-    
+
     public GameObject GetGameObject()
     {
         return gameObject;
     }
-    
+
     public Side GetSide()
     {
         return side;
@@ -41,21 +36,43 @@ public class Entity
     {
         return stats;
     }
-    
+
     public Rigidbody2D GetRigidbody()
     {
         return rb;
     }
-    
-    public void SetCollide(Entity entity)
+
+    public void SetForewardCollide(Entity entity)
     {
-        collidedEntity = entity;
+        collidedEntityForwards = entity;
+        GetRigidbody().isKinematic = entity != null;
+    }
+
+    public bool IsForewardColliding()
+    {
+        return collidedEntityForwards != null;
+    }
+
+    public Entity GetCollidedEntityForwards()
+    {
+        return collidedEntityForwards;
     }
     
-    public bool GetCollide()
+    public void SetBackwardCollide(Entity entity)
     {
-        return collidedEntity != null;
+        collidedEntityBackwards = entity;
     }
+
+    public bool IsBackwardColliding()
+    {
+        return collidedEntityBackwards != null;
+    }
+    
+    public Entity GetCollidedEntityBackwards()
+    {
+        return collidedEntityBackwards;
+    }
+
     
     public void UpdateHealthBar()
     {

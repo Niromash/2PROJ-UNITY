@@ -1,64 +1,85 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    private List<Entity> entities;
     private List<Turret> turrets;
+    private Queue<Entity> entityQueue;
+    private List<Team> teams;
+    private Camera mainCamera;
+    private GameObject backgroundCanvasGameObject;
+    private bool isSceneLoaded;
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
 
     void Start()
     {
-        entities = new List<Entity>();
+        entityQueue = new Queue<Entity>();
         turrets = new List<Turret>();
+        teams = new List<Team>();
+        mainCamera = Camera.main;
+        backgroundCanvasGameObject = GameObject.Find("BackgroundCanvas");
 
-        GameObject turretLeft = GameObject.Find("TurretsLeft");
-        GameObject turretRight = GameObject.Find("TurretsRight");
-        
-        Debug.Log(turretLeft);
-        Debug.Log(turretRight);
-        
-        turrets.Add(new Turret(turretLeft, Side.Player));
-        turrets.Add(new Turret(turretRight, Side.Enemy));
+        // GameObject turretLeft = GameObject.Find("TurretsLeft");
+        // GameObject turretRight = GameObject.Find("TurretsRight");
+        //
+        // turrets.Add(new Turret(turretLeft, Side.Player));
+        // turrets.Add(new Turret(turretRight, Side.Enemy));
+
+        teams.Add(new Team(Side.Player));
+        teams.Add(new Team(Side.Enemy));
 
         // Async task to create a new entity
         StartCoroutine(CreateEntity());
     }
 
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        isSceneLoaded = scene.name == "SampleScene" && mode == LoadSceneMode.Single;
+    }
+
     void Update()
     {
-        StartCoroutine(MoveEntities());
+        if (!isSceneLoaded) return;
 
         // Move the camera using directional keys
         float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
 
-        Vector3 newCameraPosition =
-            Camera.main.transform.position + new Vector3(horizontal, vertical, 0) * Time.deltaTime * 10;
+        Vector3 newCameraPosition = mainCamera.transform.position +
+                                    new Vector3(horizontal * Time.deltaTime * 10, mainCamera.velocity.y, 0);
 
-        newCameraPosition.y = Mathf.Clamp(newCameraPosition.y, 0.37f, 1.90f);
         newCameraPosition.x = Mathf.Clamp(newCameraPosition.x, -1.62f, 23.09f);
 
-        Camera.main.transform.position = newCameraPosition;
+        mainCamera.transform.position = newCameraPosition;
 
-        Vector3 newBackgroundPosition = GameObject.Find("BackgroundCanvas").transform.position +
-                                        new Vector3(horizontal, vertical, 0) * Time.deltaTime * 10;
+        Vector3 newBackgroundPosition = backgroundCanvasGameObject.transform.position +
+                                        new Vector3(horizontal * Time.deltaTime * 10,
+                                            backgroundCanvasGameObject.transform.position.y, 0);
 
-        newBackgroundPosition.y = Mathf.Clamp(newBackgroundPosition.y, 0.37f, 1.90f);
         newBackgroundPosition.x = Mathf.Clamp(newBackgroundPosition.x, -1.62f, 23.09f);
 
-        GameObject.Find("BackgroundCanvas").transform.position = newBackgroundPosition;
+        backgroundCanvasGameObject.transform.position = newBackgroundPosition;
+
+        MoveEntities();
     }
 
-    private IEnumerator MoveEntities()
+    private void MoveEntities()
     {
-        foreach (Entity entity in entities)
+        foreach (Entity entity in entityQueue)
         {
             MoveEntity(entity);
         }
-
-        yield return new WaitForSeconds(1);
     }
 
     public IEnumerator CreateEntity()
@@ -74,7 +95,7 @@ public class GameManager : MonoBehaviour
         while (true)
         {
             // Create a new entity
-            GameObject baseEntity = Instantiate(prefab, new Vector3(25, -0.6f, 0), Quaternion.identity);
+            GameObject baseEntity = Instantiate(prefab, new Vector3(25, 0f, 0), Quaternion.identity);
             baseEntity.SetActive(true);
             AddEntity(new Entity(baseEntity, Side.Enemy, new InfantryStats(), this));
 
@@ -83,18 +104,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void AddEntity(Entity go)
+    public void AddEntity(Entity entity)
     {
-        entities.Add(go);
+        entityQueue.Enqueue(entity);
+        teams.Find(team => team.GetSide().Equals(entity.GetSide())).AddEntity(entity);
     }
 
     public Entity GetEntity(GameObject go)
     {
-        foreach (Entity entity in entities)
+        foreach (Team team in teams)
         {
-            if (entity.GetGameObject() == go)
+            Entity entityFound = team.GetEntities().Find(entity => entity.GetGameObject() == go);
+            if (entityFound != null)
             {
-                return entity;
+                return entityFound;
             }
         }
 
@@ -103,32 +126,32 @@ public class GameManager : MonoBehaviour
 
     private void MoveEntity(Entity entity)
     {
-        if (entity == null)
+        if (entity.IsForewardColliding())
         {
             return;
         }
 
-        // tries entities en fonction des collisions avec les adversaires
-
-
-        // Move the entity
-        Rigidbody2D rb = entity.GetRigidbody();
-        Vector3 velocity = Vector3.zero;
-
-        float horizontalMovement = 10.0f;
+        float horizontalMovement = 75.0f;
         if (entity.GetSide() == Side.Enemy)
         {
             horizontalMovement *= -1;
         }
 
-        Vector3 targetVelocity = new Vector2(horizontalMovement, rb.velocity.y);
-        rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref velocity, 0.05f);
+        Rigidbody2D rb = entity.GetRigidbody();
+        Vector3 moveTowards = Vector3.MoveTowards(rb.position,
+            new Vector2(rb.position.x + horizontalMovement * Time.deltaTime, rb.position.y), 0.1f);
+        rb.MovePosition(moveTowards);
     }
 
     public void RemoveEntity(Entity entity)
     {
-        entities.Remove(entity);
-        Destroy(entity.GetGameObject());
+        entityQueue = new Queue<Entity>(entityQueue.Where(s => s != entity));
+        teams.Find(team => team.GetSide().Equals(entity.GetSide())).RemoveEntity(entity);
+        
+        foreach (Entity entity1 in entityQueue)
+        {
+            Debug.Log(entity1);
+        }
     }
 
     public Turret GetTurret(GameObject go)
@@ -142,7 +165,5 @@ public class GameManager : MonoBehaviour
         }
 
         return null;
-
     }
-
 }

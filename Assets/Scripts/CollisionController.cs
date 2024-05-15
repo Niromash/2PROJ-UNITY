@@ -11,6 +11,19 @@ public class CollisionController : MonoBehaviour
         Entity collidedSource = gameManager.GetEntity(collision.gameObject);
         Entity collidedTarget = gameManager.GetEntity(gameObject);
 
+        
+        if (collidedSource == null && collidedTarget == null)
+        {
+            Meteor meteor = gameManager.GetMeteor(collision.gameObject);
+            if (meteor == null)
+            {
+                return;
+            }
+            Debug.Log("Meteor collided: " + meteor.GetGameObject().name);
+            meteor.GetGameObject().SetActive(false);
+            Destroy(meteor.GetGameObject());
+        }
+        
         if (collidedSource == null || collidedTarget == null)
         {
             if (collidedSource == null)

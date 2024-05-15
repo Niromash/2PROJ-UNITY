@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     private GameObject backgroundCanvasGameObject;
     private bool isSceneLoaded;
     private GameState gameState;
+    private List<Meteor> meteors;
 
     public GameManager()
     {
@@ -173,5 +174,28 @@ public class GameManager : MonoBehaviour
     public List<Team> GetTeams()
     {
         return teams;
+        foreach (Turret turret in turrets)
+        {
+            if (turret.GetGameObject() == go)
+            {
+                return turret;
+            }
+        }
+
+        return null;
+
+    }
+    
+    public Meteor GetMeteor(GameObject go)
+    {
+        foreach (Meteor meteor in meteors)
+        {
+            if (meteor.GetGameObject() == go)
+            {
+                return meteor;
+            }
+        }
+
+        return null;
     }
 }

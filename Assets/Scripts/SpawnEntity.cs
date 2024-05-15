@@ -21,23 +21,22 @@ public class SpawnEntity : MonoBehaviour
     
     public void InfantryPlayerSpawn()
     {
-        Spawn(infantryPrefab, Side.Player, new InfantryStats());
+        Team playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player)); 
+        Spawn(infantryPrefab, playerTeam, new InfantryStats());
     }
 
     public void AntiArmorPlayerSpawn()
     {
-        Spawn(antiArmorPrefab, Side.Player, new AntiArmorStats());
+        Team playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
+        Spawn(antiArmorPrefab, playerTeam, new AntiArmorStats());
     }
 
-    private void Spawn(GameObject prefab, Side side, CharacterStats stats)
+    private void Spawn(GameObject prefab, Team team, CharacterStats stats)
     {
         GameObject spawnedObject = Instantiate(prefab, spawnPosition, Quaternion.identity);
         spawnedObject.SetActive(true);
 
-        Entity entity = new Entity(spawnedObject, side, stats, gameManager);
-        
-        Debug.Log("stats vie: " + entity.GetStats().Health);
-
+        Entity entity = new Entity(spawnedObject, team, stats, gameManager);
         gameManager.AddEntity(entity);
     }
 }

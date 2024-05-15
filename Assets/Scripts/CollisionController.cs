@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CollisionController : MonoBehaviour
@@ -17,25 +15,20 @@ public class CollisionController : MonoBehaviour
         {
             if (collidedSource == null)
             {
-                Turret turret = gameManager.GetTurret(collision.gameObject);
-                if (turret == null)
-                {
-                    return;
-                }
-
-                // la target à tapé un turret
-                Debug.Log(turret.GetSide());
+                HandleTowerCollision(collidedTarget, gameManager.GetTower(collision.gameObject));
+            }
+            else
+            {
+                HandleTowerCollision(collidedSource, gameManager.GetTower(gameObject));
             }
         }
 
-        if (collidedSource == null || collidedTarget == null)
-        {
-            return;
-        }
+        if (collidedSource == null || collidedTarget == null) return;
 
         // Determine which entity is in front and which is behind based on their x position
         Entity entityInFront, entityBehind;
-        if (collidedSource.GetGameObject().transform.position.x > collidedTarget.GetGameObject().transform.position.x)
+        if (collidedSource.GetGameObject().transform.position.x >
+            collidedTarget.GetGameObject().transform.position.x)
         {
             entityInFront = collidedSource;
             entityBehind = collidedTarget;
@@ -50,42 +43,49 @@ public class CollisionController : MonoBehaviour
         entityInFront.SetBackwardCollide(entityBehind);
         entityBehind.SetForewardCollide(entityInFront);
 
-        if (collidedSource.GetSide().Equals(collidedTarget.GetSide()))
+        if (collidedSource.GetTeam().GetSide().Equals(collidedTarget.GetTeam().GetSide()))
         {
             // Debug.Log("Same side, no damage taken");
             return;
         }
-        
-        if (collidedSource.GetStats().Health > 0 && collidedTarget.GetStats().Health > 0)
+
+        if (collidedSource.GetStats().health > 0 && collidedTarget.GetStats().health > 0)
         {
             StartCoroutine(DamageOverTime(collidedSource, collidedTarget));
         }
     }
 
-    IEnumerator DamageOverTime(Entity source, Entity target)
+    IEnumerator DamageOverTime(Damageable damageable, Entity source)
     {
-        while (source.GetStats().Health > 0 && target.GetStats().Health > 0)
+        while (source.GetStats().health > 0 && damageable.GetHealth() > 0)
         {
-            target.TakeDamage(source);
+            damageable.TakeDamage(source.GetStats().damagePerSecond);
             yield return new WaitForSeconds(1);
         }
-        
-        if (source.GetStats().Health <= 0)
-        { 
-            source.Kill();   
-            target.SetForewardCollide(null);
-            // Force all the backward entities to forward collide null
-            StartCoroutine(RecursiveSetForewardCollide(source));
-        }
-        if (target.GetStats().Health <= 0)
+
+        if (damageable.GetHealth() <= 0)
         {
-            target.Kill();
-            source.SetForewardCollide(null);
-            // Force all the backward entities to forward collide null
-            StartCoroutine(RecursiveSetForewardCollide(target));
+            damageable.Kill();
+            if (damageable is Entity target)
+            {
+                target.SetForewardCollide(null);
+                // Force all the backward entities to forward collide null
+                StartCoroutine(RecursiveSetForewardCollide(target));
+            }
+        }
+
+        if (source.GetStats().health <= 0)
+        {
+            source.Kill();
+            if (damageable is Entity sourceEntity)
+            {
+                sourceEntity.SetBackwardCollide(null);
+                // Force all the forward entities to backward collide null
+                StartCoroutine(RecursiveSetForewardCollide(source));
+            }
         }
     }
-    
+
     IEnumerator RecursiveSetForewardCollide(Entity entity)
     {
         if (entity.GetCollidedEntityBackwards() != null)
@@ -94,5 +94,16 @@ public class CollisionController : MonoBehaviour
             yield return new WaitForSeconds(.5f); // Wait for 0.5 seconds before setting the next entity
             StartCoroutine(RecursiveSetForewardCollide(entity.GetCollidedEntityBackwards()));
         }
+    }
+
+    private void HandleTowerCollision(Entity entity, Tower tower)
+    {
+        if (tower == null) return;
+
+        if (tower.GetTeam().GetSide().Equals(entity.GetTeam().GetSide())) return;
+
+        Debug.Log(tower.GetTeam().GetSide() + " tower has been hit by " + entity.GetTeam().GetSide());
+
+        StartCoroutine(DamageOverTime(tower, entity));
     }
 }

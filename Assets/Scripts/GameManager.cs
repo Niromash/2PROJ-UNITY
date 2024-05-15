@@ -12,6 +12,15 @@ public class GameManager : MonoBehaviour
     private Camera mainCamera;
     private GameObject backgroundCanvasGameObject;
     private bool isSceneLoaded;
+    private GameState gameState;
+
+    public GameManager()
+    {
+        entityQueue = new Queue<Entity>();
+        turrets = new List<Turret>();
+        teams = new List<Team>();
+        gameState = GameState.NotStarted;
+    }
 
     private void OnEnable()
     {
@@ -25,22 +34,18 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        entityQueue = new Queue<Entity>();
-        turrets = new List<Turret>();
-        teams = new List<Team>();
         mainCamera = Camera.main;
         backgroundCanvasGameObject = GameObject.Find("BackgroundCanvas");
 
-        // GameObject turretLeft = GameObject.Find("TurretsLeft");
-        // GameObject turretRight = GameObject.Find("TurretsRight");
-        //
-        // turrets.Add(new Turret(turretLeft, Side.Player));
-        // turrets.Add(new Turret(turretRight, Side.Enemy));
-
-        teams.Add(new Team(Side.Player));
-        teams.Add(new Team(Side.Enemy));
-
-        // Async task to create a new entity
+        GameObject turretLeft = GameObject.Find("TurretsLeft");
+        GameObject turretRight = GameObject.Find("TurretsRight");
+        
+        teams.Add(new Team(Side.Player, turretLeft, this));
+        teams.Add(new Team(Side.Enemy, turretRight, this));
+        
+        gameState = GameState.Playing;
+        
+        // Async task to create a new enemy entity
         StartCoroutine(CreateEntity());
     }
 
@@ -52,14 +57,21 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         if (!isSceneLoaded) return;
+        HandleCameras();
 
+        if (!gameState.Equals(GameState.Playing)) return;
+        MoveEntities();
+    }
+
+    private void HandleCameras()
+    {
         // Move the camera using directional keys
         float horizontal = Input.GetAxis("Horizontal");
 
         Vector3 newCameraPosition = mainCamera.transform.position +
                                     new Vector3(horizontal * Time.deltaTime * 10, mainCamera.velocity.y, 0);
 
-        newCameraPosition.x = Mathf.Clamp(newCameraPosition.x, -1.62f, 23.09f);
+        newCameraPosition.x = Mathf.Clamp(newCameraPosition.x, 0f, 24.09f);
 
         mainCamera.transform.position = newCameraPosition;
 
@@ -67,11 +79,9 @@ public class GameManager : MonoBehaviour
                                         new Vector3(horizontal * Time.deltaTime * 10,
                                             backgroundCanvasGameObject.transform.position.y, 0);
 
-        newBackgroundPosition.x = Mathf.Clamp(newBackgroundPosition.x, -1.62f, 23.09f);
+        newBackgroundPosition.x = Mathf.Clamp(newBackgroundPosition.x, 0f, 24.09f);
 
         backgroundCanvasGameObject.transform.position = newBackgroundPosition;
-
-        MoveEntities();
     }
 
     private void MoveEntities()
@@ -91,13 +101,15 @@ public class GameManager : MonoBehaviour
             Debug.LogError("Prefab not found");
             yield break;
         }
+        
+        Team enemyTeam = teams.Find(team => team.GetSide().Equals(Side.Enemy)); 
 
-        while (true)
+        while (gameState.Equals(GameState.Playing))
         {
             // Create a new entity
             GameObject baseEntity = Instantiate(prefab, new Vector3(25, 0f, 0), Quaternion.identity);
             baseEntity.SetActive(true);
-            AddEntity(new Entity(baseEntity, Side.Enemy, new InfantryStats(), this));
+            AddEntity(new Entity(baseEntity, enemyTeam, new InfantryStats(), this));
 
             // Wait for 10 seconds before creating another entity
             yield return new WaitForSeconds(10);
@@ -107,7 +119,7 @@ public class GameManager : MonoBehaviour
     public void AddEntity(Entity entity)
     {
         entityQueue.Enqueue(entity);
-        teams.Find(team => team.GetSide().Equals(entity.GetSide())).AddEntity(entity);
+        teams.Find(team => team.GetSide().Equals(entity.GetTeam().GetSide())).AddEntity(entity);
     }
 
     public Entity GetEntity(GameObject go)
@@ -126,13 +138,11 @@ public class GameManager : MonoBehaviour
 
     private void MoveEntity(Entity entity)
     {
-        if (entity.IsForewardColliding())
-        {
-            return;
-        }
+        if (entity.IsKilled()) return;
+        if (entity.IsForewardColliding()) return;
 
         float horizontalMovement = 75.0f;
-        if (entity.GetSide() == Side.Enemy)
+        if (entity.GetTeam().GetSide() == Side.Enemy)
         {
             horizontalMovement *= -1;
         }
@@ -146,24 +156,22 @@ public class GameManager : MonoBehaviour
     public void RemoveEntity(Entity entity)
     {
         entityQueue = new Queue<Entity>(entityQueue.Where(s => s != entity));
-        teams.Find(team => team.GetSide().Equals(entity.GetSide())).RemoveEntity(entity);
-        
-        foreach (Entity entity1 in entityQueue)
-        {
-            Debug.Log(entity1);
-        }
+        teams.Find(team => team.GetSide().Equals(entity.GetTeam().GetSide())).RemoveEntity(entity);
+        Destroy(entity.GetGameObject());
     }
 
-    public Turret GetTurret(GameObject go)
+    public Tower GetTower(GameObject go)
     {
-        foreach (Turret turret in turrets)
-        {
-            if (turret.GetGameObject() == go)
-            {
-                return turret;
-            }
-        }
+        return teams.Find(team => team.GetTower().GetGameObject() == go).GetTower();
+    }
 
-        return null;
+    public void EndGame()
+    {
+        gameState = GameState.Finished;
+    }
+    
+    public List<Team> GetTeams()
+    {
+        return teams;
     }
 }

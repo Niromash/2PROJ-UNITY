@@ -11,28 +11,17 @@ public class CollisionController : MonoBehaviour
         Entity collidedSource = gameManager.GetEntity(collision.gameObject);
         Entity collidedTarget = gameManager.GetEntity(gameObject);
 
-        
-        if (collidedSource == null && collidedTarget == null)
-        {
-            Meteor meteor = gameManager.GetMeteor(collision.gameObject);
-            if (meteor == null)
-            {
-                return;
-            }
-            Debug.Log("Meteor collided: " + meteor.GetGameObject().name);
-            meteor.GetGameObject().SetActive(false);
-            Destroy(meteor.GetGameObject());
-        }
-        
         if (collidedSource == null || collidedTarget == null)
         {
             if (collidedSource == null)
             {
-                HandleTowerCollision(collidedTarget, gameManager.GetTower(collision.gameObject));
+                if (HandleTowerCollision(collidedTarget, gameManager.GetTower(collision.gameObject))) return;
+                if (HandleMeteorCollision(gameManager.GetMeteor(collision.gameObject))) return;
             }
             else
             {
-                HandleTowerCollision(collidedSource, gameManager.GetTower(gameObject));
+                if (HandleTowerCollision(collidedSource, gameManager.GetTower(gameObject))) return;
+                if (HandleMeteorCollision(gameManager.GetMeteor(gameObject))) return;
             }
         }
 
@@ -109,14 +98,27 @@ public class CollisionController : MonoBehaviour
         }
     }
 
-    private void HandleTowerCollision(Entity entity, Tower tower)
+    private bool HandleTowerCollision(Entity entity, Tower tower)
     {
-        if (tower == null) return;
+        if (tower == null) return false;
 
-        if (tower.GetTeam().GetSide().Equals(entity.GetTeam().GetSide())) return;
+        if (tower.GetTeam().GetSide().Equals(entity.GetTeam().GetSide())) return false;
 
         Debug.Log(tower.GetTeam().GetSide() + " tower has been hit by " + entity.GetTeam().GetSide());
 
         StartCoroutine(DamageOverTime(tower, entity));
+
+        return true;
+    }
+
+    private bool HandleMeteorCollision(Meteor meteor)
+    {
+        if (meteor == null) return false;
+
+        Debug.Log("Meteor collided: " + meteor.GetGameObject().name);
+        meteor.GetGameObject().SetActive(false);
+        Destroy(meteor.GetGameObject());
+
+        return true;
     }
 }

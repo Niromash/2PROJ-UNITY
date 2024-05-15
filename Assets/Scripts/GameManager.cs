@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
         turrets = new List<Turret>();
         teams = new List<Team>();
         gameState = GameState.NotStarted;
+        meteors = new List<Meteor>();
     }
 
     private void OnEnable()
@@ -174,28 +175,10 @@ public class GameManager : MonoBehaviour
     public List<Team> GetTeams()
     {
         return teams;
-        foreach (Turret turret in turrets)
-        {
-            if (turret.GetGameObject() == go)
-            {
-                return turret;
-            }
-        }
-
-        return null;
-
     }
     
     public Meteor GetMeteor(GameObject go)
     {
-        foreach (Meteor meteor in meteors)
-        {
-            if (meteor.GetGameObject() == go)
-            {
-                return meteor;
-            }
-        }
-
-        return null;
+        return meteors.Find(meteor => meteor.GetGameObject() == go);
     }
 }

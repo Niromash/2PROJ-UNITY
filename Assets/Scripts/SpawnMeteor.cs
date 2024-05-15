@@ -17,7 +17,7 @@ public class SpawnMeteor : MonoBehaviour
                 12
             );
 
-            GameObject spawnedObject = GameObject.Instantiate(meteorPrefab, spawnPosition, Quaternion.identity);
+            GameObject spawnedObject = Instantiate(meteorPrefab, spawnPosition, Quaternion.identity);
             spawnedObject.SetActive(true);
         }
     }

@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 {
     private List<Entity> entities;
     private List<Turret> turrets;
+    private List<Meteor> meteors;
 
     void Start()
     {
@@ -100,6 +101,8 @@ public class GameManager : MonoBehaviour
 
         return null;
     }
+    
+    
 
     private void MoveEntity(Entity entity)
     {
@@ -143,6 +146,19 @@ public class GameManager : MonoBehaviour
 
         return null;
 
+    }
+    
+    public Meteor GetMeteor(GameObject go)
+    {
+        foreach (Meteor meteor in meteors)
+        {
+            if (meteor.GetGameObject() == go)
+            {
+                return meteor;
+            }
+        }
+
+        return null;
     }
 
 }

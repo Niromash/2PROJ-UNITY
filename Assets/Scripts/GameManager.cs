@@ -126,7 +126,7 @@ public class GameManager : MonoBehaviour
 
     private void MoveEntity(Entity entity)
     {
-        if (entity.GetCollide())
+        if (entity.IsForewardColliding())
         {
             return;
         }

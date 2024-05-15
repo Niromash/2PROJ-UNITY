@@ -7,49 +7,72 @@ public class Entity
     private Side side;
     private float healthAmount;
     private Rigidbody2D rb;
-    private Entity collidedEntity;
+    private Entity collidedEntityForwards;
+    private Entity collidedEntityBackwards;
 
     public Entity(GameObject go, Side side)
     {
         rb = go.GetComponent<Rigidbody2D>();
-        
+
         gameObject = go;
-        
+
         healthAmount = 100;
         this.side = side;
-        
+
         healthBar = gameObject.transform.GetChild(0).gameObject;
     }
-    
+
     public GameObject GetGameObject()
     {
         return gameObject;
     }
-    
+
     public Side GetSide()
     {
         return side;
     }
+
     public float GetHealth()
     {
         return healthAmount;
     }
-    
+
     public Rigidbody2D GetRigidbody()
     {
         return rb;
     }
-    
-    public void SetCollide(Entity entity)
+
+    public void SetForewardCollide(Entity entity)
     {
-        collidedEntity = entity;
+        collidedEntityForwards = entity;
         GetRigidbody().isKinematic = entity != null;
     }
-    
-    public bool GetCollide()
+
+    public bool IsForewardColliding()
     {
-        return collidedEntity != null;
+        return collidedEntityForwards != null;
     }
+
+    public Entity GetCollidedEntityForwards()
+    {
+        return collidedEntityForwards;
+    }
+    
+    public void SetBackwardCollide(Entity entity)
+    {
+        collidedEntityBackwards = entity;
+    }
+
+    public bool IsBackwardColliding()
+    {
+        return collidedEntityBackwards != null;
+    }
+    
+    public Entity GetCollidedEntityBackwards()
+    {
+        return collidedEntityBackwards;
+    }
+
     public void TakeDamage(Entity entity)
     {
         healthAmount -= 10;

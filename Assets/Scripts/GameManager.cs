@@ -124,9 +124,25 @@ public class GameManager : MonoBehaviour
         return null;
     }
 
+    private bool IsCollidingFront(Entity entity)
+    {
+        // Using recursion to check if the entity is colliding with next entity, if the next entity is an enemy, then stop moving
+        if (entity.GetCollidedEntityForwards() != null)
+        {
+            if (entity.GetCollidedEntityForwards().GetSide().Equals(Side.Enemy))
+            {
+                return true;
+            }
+
+            return IsCollidingFront(entity.GetCollidedEntityForwards());
+        }
+        
+        return false;
+    }
+
     private void MoveEntity(Entity entity)
     {
-        if (entity.IsForewardColliding())
+        if (IsCollidingFront(entity))
         {
             return;
         }
@@ -147,7 +163,7 @@ public class GameManager : MonoBehaviour
     {
         entityQueue = new Queue<Entity>(entityQueue.Where(s => s != entity));
         teams.Find(team => team.GetSide().Equals(entity.GetSide())).RemoveEntity(entity);
-        
+
         foreach (Entity entity1 in entityQueue)
         {
             Debug.Log(entity1);

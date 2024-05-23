@@ -320,6 +320,7 @@ GameObject:
   - component: {fileID: 139544767}
   - component: {fileID: 139544769}
   - component: {fileID: 139544768}
+  - component: {fileID: 139544770}
   m_Layer: 0
   m_Name: meteor
   m_TagString: Untagged
@@ -466,6 +467,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 6
+--- !u!114 &139544770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139544765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 678d9c5d57164be888364e362396e951, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &218931756
 GameObject:
   m_ObjectHideFlags: 0
@@ -762,8 +775,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 544143595}
-        m_TargetAssemblyTypeName: SpawnMeteor, Assembly-CSharp
-        m_MethodName: SpawnMeteors
+        m_TargetAssemblyTypeName: SpawnSpell, Assembly-CSharp
+        m_MethodName: SpawnMeteor
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -950,9 +963,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46816f4f53c8ca44b8e0d144bf13d679, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 600312218}
-  meteorPrefab: {fileID: 139544765}
-  numberOfMeteors: 20
 --- !u!1 &591386721
 GameObject:
   m_ObjectHideFlags: 0

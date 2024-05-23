@@ -16,12 +16,12 @@ public class CollisionController : MonoBehaviour
             if (collidedSource == null)
             {
                 if (HandleTowerCollision(collidedTarget, gameManager.GetTower(collision.gameObject))) return;
-                if (HandleMeteorCollision(gameManager.GetMeteor(collision.gameObject))) return;
+                if (HandleMeteorCollision(gameManager.GetSpell(collision.gameObject))) return;
             }
             else
             {
                 if (HandleTowerCollision(collidedSource, gameManager.GetTower(gameObject))) return;
-                if (HandleMeteorCollision(gameManager.GetMeteor(gameObject))) return;
+                if (HandleMeteorCollision(gameManager.GetSpell(gameObject))) return;
             }
         }
 
@@ -111,13 +111,13 @@ public class CollisionController : MonoBehaviour
         return true;
     }
 
-    private bool HandleMeteorCollision(Meteor meteor)
+    private bool HandleMeteorCollision(Spell spell)
     {
-        if (meteor == null) return false;
+        if (spell == null) return false;
 
-        Debug.Log("Meteor collided: " + meteor.GetGameObject().name);
-        meteor.GetGameObject().SetActive(false);
-        Destroy(meteor.GetGameObject());
+        Debug.Log("Meteor collided: " + spell.GetGameObject().name);
+        spell.GetGameObject().SetActive(false);
+        Destroy(spell.GetGameObject());
 
         return true;
     }

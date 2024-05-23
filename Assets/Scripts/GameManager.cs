@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     private GameObject backgroundCanvasGameObject;
     private bool isSceneLoaded;
     private GameState gameState;
-    private List<Meteor> meteors;
+    private List<Spell> spells;
 
     public GameManager()
     {
@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
         turrets = new List<Turret>();
         teams = new List<Team>();
         gameState = GameState.NotStarted;
-        meteors = new List<Meteor>();
+        spells = new List<Spell>();
     }
 
     private void OnEnable()
@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
         gameState = GameState.Playing;
         
         // Async task to create a new enemy entity
-        StartCoroutine(CreateEntity());
+        // StartCoroutine(CreateEntity());
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -177,8 +177,8 @@ public class GameManager : MonoBehaviour
         return teams;
     }
     
-    public Meteor GetMeteor(GameObject go)
+    public Spell GetSpell(GameObject go)
     {
-        return meteors.Find(meteor => meteor.GetGameObject() == go);
+        return spells.Find(spell => spell.GetGameObject() == go);
     }
 }

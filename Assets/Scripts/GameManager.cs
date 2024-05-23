@@ -95,6 +95,8 @@ public class GameManager : MonoBehaviour
             var entitiesCopy = teams[0].GetEntities().ToList();
             var otherEntitiesCopy = teams[1].GetEntities().ToList();
 
+            
+            // Check team 0 entities against team 1 entities
             foreach (Entity entity in entitiesCopy)
             {
                 foreach (Entity other in otherEntitiesCopy)
@@ -102,7 +104,21 @@ public class GameManager : MonoBehaviour
                     if (entity.GetTeam().GetSide() != other.GetTeam().GetSide() && entity.IsInRange(other))
                     {
                         entity.TakeDamage(other.GetStats().damagePerSecond);
-                       
+                        Debug.Log("Entity " + entity.GetGameObject().name + " is in range of " + other.GetGameObject().name);
+                        break;
+                    }
+                }
+            }
+
+            // Check team 1 entities against team 0 entities
+            foreach (Entity entity in otherEntitiesCopy)
+            {
+                foreach (Entity other in entitiesCopy)
+                {
+                    if (entity.GetTeam().GetSide() != other.GetTeam().GetSide() && entity.IsInRange(other))
+                    {
+                        entity.TakeDamage(other.GetStats().damagePerSecond);
+                        break;
                     }
                 }
             }
@@ -110,6 +126,7 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(1);
         }
     }
+    
 
     private void MoveEntities()
     {
@@ -139,7 +156,7 @@ public class GameManager : MonoBehaviour
             AddEntity(new Entity(baseEntity, enemyTeam, new InfantryStats(), this));
 
             // Wait for 10 seconds before creating another entity
-            yield return new WaitForSeconds(10);
+            yield return new WaitForSeconds(60);
         }
     }
 
@@ -180,6 +197,7 @@ public class GameManager : MonoBehaviour
             new Vector2(rb.position.x + horizontalMovement * Time.deltaTime, rb.position.y), 0.2f);
         rb.MovePosition(moveTowards);
     }
+    
     public void RemoveEntity(Entity entity)
     {
         entityQueue = new Queue<Entity>(entityQueue.Where(s => s != entity));

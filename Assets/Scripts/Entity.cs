@@ -94,10 +94,21 @@ public class Entity : Damageable
         healthBar.transform.localScale = healthBarScale;
     }
     
+    
+    
+    public float GetWidth()
+    {
+        // Assuming the entity's size is determined by its GameObject's sprite renderer
+        return gameObject.GetComponent<SpriteRenderer>().bounds.size.x;
+    }
+
     public bool IsInRange(Entity other)
     {
-        float distance = Vector2.Distance(gameObject.transform.position, other.GetGameObject().transform.position);
-        return distance <= stats.range; 
+        float distance = Vector3.Distance(this.GetGameObject().transform.position, other.GetGameObject().transform.position);
+        // Subtract half of each entity's width from the distance
+        distance -= this.GetWidth() / 2;
+        distance -= other.GetWidth() / 2;
+        return distance <= this.GetStats().range;
     }
 
     public void TakeDamage(float damage)

@@ -41,14 +41,15 @@ public class GameManager : MonoBehaviour
 
         GameObject turretLeft = GameObject.Find("TurretsLeft");
         GameObject turretRight = GameObject.Find("TurretsRight");
-        
+
         teams.Add(new Team(Side.Player, turretLeft, this));
         teams.Add(new Team(Side.Enemy, turretRight, this));
-        
+
         gameState = GameState.Playing;
-        
+
         // Async task to create a new enemy entity
         StartCoroutine(CreateEntity());
+        StartCoroutine(CheckRangeAndDamage());
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -84,6 +85,30 @@ public class GameManager : MonoBehaviour
         newBackgroundPosition.x = Mathf.Clamp(newBackgroundPosition.x, 0f, 24.09f);
 
         backgroundCanvasGameObject.transform.position = newBackgroundPosition;
+    }
+    
+    IEnumerator CheckRangeAndDamage()
+    {
+        while (true)
+        {
+            // Create a copy of the entities list
+            var entitiesCopy = teams[0].GetEntities().ToList();
+            var otherEntitiesCopy = teams[1].GetEntities().ToList();
+
+            foreach (Entity entity in entitiesCopy)
+            {
+                foreach (Entity other in otherEntitiesCopy)
+                {
+                    if (entity.GetTeam().GetSide() != other.GetTeam().GetSide() && entity.IsInRange(other))
+                    {
+                        entity.TakeDamage(other.GetStats().damagePerSecond);
+                       
+                    }
+                }
+            }
+
+            yield return new WaitForSeconds(1);
+        }
     }
 
     private void MoveEntities()
@@ -142,8 +167,9 @@ public class GameManager : MonoBehaviour
     {
         if (entity.IsKilled()) return;
         if (entity.IsForewardColliding()) return;
-
-        float horizontalMovement = 75.0f;
+        
+        float horizontalMovement = 5f * entity.GetStats().blockPerSecondMovementSpeed;
+        
         if (entity.GetTeam().GetSide() == Side.Enemy)
         {
             horizontalMovement *= -1;
@@ -151,10 +177,9 @@ public class GameManager : MonoBehaviour
 
         Rigidbody2D rb = entity.GetRigidbody();
         Vector3 moveTowards = Vector3.MoveTowards(rb.position,
-            new Vector2(rb.position.x + horizontalMovement * Time.deltaTime, rb.position.y), 0.1f);
+            new Vector2(rb.position.x + horizontalMovement * Time.deltaTime, rb.position.y), 0.2f);
         rb.MovePosition(moveTowards);
     }
-
     public void RemoveEntity(Entity entity)
     {
         entityQueue = new Queue<Entity>(entityQueue.Where(s => s != entity));

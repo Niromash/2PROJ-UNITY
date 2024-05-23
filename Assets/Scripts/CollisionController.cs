@@ -51,42 +51,42 @@ public class CollisionController : MonoBehaviour
             return;
         }
 
-        if (collidedSource.GetStats().health > 0 && collidedTarget.GetStats().health > 0)
-        {
-            StartCoroutine(DamageOverTime(collidedSource, collidedTarget));
-        }
+        // if (collidedSource.GetStats().health > 0 && collidedTarget.GetStats().health > 0)
+        // {
+        //     StartCoroutine(DamageOverTime(collidedSource, collidedTarget));
+        // }
     }
 
-    IEnumerator DamageOverTime(Damageable damageable, Entity source)
-    {
-        while (source.GetStats().health > 0 && damageable.GetHealth() > 0)
-        {
-            damageable.TakeDamage(source.GetStats().damagePerSecond);
-            yield return new WaitForSeconds(1);
-        }
-
-        if (damageable.GetHealth() <= 0)
-        {
-            damageable.Kill();
-            if (damageable is Entity target)
-            {
-                target.SetForewardCollide(null);
-                // Force all the backward entities to forward collide null
-                StartCoroutine(RecursiveSetForewardCollide(target));
-            }
-        }
-
-        if (source.GetStats().health <= 0)
-        {
-            source.Kill();
-            if (damageable is Entity sourceEntity)
-            {
-                sourceEntity.SetBackwardCollide(null);
-                // Force all the forward entities to backward collide null
-                StartCoroutine(RecursiveSetForewardCollide(source));
-            }
-        }
-    }
+    // IEnumerator DamageOverTime(Damageable damageable, Entity source)
+    // {
+    //     while (source.GetStats().health > 0 && damageable.GetHealth() > 0)
+    //     {
+    //         damageable.TakeDamage(source.GetStats().damagePerSecond);
+    //         yield return new WaitForSeconds(1);
+    //     }
+    //
+    //     if (damageable.GetHealth() <= 0)
+    //     {
+    //         damageable.Kill();
+    //         if (damageable is Entity target)
+    //         {
+    //             target.SetForewardCollide(null);
+    //             // Force all the backward entities to forward collide null
+    //             StartCoroutine(RecursiveSetForewardCollide(target));
+    //         }
+    //     }
+    //
+    //     if (source.GetStats().health <= 0)
+    //     {
+    //         source.Kill();
+    //         if (damageable is Entity sourceEntity)
+    //         {
+    //             sourceEntity.SetBackwardCollide(null);
+    //             // Force all the forward entities to backward collide null
+    //             StartCoroutine(RecursiveSetForewardCollide(source));
+    //         }
+    //     }
+    // }
 
     IEnumerator RecursiveSetForewardCollide(Entity entity)
     {
@@ -106,7 +106,7 @@ public class CollisionController : MonoBehaviour
 
         Debug.Log(tower.GetTeam().GetSide() + " tower has been hit by " + entity.GetTeam().GetSide());
 
-        StartCoroutine(DamageOverTime(tower, entity));
+        // StartCoroutine(DamageOverTime(tower, entity));
 
         return true;
     }

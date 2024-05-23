@@ -93,10 +93,11 @@ public class Entity : Damageable
         // Apply the new local scale to the health bar
         healthBar.transform.localScale = healthBarScale;
     }
-
-    public void TakeDamageFromEntity(Entity entity)
+    
+    public bool IsInRange(Entity other)
     {
-        TakeDamage(entity.GetStats().damagePerSecond);
+        float distance = Vector2.Distance(gameObject.transform.position, other.GetGameObject().transform.position);
+        return distance <= stats.range; 
     }
 
     public void TakeDamage(float damage)

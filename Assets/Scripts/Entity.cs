@@ -11,6 +11,7 @@ public class Entity : Damageable
     private GameManager gameManager;
     private CharacterStats stats;
     private bool isKilled;
+    
 
     public Entity(GameObject go, Team team, CharacterStats stats, GameManager gameManager)
     {
@@ -119,6 +120,9 @@ public class Entity : Damageable
     {
         isKilled = true;
         gameManager.RemoveEntity(this);
+        if (team.GetSide() == Side.Enemy)
+            gameManager.GainGoldByKill();
+            gameManager.GainExpByKill();
     }
     
     public bool IsKilled()

@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     private GameState gameState;
     private List<Meteor> meteors;
 
+    private Team tm;
+
     public GameManager()
     {
         entityQueue = new Queue<Entity>();
@@ -41,6 +43,8 @@ public class GameManager : MonoBehaviour
 
         GameObject turretLeft = GameObject.Find("TurretsLeft");
         GameObject turretRight = GameObject.Find("TurretsRight");
+
+        tm = new Team(Side.Player, turretLeft, new GameManager());//revoir les arguments
         
         teams.Add(new Team(Side.Player, turretLeft, this));
         teams.Add(new Team(Side.Enemy, turretRight, this));
@@ -49,6 +53,8 @@ public class GameManager : MonoBehaviour
         
         // Async task to create a new enemy entity
         StartCoroutine(CreateEntity());
+
+        StartCoroutine(GainGoldRoutine());
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -91,6 +97,15 @@ public class GameManager : MonoBehaviour
         foreach (Entity entity in entityQueue)
         {
             MoveEntity(entity);
+        }
+    }
+
+    private IEnumerator GainGoldRoutine()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(4);
+            tm.AddGold(10);
         }
     }
 
@@ -176,6 +191,18 @@ public class GameManager : MonoBehaviour
     {
         return teams;
     }
+
+    public void GainGoldByKill()
+    {
+        tm.AddGold(25);
+    }
+
+    public void GainExpByKill()
+    {
+        tm.AddExperience(150);
+    }
+    
+    //public int GetPlayerGold(){}
     
     public Meteor GetMeteor(GameObject go)
     {

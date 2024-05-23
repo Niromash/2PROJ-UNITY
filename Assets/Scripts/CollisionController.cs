@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CollisionController : MonoBehaviour
@@ -17,25 +15,22 @@ public class CollisionController : MonoBehaviour
         {
             if (collidedSource == null)
             {
-                Turret turret = gameManager.GetTurret(collision.gameObject);
-                if (turret == null)
-                {
-                    return;
-                }
-
-                // la target à tapé un turret
-                Debug.Log(turret.GetSide());
+                if (HandleTowerCollision(collidedTarget, gameManager.GetTower(collision.gameObject))) return;
+                if (HandleMeteorCollision(gameManager.GetMeteor(collision.gameObject))) return;
+            }
+            else
+            {
+                if (HandleTowerCollision(collidedSource, gameManager.GetTower(gameObject))) return;
+                if (HandleMeteorCollision(gameManager.GetMeteor(gameObject))) return;
             }
         }
 
-        if (collidedSource == null || collidedTarget == null)
-        {
-            return;
-        }
+        if (collidedSource == null || collidedTarget == null) return;
 
         // Determine which entity is in front and which is behind based on their x position
         Entity entityInFront, entityBehind;
-        if (collidedSource.GetGameObject().transform.position.x > collidedTarget.GetGameObject().transform.position.x)
+        if (collidedSource.GetGameObject().transform.position.x >
+            collidedTarget.GetGameObject().transform.position.x)
         {
             entityInFront = collidedSource;
             entityBehind = collidedTarget;
@@ -50,42 +45,46 @@ public class CollisionController : MonoBehaviour
         entityInFront.SetBackwardCollide(entityBehind);
         entityBehind.SetForewardCollide(entityInFront);
 
-        if (collidedSource.GetSide().Equals(collidedTarget.GetSide()))
+        if (collidedSource.GetTeam().GetSide().Equals(collidedTarget.GetTeam().GetSide()))
         {
             // Debug.Log("Same side, no damage taken");
             return;
         }
 
-        if (collidedSource.GetHealth() > 0)
+        if (collidedSource.GetStats().health > 0 && collidedTarget.GetStats().health > 0)
         {
             StartCoroutine(DamageOverTime(collidedSource, collidedTarget));
         }
     }
 
-    IEnumerator DamageOverTime(Entity source, Entity target)
+    IEnumerator DamageOverTime(Damageable damageable, Entity source)
     {
-        while (source.GetHealth() > 0 && target.GetHealth() > 0)
+        while (source.GetStats().health > 0 && damageable.GetHealth() > 0)
         {
-            target.TakeDamage(source);
+            damageable.TakeDamage(source.GetStats().damagePerSecond);
             yield return new WaitForSeconds(1);
         }
 
-        if (source.GetHealth() <= 0)
+        if (damageable.GetHealth() <= 0)
         {
-            target.SetForewardCollide(null);
-            // Force all the backward entities to forward collide null
-            StartCoroutine(RecursiveSetForewardCollide(source));
-            gameManager.RemoveEntity(source);
-            Destroy(source.GetGameObject());
+            damageable.Kill();
+            if (damageable is Entity target)
+            {
+                target.SetForewardCollide(null);
+                // Force all the backward entities to forward collide null
+                StartCoroutine(RecursiveSetForewardCollide(target));
+            }
         }
 
-        if (target.GetHealth() <= 0)
+        if (source.GetStats().health <= 0)
         {
-            source.SetForewardCollide(null);
-            // Force all the backward entities to forward collide null
-            StartCoroutine(RecursiveSetForewardCollide(target));
-            gameManager.RemoveEntity(target);
-            Destroy(target.GetGameObject());
+            source.Kill();
+            if (damageable is Entity sourceEntity)
+            {
+                sourceEntity.SetBackwardCollide(null);
+                // Force all the forward entities to backward collide null
+                StartCoroutine(RecursiveSetForewardCollide(source));
+            }
         }
     }
 
@@ -97,5 +96,29 @@ public class CollisionController : MonoBehaviour
             yield return new WaitForSeconds(.5f); // Wait for 0.5 seconds before setting the next entity
             StartCoroutine(RecursiveSetForewardCollide(entity.GetCollidedEntityBackwards()));
         }
+    }
+
+    private bool HandleTowerCollision(Entity entity, Tower tower)
+    {
+        if (tower == null) return false;
+
+        if (tower.GetTeam().GetSide().Equals(entity.GetTeam().GetSide())) return false;
+
+        Debug.Log(tower.GetTeam().GetSide() + " tower has been hit by " + entity.GetTeam().GetSide());
+
+        StartCoroutine(DamageOverTime(tower, entity));
+
+        return true;
+    }
+
+    private bool HandleMeteorCollision(Meteor meteor)
+    {
+        if (meteor == null) return false;
+
+        Debug.Log("Meteor collided: " + meteor.GetGameObject().name);
+        meteor.GetGameObject().SetActive(false);
+        Destroy(meteor.GetGameObject());
+
+        return true;
     }
 }

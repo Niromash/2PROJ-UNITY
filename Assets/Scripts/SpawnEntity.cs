@@ -8,33 +8,35 @@ public class SpawnEntity : MonoBehaviour
     public GameObject infantryPrefab;
     public GameObject antiArmorPrefab;
     public Vector2 spawnPosition;
-
-
+    
+    // public void InfantryEnemySpawn()
+    // {
+    //     Spawn(infantryPrefab, Side.Enemy);
+    // }
+    //
+    // public void AntiArmorEnemySpawn()
+    // {
+    //     Spawn(antiArmorPrefab, Side.Enemy);
+    // }
+    
     public void InfantryPlayerSpawn()
     {
-        Spawn(infantryPrefab, Side.Player);
-    }
-
-    public void InfantryEnemySpawn()
-    {
-        Spawn(infantryPrefab, Side.Enemy);
+        Team playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player)); 
+        Spawn(infantryPrefab, playerTeam, new InfantryStats());
     }
 
     public void AntiArmorPlayerSpawn()
     {
-        Spawn(antiArmorPrefab, Side.Player);
-    }
-    
-    public void AntiArmorEnemySpawn()
-    {
-        Spawn(antiArmorPrefab, Side.Enemy);
+        Team playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
+        Spawn(antiArmorPrefab, playerTeam, new AntiArmorStats());
     }
 
-    private void Spawn(GameObject prefab, Side side)
+    private void Spawn(GameObject prefab, Team team, CharacterStats stats)
     {
         GameObject spawnedObject = Instantiate(prefab, spawnPosition, Quaternion.identity);
         spawnedObject.SetActive(true);
-        
-        gameManager.AddEntity(new Entity(spawnedObject, side));
+
+        Entity entity = new Entity(spawnedObject, team, stats, gameManager);
+        gameManager.AddEntity(entity);
     }
 }

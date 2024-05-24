@@ -41,12 +41,12 @@ public class GameManager : MonoBehaviour
 
         GameObject turretLeft = GameObject.Find("TurretsLeft");
         GameObject turretRight = GameObject.Find("TurretsRight");
-        
+
         teams.Add(new Team(Side.Player, turretLeft, this));
         teams.Add(new Team(Side.Enemy, turretRight, this));
-        
+
         gameState = GameState.Playing;
-        
+
         // Async task to create a new enemy entity
         StartCoroutine(CreateEntity());
     }
@@ -103,8 +103,8 @@ public class GameManager : MonoBehaviour
             Debug.LogError("Prefab not found");
             yield break;
         }
-        
-        Team enemyTeam = teams.Find(team => team.GetSide().Equals(Side.Enemy)); 
+
+        Team enemyTeam = teams.Find(team => team.GetSide().Equals(Side.Enemy));
 
         while (gameState.Equals(GameState.Playing))
         {
@@ -143,26 +143,25 @@ public class GameManager : MonoBehaviour
         // Using recursion to check if the entity is colliding with next entity, if the next entity is an enemy, then stop moving
         if (entity.GetCollidedEntityForwards() != null)
         {
-            if (entity.GetCollidedEntityForwards().GetSide().Equals(Side.Enemy))
+            if (entity.GetCollidedEntityForwards().GetTeam().GetSide().Equals(Side.Enemy))
             {
                 return true;
             }
 
             return IsCollidingFront(entity.GetCollidedEntityForwards());
         }
-        
+
         return false;
     }
 
     private void MoveEntity(Entity entity)
     {
-        if (entity.IsForewardColliding()) return;
         if (IsCollidingFront(entity))
         {
             return;
         }
 
-        float horizontalMovement = 75.0f;
+        float horizontalMovement = 1 * entity.GetStats().blockPerSecondMovementSpeed;
         if (entity.GetTeam().GetSide() == Side.Enemy)
         {
             horizontalMovement *= -1;
@@ -170,14 +169,14 @@ public class GameManager : MonoBehaviour
 
         Rigidbody2D rb = entity.GetRigidbody();
         Vector3 moveTowards = Vector3.MoveTowards(rb.position,
-            new Vector2(rb.position.x + horizontalMovement * Time.deltaTime, rb.position.y), 0.1f);
+            new Vector2(rb.position.x + horizontalMovement * Time.deltaTime, rb.position.y), 1f);
         rb.MovePosition(moveTowards);
     }
 
     public void RemoveEntity(Entity entity)
     {
         entityQueue = new Queue<Entity>(entityQueue.Where(s => s != entity));
-        teams.Find(team => team.GetSide().Equals(entity.GetSide())).RemoveEntity(entity);
+        teams.Find(team => team.GetSide().Equals(entity.GetTeam().GetSide())).RemoveEntity(entity);
         Destroy(entity.GetGameObject());
     }
 
@@ -190,12 +189,12 @@ public class GameManager : MonoBehaviour
     {
         gameState = GameState.Finished;
     }
-    
+
     public List<Team> GetTeams()
     {
         return teams;
     }
-    
+
     public Meteor GetMeteor(GameObject go)
     {
         return meteors.Find(meteor => meteor.GetGameObject() == go);

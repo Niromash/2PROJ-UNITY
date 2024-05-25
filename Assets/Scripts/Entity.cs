@@ -2,19 +2,22 @@
 
 public class Entity : Damageable
 {
-    private GameObject gameObject;
-    private GameObject healthBar;
-    private Team team;
-    private Rigidbody2D rb;
+    private readonly GameObject gameObject;
+    private readonly GameObject healthBar;
+    private readonly Team team;
+    private readonly Rigidbody2D rb;
+    private readonly SpriteRenderer spriteRenderer;
     private Entity collidedEntityForwards;
     private Entity collidedEntityBackwards;
-    private GameManager gameManager;
-    private CharacterStats stats;
+    private Tower collidedTowerForwards;
+    private readonly GameManager gameManager;
+    private readonly CharacterStats stats;
     private bool isKilled;
 
     public Entity(GameObject go, Team team, CharacterStats stats, GameManager gameManager)
     {
         rb = go.GetComponent<Rigidbody2D>();
+        spriteRenderer = go.GetComponent<SpriteRenderer>();
         this.stats = stats;
         gameObject = go;
         this.team = team;
@@ -41,16 +44,23 @@ public class Entity : Damageable
     {
         return rb;
     }
-
-    public void SetForewardCollide(Entity entity)
+    
+    public SpriteRenderer GetSpriteRenderer()
+    {
+        return spriteRenderer;
+    }
+    
+    public void SetForwardCollide(Entity entity)
     {
         collidedEntityForwards = entity;
         if (!isKilled)
-            GetRigidbody().isKinematic =
-                entity != null; // this method can be called after delay, so we need to check if the rigidbody is not null
+        {
+            // this method can be called after delay, so we need to check if the rigidbody is not null (if the entity is killed, the rigidbody is set to null)
+            GetRigidbody().isKinematic = entity != null;
+        }
     }
 
-    public bool IsForewardColliding()
+    public bool IsForwardColliding()
     {
         return collidedEntityForwards != null;
     }
@@ -75,6 +85,15 @@ public class Entity : Damageable
         return collidedEntityBackwards;
     }
 
+    public void SetCollidedTowerForwards(Tower tower)
+    {
+        collidedTowerForwards = tower;
+    }
+
+    public Tower GetCollidedTowerForwards()
+    {
+        return collidedTowerForwards;
+    }
 
     public void UpdateHealthBar()
     {
@@ -118,9 +137,22 @@ public class Entity : Damageable
     public void Kill()
     {
         isKilled = true;
+        
+        // set to the backward entity, the forward entity null
+        if (collidedEntityBackwards != null)
+        {
+            collidedEntityBackwards.SetForwardCollide(null);
+        }
+        
+        // set the forward entity, the forward entity null
+        if (collidedEntityForwards != null)
+        {
+            collidedEntityForwards.SetForwardCollide(null);
+        }
+        
         gameManager.RemoveEntity(this);
     }
-    
+
     public bool IsKilled()
     {
         return isKilled;

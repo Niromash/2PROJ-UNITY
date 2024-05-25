@@ -41,15 +41,15 @@ public class CollisionController : MonoBehaviour
             entityBehind = collidedSource;
         }
 
-        // Set the forward and backward collisions for the entities
-        entityInFront.SetBackwardCollide(entityBehind);
-        entityBehind.SetForewardCollide(entityInFront);
-
         if (collidedSource.GetTeam().GetSide().Equals(collidedTarget.GetTeam().GetSide()))
         {
-            // Debug.Log("Same side, no damage taken");
+            entityInFront.SetBackwardCollide(entityBehind);
+            entityBehind.SetForwardCollide(entityInFront);
             return;
         }
+
+        entityInFront.SetForwardCollide(entityBehind);
+        entityBehind.SetForwardCollide(entityInFront);
 
         if (collidedSource.GetStats().health > 0 && collidedTarget.GetStats().health > 0)
         {
@@ -68,44 +68,26 @@ public class CollisionController : MonoBehaviour
         if (damageable.GetHealth() <= 0)
         {
             damageable.Kill();
-            if (damageable is Entity target)
-            {
-                target.SetForewardCollide(null);
-                // Force all the backward entities to forward collide null
-                StartCoroutine(RecursiveSetForewardCollide(target));
-            }
+            source.SetForwardCollide(null);
         }
 
         if (source.GetStats().health <= 0)
         {
             source.Kill();
-            if (damageable is Entity sourceEntity)
+            if (damageable is Entity entity)
             {
-                sourceEntity.SetBackwardCollide(null);
-                // Force all the forward entities to backward collide null
-                StartCoroutine(RecursiveSetForewardCollide(source));
+                entity.SetForwardCollide(null);
             }
-        }
-    }
-
-    IEnumerator RecursiveSetForewardCollide(Entity entity)
-    {
-        if (entity.GetCollidedEntityBackwards() != null)
-        {
-            entity.GetCollidedEntityBackwards().SetForewardCollide(null);
-            yield return new WaitForSeconds(.5f); // Wait for 0.5 seconds before setting the next entity
-            StartCoroutine(RecursiveSetForewardCollide(entity.GetCollidedEntityBackwards()));
         }
     }
 
     private bool HandleTowerCollision(Entity entity, Tower tower)
     {
         if (tower == null) return false;
-
         if (tower.GetTeam().GetSide().Equals(entity.GetTeam().GetSide())) return false;
 
+        entity.SetCollidedTowerForwards(tower);
         Debug.Log(tower.GetTeam().GetSide() + " tower has been hit by " + entity.GetTeam().GetSide());
-
         StartCoroutine(DamageOverTime(tower, entity));
 
         return true;

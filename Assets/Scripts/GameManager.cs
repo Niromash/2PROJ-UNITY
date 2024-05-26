@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     private Camera mainCamera;
     private GameObject backgroundCanvasGameObject;
     private bool isSceneLoaded;
-    private GameState gameState;
+    private static GameState gameState;
     private List<Meteor> meteors;
 
     public GameManager()
@@ -97,16 +97,16 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator CreateEntity()
     {
-        // Get the gameObject from the Scene with name "perso1test" in scene "SampleScene"
-        GameObject prefab1 = GameObject.Find("perso1test");
-        GameObject prefab2 = GameObject.Find("perso2test");
+        GameObject frankiTanki = GameObject.Find("FrankiTanki");
+        GameObject marcel = GameObject.Find("Marcel");
 
         Team enemyTeam = teams.Find(team => team.GetSide().Equals(Side.Enemy));
 
         int entityCount = 0;
         while (gameState.Equals(GameState.Playing))
         {
-            GameObject entityToSpawn = entityCount % 2 == 0 ? prefab1 : prefab2;
+            GameObject entityToSpawn = entityCount % 2 == 0 ? frankiTanki : marcel;
+            CharacterStats stats = entityCount % 2 == 0 ? new InfantryStats() : new AntiArmorStats();
             // Create a new entity
             GameObject baseEntity = Instantiate(entityToSpawn, new Vector3(25, 0f, 0), Quaternion.identity);
             baseEntity.SetActive(true);
@@ -114,7 +114,7 @@ public class GameManager : MonoBehaviour
             baseEntity.tag = "Untagged";
             // Flip the entity sprite to face the enemy side
             baseEntity.GetComponent<SpriteRenderer>().flipX = true;
-            AddEntity(new Entity(baseEntity, enemyTeam, new InfantryStats(), this));
+            AddEntity(new Entity(baseEntity, enemyTeam, stats, this));
             entityCount++;
 
             // Wait for 10 seconds before creating another entity
@@ -268,5 +268,10 @@ public class GameManager : MonoBehaviour
     public Meteor GetMeteor(GameObject go)
     {
         return meteors.Find(meteor => meteor.GetGameObject() == go);
+    }
+
+    public static GameState GetGameState()
+    {
+        return gameState;
     }
 }

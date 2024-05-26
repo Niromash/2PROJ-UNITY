@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class Tower : Damageable
 {
@@ -7,17 +8,44 @@ public class Tower : Damageable
     private GameObject healthBar;
     private GameManager gameManager;
     private readonly GameObject towerGameObject;
+    private readonly Tilemap tileMap;
+    private readonly Vector3Int minCellPosition;
     private readonly Team team;
 
     public Tower(float maxHealth, GameObject towerGameObject, Team team, GameManager gameManager)
     {
         healthBar = towerGameObject.transform.GetChild(0).gameObject;
-        
+        tileMap = towerGameObject.GetComponent<Tilemap>();
+
+        // Get the position of the most left/right tile of the tower depending on the team
+        minCellPosition = GetExtremeTilePosition(tileMap, team.GetSide().Equals(Side.Enemy));
+
         this.maxHealth = maxHealth;
         health = maxHealth;
         this.towerGameObject = towerGameObject;
         this.team = team;
         this.gameManager = gameManager;
+    }
+
+    // Function to find the extreme tile position (leftmost or rightmost) of the tower
+    private Vector3Int GetExtremeTilePosition(Tilemap tileMap, bool findLeftmost)
+    {
+        int extremeX = findLeftmost ? int.MaxValue : int.MinValue;
+        Vector3Int extremeCell = Vector3Int.zero;
+
+        foreach (Vector3Int pos in tileMap.cellBounds.allPositionsWithin)
+        {
+            if (tileMap.HasTile(pos))
+            {
+                if ((findLeftmost && pos.x < extremeX) || (!findLeftmost && pos.x > extremeX))
+                {
+                    extremeX = pos.x;
+                    extremeCell = pos;
+                }
+            }
+        }
+
+        return extremeCell;
     }
 
     public void TakeDamage(float damage)
@@ -68,5 +96,16 @@ public class Tower : Damageable
 
         // Apply the new local scale to the health bar
         healthBar.transform.localScale = healthBarScale;
+    }
+
+    public Vector3 GetPosition()
+    {
+        return tileMap.GetCellCenterWorld(minCellPosition);
+    }
+
+    public Vector3 GetSize()
+    {
+        // tileMap.CompressBounds();
+        return tileMap.size;
     }
 }

@@ -144,8 +144,8 @@ public class Entity : Damageable
             collidedEntityBackwards.SetForwardCollide(null);
         }
         
-        // set the forward entity, the forward entity null
-        if (collidedEntityForwards != null)
+        // if the entity forward is enemy, set the forward entity null for the forward entity of the killed entity
+        if (collidedEntityForwards != null && !collidedEntityForwards.GetTeam().GetSide().Equals(team.GetSide()))
         {
             collidedEntityForwards.SetForwardCollide(null);
         }
@@ -156,5 +156,15 @@ public class Entity : Damageable
     public bool IsKilled()
     {
         return isKilled;
+    }
+    
+    public Vector3 GetPosition()
+    {
+        return gameObject.transform.position;
+    }
+    
+    public Vector3 GetSize()
+    {
+        return spriteRenderer.bounds.size;
     }
 }

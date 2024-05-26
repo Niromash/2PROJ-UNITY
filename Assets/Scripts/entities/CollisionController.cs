@@ -17,10 +17,7 @@ public class CollisionController : MonoBehaviour
         if (sourceEntity == null)
         {
             Debug.LogError("Entity not found for " + gameObject.name);
-            return;
         }
-
-        // StartCoroutine(CheckForEnemiesInRange());
     }
 
     //Detect collisions between the GameObjects with Colliders attached
@@ -58,6 +55,7 @@ public class CollisionController : MonoBehaviour
             entityInFront = collidedTarget;
             entityBehind = collidedSource;
         }
+
         // if the side is enemy, inverse the order
         if (entityInFront.GetTeam().GetSide().Equals(Side.Enemy))
         {
@@ -73,35 +71,6 @@ public class CollisionController : MonoBehaviour
 
         entityInFront.SetForwardCollide(entityBehind);
         entityBehind.SetForwardCollide(entityInFront);
-
-        if (collidedSource.GetStats().health > 0 && collidedTarget.GetStats().health > 0)
-        {
-            StartCoroutine(DamageOverTime(collidedSource, collidedTarget));
-        }
-    }
-
-    IEnumerator DamageOverTime(Damageable damageable, Entity source)
-    {
-        while (source.GetStats().health > 0 && damageable.GetHealth() > 0)
-        {
-            damageable.TakeDamage(source.GetStats().damagePerSecond);
-            yield return new WaitForSeconds(1);
-        }
-
-        if (damageable.GetHealth() <= 0)
-        {
-            damageable.Kill();
-            source.SetForwardCollide(null);
-        }
-
-        if (source.GetStats().health <= 0)
-        {
-            source.Kill();
-            if (damageable is Entity entity)
-            {
-                entity.SetForwardCollide(null);
-            }
-        }
     }
 
     private bool HandleTowerCollision(Entity entity, Tower tower)
@@ -111,7 +80,7 @@ public class CollisionController : MonoBehaviour
 
         entity.SetCollidedTowerForwards(tower);
         Debug.Log(tower.GetTeam().GetSide() + " tower has been hit by " + entity.GetTeam().GetSide());
-        StartCoroutine(DamageOverTime(tower, entity));
+        // StartCoroutine(DamageOverTime(tower, entity));
 
         return true;
     }

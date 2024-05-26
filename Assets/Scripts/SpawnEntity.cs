@@ -35,6 +35,8 @@ public class SpawnEntity : MonoBehaviour
     {
         GameObject spawnedObject = Instantiate(prefab, spawnPosition, Quaternion.identity);
         spawnedObject.SetActive(true);
+        // remove the tag so that the spawned object is not considered a template
+        spawnedObject.tag = "Untagged";
 
         Entity entity = new Entity(spawnedObject, team, stats, gameManager);
         gameManager.AddEntity(entity);

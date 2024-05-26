@@ -98,23 +98,24 @@ public class GameManager : MonoBehaviour
     public IEnumerator CreateEntity()
     {
         // Get the gameObject from the Scene with name "perso1test" in scene "SampleScene"
-        GameObject prefab = GameObject.Find("perso1test");
-        if (prefab == null)
-        {
-            Debug.LogError("Prefab not found");
-            yield break;
-        }
+        GameObject prefab1 = GameObject.Find("perso1test");
+        GameObject prefab2 = GameObject.Find("perso2test");
 
         Team enemyTeam = teams.Find(team => team.GetSide().Equals(Side.Enemy));
 
+        int entityCount = 0;
         while (gameState.Equals(GameState.Playing))
         {
+            GameObject entityToSpawn = entityCount % 2 == 0 ? prefab1 : prefab2;
             // Create a new entity
-            GameObject baseEntity = Instantiate(prefab, new Vector3(25, 0f, 0), Quaternion.identity);
+            GameObject baseEntity = Instantiate(entityToSpawn, new Vector3(25, 0f, 0), Quaternion.identity);
             baseEntity.SetActive(true);
+            // remove the tag so that the spawned object is not considered a template
+            baseEntity.tag = "Untagged";
             // Flip the entity sprite to face the enemy side
             baseEntity.GetComponent<SpriteRenderer>().flipX = true;
             AddEntity(new Entity(baseEntity, enemyTeam, new InfantryStats(), this));
+            entityCount++;
 
             // Wait for 10 seconds before creating another entity
             yield return new WaitForSeconds(10);

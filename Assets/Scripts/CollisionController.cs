@@ -1,15 +1,33 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CollisionController : MonoBehaviour
 {
     public GameManager gameManager;
+    private Entity sourceEntity;
+
+    void Start()
+    {
+        if (sourceEntity != null) return;
+        // if the gameobject has tag "template" then it is a template and should not be used
+        if (gameObject.CompareTag("Template")) return;
+        sourceEntity = gameManager.GetEntity(gameObject);
+
+        if (sourceEntity == null)
+        {
+            Debug.LogError("Entity not found for " + gameObject.name);
+            return;
+        }
+
+        // StartCoroutine(CheckForEnemiesInRange());
+    }
 
     //Detect collisions between the GameObjects with Colliders attached
     void OnCollisionEnter2D(Collision2D collision)
     {
         Entity collidedSource = gameManager.GetEntity(collision.gameObject);
-        Entity collidedTarget = gameManager.GetEntity(gameObject);
+        Entity collidedTarget = sourceEntity;
 
         if (collidedSource == null || collidedTarget == null)
         {
@@ -40,8 +58,13 @@ public class CollisionController : MonoBehaviour
             entityInFront = collidedTarget;
             entityBehind = collidedSource;
         }
+        // if the side is enemy, inverse the order
+        if (entityInFront.GetTeam().GetSide().Equals(Side.Enemy))
+        {
+            (entityInFront, entityBehind) = (entityBehind, entityInFront);
+        }
 
-        if (collidedSource.GetTeam().GetSide().Equals(collidedTarget.GetTeam().GetSide()))
+        if (entityBehind.GetTeam().GetSide().Equals(entityInFront.GetTeam().GetSide()))
         {
             entityInFront.SetBackwardCollide(entityBehind);
             entityBehind.SetForwardCollide(entityInFront);

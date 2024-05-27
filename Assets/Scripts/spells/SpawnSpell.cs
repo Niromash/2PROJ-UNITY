@@ -4,8 +4,7 @@ using Random = UnityEngine.Random;
 
 public class SpawnSpell : MonoBehaviour
 {
-    public readonly GameManager gameManager;
-    public readonly GameObject spellPrefab;
+    public GameManager gameManager;
 
     public void SpawnMeteor()
     {
@@ -16,12 +15,13 @@ public class SpawnSpell : MonoBehaviour
                 12
             );
 
-            Meteor meteor = new Meteor(Side.Player, gameManager);
-            meteor.GetGameObject().transform.position = spawnPosition;
+            Spell spell = new Meteor(Side.Player, gameManager);
+            spell.GetGameObject().transform.position = spawnPosition;
             // unfreeze y position
-            meteor.GetGameObject().GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
-            meteor.GetGameObject().SetActive(true);
+            spell.GetGameObject().GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
+            spell.GetGameObject().SetActive(true);
+
+            gameManager.AddSpell(spell);
         }
     }
-    
 }

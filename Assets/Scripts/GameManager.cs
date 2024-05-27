@@ -264,10 +264,21 @@ public class GameManager : MonoBehaviour
     {
         return teams;
     }
-    
+
     public Spell GetSpell(GameObject go)
     {
         return spells.Find(spell => spell.GetGameObject() == go);
+    }
+
+    public void AddSpell(Spell spell)
+    {
+        spells.Add(spell);
+    }
+
+    public void RemoveSpell(Spell spell)
+    {
+        spells = new List<Spell>(spells.Where(s => s != spell));
+        Destroy(spell.GetGameObject());
     }
 
     public static GameState GetGameState()

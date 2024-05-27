@@ -14,7 +14,7 @@ public class Tower : Damageable
 
     public Tower(float maxHealth, GameObject towerGameObject, Team team, GameManager gameManager)
     {
-        healthBar = towerGameObject.transform.GetChild(0).gameObject;
+        healthBar = GameObject.Find(team.GetSide().Equals(Side.Player) ? "TowerLeftHealthBar" : "TowerRightHealthBar");
         tileMap = towerGameObject.GetComponent<Tilemap>();
 
         // Get the position of the most left/right tile of the tower depending on the team

@@ -1,15 +1,30 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CollisionController : MonoBehaviour
 {
     public GameManager gameManager;
+    private Entity sourceEntity;
+
+    void Start()
+    {
+        if (sourceEntity != null) return;
+        // if the gameobject has tag "template" then it is a template and should not be used
+        if (gameObject.CompareTag("Template")) return;
+        sourceEntity = gameManager.GetEntity(gameObject);
+
+        if (sourceEntity == null)
+        {
+            Debug.LogError("Entity not found for " + gameObject.name);
+        }
+    }
 
     //Detect collisions between the GameObjects with Colliders attached
     void OnCollisionEnter2D(Collision2D collision)
     {
         Entity collidedSource = gameManager.GetEntity(collision.gameObject);
-        Entity collidedTarget = gameManager.GetEntity(gameObject);
+        Entity collidedTarget = sourceEntity;
 
         if (collidedSource == null || collidedTarget == null)
         {
@@ -41,72 +56,31 @@ public class CollisionController : MonoBehaviour
             entityBehind = collidedSource;
         }
 
-        // Set the forward and backward collisions for the entities
-        entityInFront.SetBackwardCollide(entityBehind);
-        entityBehind.SetForewardCollide(entityInFront);
-
-        if (collidedSource.GetTeam().GetSide().Equals(collidedTarget.GetTeam().GetSide()))
+        // if the side is enemy, inverse the order
+        if (entityInFront.GetTeam().GetSide().Equals(Side.Enemy))
         {
-            // Debug.Log("Same side, no damage taken");
+            (entityInFront, entityBehind) = (entityBehind, entityInFront);
+        }
+
+        if (entityBehind.GetTeam().GetSide().Equals(entityInFront.GetTeam().GetSide()))
+        {
+            entityInFront.SetBackwardCollide(entityBehind);
+            entityBehind.SetForwardCollide(entityInFront);
             return;
         }
 
-        if (collidedSource.GetStats().health > 0 && collidedTarget.GetStats().health > 0)
-        {
-            StartCoroutine(DamageOverTime(collidedSource, collidedTarget));
-        }
-    }
-
-    IEnumerator DamageOverTime(Damageable damageable, Entity source)
-    {
-        while (source.GetStats().health > 0 && damageable.GetHealth() > 0)
-        {
-            damageable.TakeDamage(source.GetStats().damagePerSecond);
-            yield return new WaitForSeconds(1);
-        }
-
-        if (damageable.GetHealth() <= 0)
-        {
-            damageable.Kill();
-            if (damageable is Entity target)
-            {
-                target.SetForewardCollide(null);
-                // Force all the backward entities to forward collide null
-                StartCoroutine(RecursiveSetForewardCollide(target));
-            }
-        }
-
-        if (source.GetStats().health <= 0)
-        {
-            source.Kill();
-            if (damageable is Entity sourceEntity)
-            {
-                sourceEntity.SetBackwardCollide(null);
-                // Force all the forward entities to backward collide null
-                StartCoroutine(RecursiveSetForewardCollide(source));
-            }
-        }
-    }
-
-    IEnumerator RecursiveSetForewardCollide(Entity entity)
-    {
-        if (entity.GetCollidedEntityBackwards() != null)
-        {
-            entity.GetCollidedEntityBackwards().SetForewardCollide(null);
-            yield return new WaitForSeconds(.5f); // Wait for 0.5 seconds before setting the next entity
-            StartCoroutine(RecursiveSetForewardCollide(entity.GetCollidedEntityBackwards()));
-        }
+        entityInFront.SetForwardCollide(entityBehind);
+        entityBehind.SetForwardCollide(entityInFront);
     }
 
     private bool HandleTowerCollision(Entity entity, Tower tower)
     {
         if (tower == null) return false;
-
         if (tower.GetTeam().GetSide().Equals(entity.GetTeam().GetSide())) return false;
 
+        entity.SetCollidedTowerForwards(tower);
         Debug.Log(tower.GetTeam().GetSide() + " tower has been hit by " + entity.GetTeam().GetSide());
-
-        StartCoroutine(DamageOverTime(tower, entity));
+        // StartCoroutine(DamageOverTime(tower, entity));
 
         return true;
     }

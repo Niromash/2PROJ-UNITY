@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,7 +13,7 @@ public class GameManager : MonoBehaviour
     private Camera mainCamera;
     private GameObject backgroundCanvasGameObject;
     private bool isSceneLoaded;
-    private GameState gameState;
+    private static GameState gameState;
     private List<Spell> spells;
 
     public GameManager()
@@ -39,16 +40,16 @@ public class GameManager : MonoBehaviour
         mainCamera = Camera.main;
         backgroundCanvasGameObject = GameObject.Find("BackgroundCanvas");
 
-        GameObject turretLeft = GameObject.Find("TurretsLeft");
-        GameObject turretRight = GameObject.Find("TurretsRight");
-        
-        teams.Add(new Team(Side.Player, turretLeft, this));
-        teams.Add(new Team(Side.Enemy, turretRight, this));
-        
+        GameObject towerLeft = GameObject.Find("TowerLeft");
+        GameObject towerRight = GameObject.Find("TowerRight");
+
+        teams.Add(new Team(Side.Player, towerLeft, this));
+        teams.Add(new Team(Side.Enemy, towerRight, this));
+
         gameState = GameState.Playing;
-        
+
         // Async task to create a new enemy entity
-        // StartCoroutine(CreateEntity());
+        StartCoroutine(CreateEntity());
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -96,22 +97,25 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator CreateEntity()
     {
-        // Get the gameObject from the Scene with name "perso1test" in scene "SampleScene"
-        GameObject prefab = GameObject.Find("perso1test");
-        if (prefab == null)
-        {
-            Debug.LogError("Prefab not found");
-            yield break;
-        }
-        
-        Team enemyTeam = teams.Find(team => team.GetSide().Equals(Side.Enemy)); 
+        GameObject frankiTanki = GameObject.Find("FrankiTanki");
+        GameObject marcel = GameObject.Find("Marcel");
 
+        Team enemyTeam = teams.Find(team => team.GetSide().Equals(Side.Enemy));
+
+        int entityCount = 0;
         while (gameState.Equals(GameState.Playing))
         {
+            GameObject entityToSpawn = entityCount % 2 == 0 ? frankiTanki : marcel;
+            CharacterStats stats = entityCount % 2 == 0 ? new InfantryStats() : new AntiArmorStats();
             // Create a new entity
-            GameObject baseEntity = Instantiate(prefab, new Vector3(25, 0f, 0), Quaternion.identity);
+            GameObject baseEntity = Instantiate(entityToSpawn, new Vector3(25, 0f, 0), Quaternion.identity);
             baseEntity.SetActive(true);
-            AddEntity(new Entity(baseEntity, enemyTeam, new InfantryStats(), this));
+            // remove the tag so that the spawned object is not considered a template
+            baseEntity.tag = "Untagged";
+            // Flip the entity sprite to face the enemy side
+            baseEntity.GetComponent<SpriteRenderer>().flipX = true;
+            AddEntity(new Entity(baseEntity, enemyTeam, stats, this));
+            entityCount++;
 
             // Wait for 10 seconds before creating another entity
             yield return new WaitForSeconds(10);
@@ -138,21 +142,99 @@ public class GameManager : MonoBehaviour
         return null;
     }
 
+    // Using recursion to check if the entity is colliding with next entity, if the next entity is an enemy, then stop moving
+    private Entity GetCollidingFrontEnemy(Entity entity)
+    {
+        Entity forwardEntity = entity.GetCollidedEntityForwards();
+
+        if (forwardEntity == null)
+        {
+            return null;
+        }
+
+        if (!forwardEntity.GetTeam().GetSide().Equals(entity.GetTeam().GetSide()))
+        {
+            float distance = forwardEntity.GetGameObject().transform.position.x -
+                             entity.GetGameObject().transform.position.x;
+            if (distance <= entity.GetSpriteRenderer().bounds.size.x)
+            {
+                return forwardEntity;
+            }
+        }
+
+        return GetCollidingFrontEnemy(forwardEntity);
+    }
+
+    // IsCollidingTower returns using recursive calls, if all the entity from the team are colliding with a forward tower, if one of the entity is not colliding, then return false
+    private bool IsCollidingTower(Entity entity)
+    {
+        if (entity.GetCollidedTowerForwards() == null) return false;
+        if (entity.GetCollidedTowerForwards().GetTeam().GetSide().Equals(entity.GetTeam().GetSide())) return true;
+
+        Entity forwardEntity = entity.GetCollidedEntityForwards();
+        if (forwardEntity == null) return false;
+
+        return IsCollidingTower(forwardEntity);
+    }
+
     private void MoveEntity(Entity entity)
     {
-        if (entity.IsKilled()) return;
-        if (entity.IsForewardColliding()) return;
+        if (IsCollidingTower(entity))
+        {
+            return;
+        }
 
-        float horizontalMovement = 75.0f;
+        Entity collidingFrontEnemy = GetCollidingFrontEnemy(entity);
+        if (collidingFrontEnemy != null)
+        {
+            // Check if there is enough space to move
+            float distanceToEnemy = Mathf.Abs(collidingFrontEnemy.GetGameObject().transform.position.x -
+                                              entity.GetGameObject().transform.position.x);
+            if (distanceToEnemy <= entity.GetSpriteRenderer().bounds.size.x)
+            {
+                return;
+            }
+        }
+
+        float moveSpeed = entity.GetStats().blockPerSecondMovementSpeed;
+
+        // if the colliding entity is an ally, apply the collided entity move speed to the current entity if the current entity is faster than the collided entity
+        Entity collidedAlly = entity.GetCollidedEntityForwards();
+        if (collidedAlly != null && collidedAlly.GetTeam().GetSide().Equals(entity.GetTeam().GetSide()) &&
+            collidedAlly.GetStats().blockPerSecondMovementSpeed < entity.GetStats().blockPerSecondMovementSpeed)
+        {
+            moveSpeed = collidedAlly.GetStats().blockPerSecondMovementSpeed;
+        }
+
+        float horizontalMovement = 10 * moveSpeed;
         if (entity.GetTeam().GetSide() == Side.Enemy)
         {
             horizontalMovement *= -1;
         }
 
-        Rigidbody2D rb = entity.GetRigidbody();
-        Vector3 moveTowards = Vector3.MoveTowards(rb.position,
-            new Vector2(rb.position.x + horizontalMovement * Time.deltaTime, rb.position.y), 0.1f);
-        rb.MovePosition(moveTowards);
+        // if the new position is in an entity in front (check with entity rigidbody size), then stop moving
+        if (entity.GetCollidedEntityForwards() != null)
+        {
+            float distance = entity.GetCollidedEntityForwards().GetGameObject().transform.position.x -
+                             entity.GetGameObject().transform.position.x;
+            if (distance < entity.GetSpriteRenderer().bounds.size.x)
+            {
+                return;
+            }
+        }
+
+        // if the new position is in a tower in front (check with entity rigidbody size), then stop moving
+        if (entity.GetCollidedTowerForwards() != null)
+        {
+            float distance = entity.GetCollidedTowerForwards().GetGameObject().transform.position.x -
+                             entity.GetGameObject().transform.position.x;
+            if (distance < entity.GetSpriteRenderer().bounds.size.x)
+            {
+                return;
+            }
+        }
+
+        entity.GetRigidbody().transform.position += new Vector3(horizontalMovement * Time.deltaTime, 0, 0);
     }
 
     public void RemoveEntity(Entity entity)
@@ -164,14 +246,20 @@ public class GameManager : MonoBehaviour
 
     public Tower GetTower(GameObject go)
     {
-        return teams.Find(team => team.GetTower().GetGameObject() == go).GetTower();
+        Team team = teams.Find(team => team.GetTower().GetGameObject() == go);
+        if (team == null)
+        {
+            return null;
+        }
+
+        return team.GetTower();
     }
 
     public void EndGame()
     {
         gameState = GameState.Finished;
     }
-    
+
     public List<Team> GetTeams()
     {
         return teams;
@@ -180,5 +268,10 @@ public class GameManager : MonoBehaviour
     public Spell GetSpell(GameObject go)
     {
         return spells.Find(spell => spell.GetGameObject() == go);
+    }
+
+    public static GameState GetGameState()
+    {
+        return gameState;
     }
 }

@@ -455,10 +455,10 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: 0.36221108, w: 0.9320961}
   m_LocalPosition: {x: -13.84, y: 4.98, z: 0}
-  m_LocalScale: {x: 0.24997257, y: 0.24997257, z: 0.24997257}
+  m_LocalScale: {x: 0.24997258, y: 0.24997258, z: 0.24997257}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1982631545}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 42.472}
 --- !u!212 &139544767
 SpriteRenderer:
@@ -596,6 +596,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 678d9c5d57164be888364e362396e951, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 600312218}
 --- !u!1 &218931756
 GameObject:
   m_ObjectHideFlags: 0
@@ -1348,6 +1349,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46816f4f53c8ca44b8e0d144bf13d679, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 600312218}
 --- !u!1 &591386721
 GameObject:
   m_ObjectHideFlags: 0
@@ -5757,6 +5759,38 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &1982631544
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1982631545}
+  m_Layer: 0
+  m_Name: Spells
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1982631545
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1982631544}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 139544766}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2058304891
 GameObject:
   m_ObjectHideFlags: 0
@@ -5853,5 +5887,5 @@ SceneRoots:
   - {fileID: 600312219}
   - {fileID: 544143594}
   - {fileID: 218931759}
-  - {fileID: 139544766}
   - {fileID: 2090774526}
+  - {fileID: 1982631545}

@@ -1,17 +1,51 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
+    public Canvas pauseCanvas;
+    private bool isPaused = false;
+
+    void Start()
+    {
+        pauseCanvas.gameObject.SetActive(false);
+    }
+
     void Update()
     {
-        // Todo: Add code to pause the game when the escape key is pressed only on the game scene
         if (SceneManager.GetActiveScene().name == "SampleScene" && Input.GetKeyDown(KeyCode.Escape))
         {
-            Debug.Log("space key was pressed");
+            if (isPaused)
+            {
+                ResumeGame();
+            }
+            else
+            {
+                PauseGame();
+            }
         }
- 
     }
+
+    void PauseGame()
+    {
+        Time.timeScale = 0;
+        isPaused = true;
+        pauseCanvas.gameObject.SetActive(true);
+        Debug.Log("Game Paused");
+    }
+
+    public void ResumeGame()
+    {
+        Time.timeScale = 1;
+        isPaused = false;
+        pauseCanvas.gameObject.SetActive(false);
+        Debug.Log("Game Resumed");
+    }
+    
+    public void QuitGame()
+    {
+        Resources.UnloadUnusedAssets();
+        SceneManager.LoadScene("MainMenu");
+    }
+    
 }

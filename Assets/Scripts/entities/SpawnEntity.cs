@@ -5,26 +5,23 @@ using UnityEngine;
 public class SpawnEntity : MonoBehaviour
 {
     public GameManager gameManager;
+    public GameObject tankPrefab;
     public GameObject infantryPrefab;
     public GameObject antiArmorPrefab;
     public Vector2 spawnPosition;
     
-    // public void InfantryEnemySpawn()
-    // {
-    //     Spawn(infantryPrefab, Side.Enemy);
-    // }
-    //
-    // public void AntiArmorEnemySpawn()
-    // {
-    //     Spawn(antiArmorPrefab, Side.Enemy);
-    // }
-    
-    public void InfantryPlayerSpawn()
+    public void TankPlayerSpawn()
     {
-        Team playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player)); 
-        Spawn(infantryPrefab, playerTeam, new InfantryStats());
+        Team playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
+        Spawn(tankPrefab, playerTeam, new TankStats());
     }
 
+    public void InfantryPlayerSpawn()
+    {
+        Team playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
+        Spawn(infantryPrefab, playerTeam, new InfantryStats());
+    }
+    
     public void AntiArmorPlayerSpawn()
     {
         Team playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));

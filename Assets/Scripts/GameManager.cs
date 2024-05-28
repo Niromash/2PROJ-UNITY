@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     private bool isSceneLoaded;
     private static GameState gameState;
     private List<Meteor> meteors;
+    
 
     public GameManager()
     {
@@ -64,6 +65,7 @@ public class GameManager : MonoBehaviour
 
         if (!gameState.Equals(GameState.Playing)) return;
         MoveEntities();
+        
     }
 
     private void HandleCameras()
@@ -141,6 +143,22 @@ public class GameManager : MonoBehaviour
 
         return null;
     }
+    
+    public Turret GetTurret(GameObject go)
+    {
+        foreach (Team team in teams)
+        {
+            Debug.Log(team.GetTower().GetTurrets());
+            Turret turretFound = team.GetTower().GetTurrets().Find(turret => turret.GetGameObject() == go);
+            if (turretFound != null)
+            {
+                return turretFound;
+            }
+        }
+
+        return null;
+    }
+
 
     // Using recursion to check if the entity is colliding with next entity, if the next entity is an enemy, then stop moving
     private Entity GetCollidingFrontEnemy(Entity entity)
@@ -254,7 +272,8 @@ public class GameManager : MonoBehaviour
 
         return team.GetTower();
     }
-
+    
+    
     public void EndGame()
     {
         gameState = GameState.Finished;

@@ -8,7 +8,6 @@ public class Team
     private int experience;
     private readonly List<Entity> entities;
     private readonly Tower tower;
-    private readonly List<Turret> turrets;
 
     public int Gold
     {
@@ -27,7 +26,6 @@ public class Team
         this.side = side;
         tower = new Tower(500, towerGameObject, this, gameManager);
         entities = new List<Entity>();
-        turrets = new List<Turret>();
     }
 
     public void AddGold(int amount)
@@ -56,22 +54,7 @@ public class Team
     {
         return entities;
     }
-
-    public void AddTurret(Turret turret)
-    {
-        turrets.Add(turret);
-    }
-
-    public void RemoveTurret(Turret turret)
-    {
-        turrets.Remove(turret);
-    }
-
-    public List<Turret> GetTurrets()
-    {
-        return turrets;
-    }
-
+    
     public Side GetSide()
     {
         return side;
@@ -81,4 +64,5 @@ public class Team
     {
         return tower;
     }
+    
 }

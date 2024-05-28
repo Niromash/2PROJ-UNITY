@@ -1,21 +1,30 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 public class Tower : Damageable
 {
     private float health;
     private float maxHealth;
-    private GameObject healthBar;
+    private Image healthBarImage;
     private GameManager gameManager;
     private readonly GameObject towerGameObject;
     private readonly Tilemap tileMap;
     private readonly Vector3Int minCellPosition;
     private readonly Team team;
+    private List<Turret> turrets;
 
     public Tower(float maxHealth, GameObject towerGameObject, Team team, GameManager gameManager)
     {
-        healthBar = towerGameObject.transform.GetChild(0).gameObject;
+        GameObject healthBar = GameObject.Find(team.GetSide().Equals(Side.Player) ? "TowerLeftHealthBar" : "TowerRightHealthBar");
+        healthBarImage = healthBar.GetComponent<Image>();
+        
         tileMap = towerGameObject.GetComponent<Tilemap>();
+        turrets = new List<Turret>();
+        Turret newTurret = new Turret(towerGameObject.transform.GetChild(0).gameObject, new FirstTurret(), team.GetSide());
+        turrets.Add(newTurret);
+        
 
         // Get the position of the most left/right tile of the tower depending on the team
         minCellPosition = GetExtremeTilePosition(tileMap, team.GetSide().Equals(Side.Enemy));
@@ -25,6 +34,8 @@ public class Tower : Damageable
         this.towerGameObject = towerGameObject;
         this.team = team;
         this.gameManager = gameManager;
+        
+        UpdateHealthBar();
     }
 
     // Function to find the extreme tile position (leftmost or rightmost) of the tower
@@ -82,20 +93,11 @@ public class Tower : Damageable
 
     public void UpdateHealthBar()
     {
-        // Get the current health of the entity
-        float currentHealth = health;
+        // Calculez le pourcentage de santé restant
+        float healthPercentage = health / maxHealth;
 
-        // Calculate the health percentage
-        float healthPercentage = currentHealth / maxHealth;
-
-        // Get the health bar's current local scale
-        Vector3 healthBarScale = healthBar.transform.localScale;
-
-        // Set the x value of the health bar's local scale to the health percentage
-        healthBarScale.x = healthPercentage;
-
-        // Apply the new local scale to the health bar
-        healthBar.transform.localScale = healthBarScale;
+        healthBarImage.color = Color.Lerp(Color.red, Color.green, healthPercentage);
+        healthBarImage.fillAmount = healthPercentage;
     }
 
     public Vector3 GetPosition()
@@ -108,4 +110,15 @@ public class Tower : Damageable
         // tileMap.CompressBounds();
         return tileMap.size;
     }
+
+    public void AddTurret(Turret turret)
+    {
+        turrets.Add(turret);
+    }
+
+    public List<Turret> GetTurrets()
+    {
+        return turrets;
+    }
+
 }

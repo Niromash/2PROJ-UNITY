@@ -10,7 +10,7 @@ public class SpellCollisionController : MonoBehaviour
         Spell spell = gameManager.GetSpell(gameObject);
         if (spell == null) return;
 
-        // Vérifiez si l'objet entrant en collision est le sol
+        // Vérifiez si l'objet entrant en collision est le sol ou un obstacle
         if (gameObject.transform.position.y <= 0 || collider.gameObject != null)
         {
             Spell collidedSpell = gameManager.GetSpell(collider.gameObject);

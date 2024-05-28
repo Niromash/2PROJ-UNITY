@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnEntity : MonoBehaviour
@@ -8,16 +6,6 @@ public class SpawnEntity : MonoBehaviour
     public GameObject infantryPrefab;
     public GameObject antiArmorPrefab;
     public Vector2 spawnPosition;
-    
-    // public void InfantryEnemySpawn()
-    // {
-    //     Spawn(infantryPrefab, Side.Enemy);
-    // }
-    //
-    // public void AntiArmorEnemySpawn()
-    // {
-    //     Spawn(antiArmorPrefab, Side.Enemy);
-    // }
     
     public void InfantryPlayerSpawn()
     {

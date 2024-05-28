@@ -14,11 +14,11 @@ public class GameManager : MonoBehaviour
     private GameObject backgroundCanvasGameObject;
     private bool isSceneLoaded;
     private static GameState gameState;
-    private List<Meteor> meteors;
     private int playerGold;
     private int enemyGold;
     private int playerExperience;
     private int enemyExperience;
+    private List<Spell> spells;
 
     public GameManager()
     {
@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
         turrets = new List<Turret>();
         teams = new List<Team>();
         gameState = GameState.NotStarted;
-        meteors = new List<Meteor>();
+        spells = new List<Spell>();;
         playerGold = 0;
         playerExperience = 0;
         enemyGold = 0;
@@ -273,9 +273,20 @@ public class GameManager : MonoBehaviour
         return teams;
     }
 
-    public Meteor GetMeteor(GameObject go)
+    public Spell GetSpell(GameObject go)
     {
-        return meteors.Find(meteor => meteor.GetGameObject() == go);
+        return spells.Find(spell => spell.GetGameObject() == go);
+    }
+
+    public void AddSpell(Spell spell)
+    {
+        spells.Add(spell);
+    }
+
+    public void RemoveSpell(Spell spell)
+    {
+        spells = new List<Spell>(spells.Where(s => s != spell));
+        Destroy(spell.GetGameObject());
     }
 
     public static GameState GetGameState()

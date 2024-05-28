@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     public Canvas pauseCanvas;
-    private bool isPaused = false;
+    private bool isPaused;
 
     void Start()
     {
@@ -41,11 +41,10 @@ public class PauseMenu : MonoBehaviour
         pauseCanvas.gameObject.SetActive(false);
         Debug.Log("Game Resumed");
     }
-    
+
     public void QuitGame()
     {
         Resources.UnloadUnusedAssets();
         SceneManager.LoadScene("MainMenu");
     }
-    
 }

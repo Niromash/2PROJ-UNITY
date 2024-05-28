@@ -15,6 +15,10 @@ public class GameManager : MonoBehaviour
     private bool isSceneLoaded;
     private static GameState gameState;
     private List<Meteor> meteors;
+    private int playerGold;
+    private int enemyGold;
+    private int playerExperience;
+    private int enemyExperience;
 
     public GameManager()
     {
@@ -23,6 +27,10 @@ public class GameManager : MonoBehaviour
         teams = new List<Team>();
         gameState = GameState.NotStarted;
         meteors = new List<Meteor>();
+        playerGold = 0;
+        playerExperience = 0;
+        enemyGold = 0;
+        enemyExperience = 0;
     }
 
     private void OnEnable()
@@ -273,5 +281,56 @@ public class GameManager : MonoBehaviour
     public static GameState GetGameState()
     {
         return gameState;
+    }
+
+    public void GainGoldByKill(Team killerTeam, Team killedTeam)
+    {
+        if (killerTeam != null && killedTeam != null)
+        {
+            int goldAmount = 25;
+            killerTeam.AddGold(goldAmount);
+            if (killerTeam.GetSide() == Side.Player)
+            {
+                playerGold += goldAmount;
+            }
+            else if (killedTeam.GetSide() == Side.Enemy)
+            {
+                enemyGold += goldAmount;
+            }
+        }
+    }
+    public void GainExpByKill(Team killerTeam, Team killedTeam)
+    {
+        if (killerTeam != null && killedTeam != null)
+        {
+            int expAmount = 150;
+            killerTeam.AddExperience(expAmount);
+            if (killedTeam.GetSide() == Side.Player)
+            {
+                playerExperience += expAmount;
+            }
+            else if (killerTeam.GetSide() == Side.Enemy)
+            {
+                enemyExperience += expAmount;
+            }
+        }
+    }
+    public int GetPlayerGold()
+    {
+        return playerGold;
+    }
+    public int GetEnemyGold()
+    {
+        return enemyGold;
+    }
+
+    public int GetPlayerExperience()
+    {
+        return playerExperience;
+    }
+
+    public int GetEnemyExperience()
+    {
+        return enemyExperience;
     }
 }

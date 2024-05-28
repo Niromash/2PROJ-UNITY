@@ -435,9 +435,9 @@ GameObject:
   m_Component:
   - component: {fileID: 139544766}
   - component: {fileID: 139544767}
-  - component: {fileID: 139544769}
-  - component: {fileID: 139544768}
   - component: {fileID: 139544770}
+  - component: {fileID: 139544772}
+  - component: {fileID: 139544771}
   m_Layer: 0
   m_Name: Meteor
   m_TagString: Untagged
@@ -512,7 +512,47 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &139544768
+--- !u!114 &139544770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139544765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 678d9c5d57164be888364e362396e951, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameManager: {fileID: 600312218}
+--- !u!50 &139544771
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139544765}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 6
+--- !u!61 &139544772
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -541,10 +581,10 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.006297767, y: 0.004134178}
+  m_Offset: {x: 0.012898803, y: 0.020596862}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -555,48 +595,8 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 3.6354885, y: 3.5314803}
+  m_Size: {x: 3.6544378, y: 3.6906989}
   m_EdgeRadius: 0
---- !u!50 &139544769
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 139544765}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 6
---- !u!114 &139544770
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 139544765}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 678d9c5d57164be888364e362396e951, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gameManager: {fileID: 600312218}
 --- !u!1 &218931756
 GameObject:
   m_ObjectHideFlags: 0
@@ -894,7 +894,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 544143590}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SpawnEntity, Assembly-CSharp
         m_MethodName: Spawn
         m_Mode: 1
@@ -1222,7 +1222,7 @@ GameObject:
   - component: {fileID: 544143593}
   - component: {fileID: 544143592}
   - component: {fileID: 544143591}
-  - component: {fileID: 544143590}
+  - component: {fileID: 544143596}
   - component: {fileID: 544143595}
   m_Layer: 5
   m_Name: Canvas
@@ -1231,22 +1231,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &544143590
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 544143589}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38e9f3bf9b3f34e4bb84ab8d2aa7bfaf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gameManager: {fileID: 600312218}
-  infantryPrefab: {fileID: 1014623023}
-  antiArmorPrefab: {fileID: 894787029}
-  spawnPosition: {x: -3, y: 0}
 --- !u!114 &544143591
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1352,6 +1336,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 600312218}
+--- !u!114 &544143596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 544143589}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38e9f3bf9b3f34e4bb84ab8d2aa7bfaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameManager: {fileID: 600312218}
+  infantryPrefab: {fileID: 1014623023}
+  antiArmorPrefab: {fileID: 894787029}
+  spawnPosition: {x: -3, y: 0}
 --- !u!1 &591386721
 GameObject:
   m_ObjectHideFlags: 0
@@ -1570,7 +1570,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 544143590}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SpawnEntity, Assembly-CSharp
         m_MethodName: Spawn
         m_Mode: 1
@@ -2079,7 +2079,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 544143590}
+      - m_Target: {fileID: 544143596}
         m_TargetAssemblyTypeName: SpawnEntity, Assembly-CSharp
         m_MethodName: InfantryPlayerSpawn
         m_Mode: 1
@@ -4056,7 +4056,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 544143590}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SpawnEntity, Assembly-CSharp
         m_MethodName: InfantrySpawn
         m_Mode: 1
@@ -4188,7 +4188,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 544143590}
+      - m_Target: {fileID: 544143596}
         m_TargetAssemblyTypeName: SpawnEntity, Assembly-CSharp
         m_MethodName: AntiArmorPlayerSpawn
         m_Mode: 1
@@ -4746,7 +4746,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 544143590}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SpawnEntity, Assembly-CSharp
         m_MethodName: Spawn
         m_Mode: 1
@@ -5384,7 +5384,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 544143590}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SpawnEntity, Assembly-CSharp
         m_MethodName: Spawn
         m_Mode: 1

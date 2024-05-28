@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Unity.VisualStudio.Editor;
 using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -26,7 +27,8 @@ public class GameManager : MonoBehaviour
         turrets = new List<Turret>();
         teams = new List<Team>();
         gameState = GameState.NotStarted;
-        spells = new List<Spell>();;
+        spells = new List<Spell>();
+        ;
         playerGold = 0;
         playerExperience = 0;
         enemyGold = 0;
@@ -126,7 +128,7 @@ public class GameManager : MonoBehaviour
             entityCount++;
 
             // Wait for 10 seconds before creating another entity
-            yield return new WaitForSeconds(10);
+            yield return new WaitForSeconds(5);
         }
     }
 
@@ -154,11 +156,7 @@ public class GameManager : MonoBehaviour
     private Entity GetCollidingFrontEnemy(Entity entity)
     {
         Entity forwardEntity = entity.GetCollidedEntityForwards();
-
-        if (forwardEntity == null)
-        {
-            return null;
-        }
+        if (forwardEntity == null) return null;
 
         if (!forwardEntity.GetTeam().GetSide().Equals(entity.GetTeam().GetSide()))
         {
@@ -177,7 +175,7 @@ public class GameManager : MonoBehaviour
     private bool IsCollidingTower(Entity entity)
     {
         if (entity.GetCollidedTowerForwards() == null) return false;
-        if (entity.GetCollidedTowerForwards().GetTeam().GetSide().Equals(entity.GetTeam().GetSide())) return true;
+        if (!entity.GetCollidedTowerForwards().GetTeam().GetSide().Equals(entity.GetTeam().GetSide())) return true;
 
         Entity forwardEntity = entity.GetCollidedEntityForwards();
         if (forwardEntity == null) return false;
@@ -187,10 +185,7 @@ public class GameManager : MonoBehaviour
 
     private void MoveEntity(Entity entity)
     {
-        if (IsCollidingTower(entity))
-        {
-            return;
-        }
+        if (IsCollidingTower(entity)) return;
 
         Entity collidingFrontEnemy = GetCollidingFrontEnemy(entity);
         if (collidingFrontEnemy != null)
@@ -223,8 +218,18 @@ public class GameManager : MonoBehaviour
         // if the new position is in an entity in front (check with entity rigidbody size), then stop moving
         if (entity.GetCollidedEntityForwards() != null)
         {
-            float distance = entity.GetCollidedEntityForwards().GetGameObject().transform.position.x -
-                             entity.GetGameObject().transform.position.x;
+            float distance;
+            if (entity.GetTeam().GetSide().Equals(Side.Player))
+            {
+                distance = entity.GetCollidedEntityForwards().GetGameObject().transform.position.x -
+                           entity.GetGameObject().transform.position.x;
+            }
+            else
+            {
+                distance = entity.GetGameObject().transform.position.x -
+                           entity.GetCollidedEntityForwards().GetGameObject().transform.position.x;
+            }
+
             if (distance < entity.GetSpriteRenderer().bounds.size.x)
             {
                 return;
@@ -310,6 +315,7 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
     public void GainExpByKill(Team killerTeam, Team killedTeam)
     {
         if (killerTeam != null && killedTeam != null)
@@ -326,10 +332,12 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
     public int GetPlayerGold()
     {
         return playerGold;
     }
+
     public int GetEnemyGold()
     {
         return enemyGold;

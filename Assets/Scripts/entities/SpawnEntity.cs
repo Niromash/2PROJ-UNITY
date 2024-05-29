@@ -36,6 +36,5 @@ public class SpawnEntity : MonoBehaviour
 
         team.AddEntity(prefab, stats, spawnPosition);
         team.RemoveGold(stats.deploymentCost);
-        Debug.Log("Spawned entity " + stats.name + ". Gold left: " + team.GetGold());
     }
 }

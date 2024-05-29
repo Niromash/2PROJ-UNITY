@@ -22,7 +22,7 @@ public class Tower : Damageable
         
         tileMap = towerGameObject.GetComponent<Tilemap>();
         turrets = new List<Turret>();
-        Turret newTurret = new Turret(towerGameObject.transform.GetChild(0).gameObject, new FirstTurret(), team.GetSide());
+        Turret newTurret = new Turret(towerGameObject.transform.GetChild(0).gameObject, new FirstTurret(),team);
         turrets.Add(newTurret);
         
 

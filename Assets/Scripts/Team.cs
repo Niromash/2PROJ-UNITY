@@ -1,26 +1,41 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Team
 {
     private readonly Side side;
     private readonly List<Entity> entities;
     private readonly Tower tower;
-    private readonly List<Turret> turrets;
     private readonly Queue<EntityToSpawn> entitiesToSpawn;
     private int gold;
     private int experience;
+    private int maxExperience;
+    private Image expBarImage;
+    private TextMeshProUGUI goldCountText;
+    private TextMeshProUGUI expCountText;
 
     public Team(Side side, GameObject towerGameObject, GameManager gameManager)
     {
         this.side = side;
         tower = new Tower(500, towerGameObject, this, gameManager);
         entities = new List<Entity>();
-        turrets = new List<Turret>();
         entitiesToSpawn = new Queue<EntityToSpawn>();
         gold = 500;
         experience = 0;
+        maxExperience = 500; // exemple d'expérience maximale pour remplir la barre
+        GameObject expBar = GameObject.Find(side.Equals(Side.Player) ? "TowerLeftExpBar" : "TowerRightExpBar");
+        GameObject goldcount = GameObject.Find(side.Equals(Side.Player) ? "GoldLeft" : "GoldRight");
+        GameObject expcount = GameObject.Find(side.Equals(Side.Player) ? "ExpLeftText" : "ExpRightText");
+        goldCountText = goldcount.GetComponent<TextMeshProUGUI>();
+        expCountText = expcount.GetComponent<TextMeshProUGUI>();
+        expBarImage = expBar.GetComponent<Image>();
+        
+        UpdateExpBar();
+        DisplayGold();
+        UpdateExpBar();
     }
 
     public int GetGold()
@@ -36,19 +51,19 @@ public class Team
     public void AddGold(int amount)
     {
         gold += amount;
-        Debug.Log("Gain de" + amount + "gold");
+        DisplayGold();
     }
 
     public void AddExperience(int amount)
     {
         experience += amount;
-        Debug.Log("Gain de " + amount + " d'experience!");
+        UpdateExpBar();
     }
 
     public void RemoveGold(int amount)
     {
         gold -= amount;
-        Debug.Log("Perte de " + amount + " gold");
+        DisplayGold();
     }
 
     public void AddEntity(GameObject prefab, CharacterStats stats, Vector3 spawnPosition)
@@ -71,22 +86,7 @@ public class Team
     {
         return entitiesToSpawn;
     }
-
-    public void AddTurret(Turret turret)
-    {
-        turrets.Add(turret);
-    }
-
-    public void RemoveTurret(Turret turret)
-    {
-        turrets.Remove(turret);
-    }
-
-    public List<Turret> GetTurrets()
-    {
-        return turrets;
-    }
-
+    
     public Side GetSide()
     {
         return side;
@@ -131,6 +131,28 @@ public class Team
         {
             AddGold(10);
             yield return new WaitForSeconds(1);
+        }
+    }
+    
+    public void UpdateExpBar()
+    {
+        if (expBarImage != null)
+        {
+            float expPercentage = (float)experience / maxExperience;
+            expBarImage.color = Color.Lerp(Color.cyan, Color.blue, expPercentage);
+            expBarImage.fillAmount = expPercentage;
+        }
+        if  (expCountText != null)
+        {
+            expCountText.text = experience.ToString();
+        }
+    }
+    
+    public void DisplayGold()
+    {
+        if (goldCountText != null)
+        {
+            goldCountText.text = gold.ToString();
         }
     }
 }

@@ -36,7 +36,7 @@ public class TurretAttackController : MonoBehaviour
                 continue;
             }
 
-            if (iteratedEntity != null && !iteratedEntity.GetTeam().GetSide().Equals(sourceTurret.GetSide()))
+            if (iteratedEntity != null && !iteratedEntity.GetTeam().GetSide().Equals(sourceTurret.GetTeam().GetSide()))
             {
                 // Calculate the distance considering the size of the entity
                 float distanceToEntity = Vector2.Distance(transform.position, iteratedEntity.GetPosition());
@@ -68,7 +68,7 @@ public class TurretAttackController : MonoBehaviour
             List<Damageable> enemiesInRange = GetEnemiesInRange(sourceTurret.GetStats().range);
             if (enemiesInRange.Count > 0)
             {
-                enemiesInRange[0].TakeDamage(sourceTurret.GetStats().damagePerSecond);
+                enemiesInRange[0].TakeDamage(sourceTurret);
             }
 
             yield return new WaitForSeconds(1);

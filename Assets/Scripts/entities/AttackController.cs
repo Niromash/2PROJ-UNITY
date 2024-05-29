@@ -24,7 +24,7 @@ public class AttackController : MonoBehaviour
     }
 
     // GetEnemiesInRange returns a list of enemies within a certain range (including entites and towers)
-    private List<Damageable> GetEnemiesInRange(float range)
+    public List<Damageable> GetEnemiesInRange(float range)
     {
         List<Damageable> enemiesInRange = new List<Damageable>();
 
@@ -78,4 +78,6 @@ public class AttackController : MonoBehaviour
             yield return new WaitForSeconds(1);
         }
     }
+    
+    
 }

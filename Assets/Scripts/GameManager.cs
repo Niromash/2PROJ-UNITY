@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
 
         GameObject towerLeft = GameObject.Find("TowerLeft");
         GameObject towerRight = GameObject.Find("TowerRight");
+        
 
         teams.Add(new Team(Side.Player, towerLeft, this));
         teams.Add(new Team(Side.Enemy, towerRight, this));
@@ -139,6 +140,22 @@ public class GameManager : MonoBehaviour
 
         return null;
     }
+    
+    public Turret GetTurret(GameObject go)
+    {
+        foreach (Team team in teams)
+        {
+            Debug.Log(team.GetTower().GetTurrets());
+            Turret turretFound = team.GetTower().GetTurrets().Find(turret => turret.GetGameObject() == go);
+            if (turretFound != null)
+            {
+                return turretFound;
+            }
+        }
+
+        return null;
+    }
+
 
     // Using recursion to check if the entity is colliding with next entity, if the next entity is an enemy, then stop moving
     private Entity GetCollidingFrontEnemy(Entity entity)

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Unity.VisualStudio.Editor;
 using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,7 +15,11 @@ public class GameManager : MonoBehaviour
     private GameObject backgroundCanvasGameObject;
     private bool isSceneLoaded;
     private static GameState gameState;
-    private List<Meteor> meteors;
+    private int playerGold;
+    private int enemyGold;
+    private int playerExperience;
+    private int enemyExperience;
+    private List<Spell> spells;
 
     public GameManager()
     {
@@ -22,7 +27,12 @@ public class GameManager : MonoBehaviour
         turrets = new List<Turret>();
         teams = new List<Team>();
         gameState = GameState.NotStarted;
-        meteors = new List<Meteor>();
+        spells = new List<Spell>();
+        ;
+        playerGold = 0;
+        playerExperience = 0;
+        enemyGold = 0;
+        enemyExperience = 0;
     }
 
     private void OnEnable()
@@ -118,7 +128,7 @@ public class GameManager : MonoBehaviour
             entityCount++;
 
             // Wait for 10 seconds before creating another entity
-            yield return new WaitForSeconds(10);
+            yield return new WaitForSeconds(5);
         }
     }
 
@@ -146,11 +156,7 @@ public class GameManager : MonoBehaviour
     private Entity GetCollidingFrontEnemy(Entity entity)
     {
         Entity forwardEntity = entity.GetCollidedEntityForwards();
-
-        if (forwardEntity == null)
-        {
-            return null;
-        }
+        if (forwardEntity == null) return null;
 
         if (!forwardEntity.GetTeam().GetSide().Equals(entity.GetTeam().GetSide()))
         {
@@ -169,7 +175,7 @@ public class GameManager : MonoBehaviour
     private bool IsCollidingTower(Entity entity)
     {
         if (entity.GetCollidedTowerForwards() == null) return false;
-        if (entity.GetCollidedTowerForwards().GetTeam().GetSide().Equals(entity.GetTeam().GetSide())) return true;
+        if (!entity.GetCollidedTowerForwards().GetTeam().GetSide().Equals(entity.GetTeam().GetSide())) return true;
 
         Entity forwardEntity = entity.GetCollidedEntityForwards();
         if (forwardEntity == null) return false;
@@ -179,10 +185,7 @@ public class GameManager : MonoBehaviour
 
     private void MoveEntity(Entity entity)
     {
-        if (IsCollidingTower(entity))
-        {
-            return;
-        }
+        if (IsCollidingTower(entity)) return;
 
         Entity collidingFrontEnemy = GetCollidingFrontEnemy(entity);
         if (collidingFrontEnemy != null)
@@ -215,8 +218,18 @@ public class GameManager : MonoBehaviour
         // if the new position is in an entity in front (check with entity rigidbody size), then stop moving
         if (entity.GetCollidedEntityForwards() != null)
         {
-            float distance = entity.GetCollidedEntityForwards().GetGameObject().transform.position.x -
-                             entity.GetGameObject().transform.position.x;
+            float distance;
+            if (entity.GetTeam().GetSide().Equals(Side.Player))
+            {
+                distance = entity.GetCollidedEntityForwards().GetGameObject().transform.position.x -
+                           entity.GetGameObject().transform.position.x;
+            }
+            else
+            {
+                distance = entity.GetGameObject().transform.position.x -
+                           entity.GetCollidedEntityForwards().GetGameObject().transform.position.x;
+            }
+
             if (distance < entity.GetSpriteRenderer().bounds.size.x)
             {
                 return;
@@ -265,13 +278,78 @@ public class GameManager : MonoBehaviour
         return teams;
     }
 
-    public Meteor GetMeteor(GameObject go)
+    public Spell GetSpell(GameObject go)
     {
-        return meteors.Find(meteor => meteor.GetGameObject() == go);
+        return spells.Find(spell => spell.GetGameObject() == go);
+    }
+
+    public void AddSpell(Spell spell)
+    {
+        spells.Add(spell);
+    }
+
+    public void RemoveSpell(Spell spell)
+    {
+        spells = new List<Spell>(spells.Where(s => s != spell));
+        Destroy(spell.GetGameObject());
     }
 
     public static GameState GetGameState()
     {
         return gameState;
+    }
+
+    public void GainGoldByKill(Team killerTeam, Team killedTeam)
+    {
+        if (killerTeam != null && killedTeam != null)
+        {
+            int goldAmount = 25;
+            killerTeam.AddGold(goldAmount);
+            if (killerTeam.GetSide() == Side.Player)
+            {
+                playerGold += goldAmount;
+            }
+            else if (killedTeam.GetSide() == Side.Enemy)
+            {
+                enemyGold += goldAmount;
+            }
+        }
+    }
+
+    public void GainExpByKill(Team killerTeam, Team killedTeam)
+    {
+        if (killerTeam != null && killedTeam != null)
+        {
+            int expAmount = 150;
+            killerTeam.AddExperience(expAmount);
+            if (killedTeam.GetSide() == Side.Player)
+            {
+                playerExperience += expAmount;
+            }
+            else if (killerTeam.GetSide() == Side.Enemy)
+            {
+                enemyExperience += expAmount;
+            }
+        }
+    }
+
+    public int GetPlayerGold()
+    {
+        return playerGold;
+    }
+
+    public int GetEnemyGold()
+    {
+        return enemyGold;
+    }
+
+    public int GetPlayerExperience()
+    {
+        return playerExperience;
+    }
+
+    public int GetEnemyExperience()
+    {
+        return enemyExperience;
     }
 }

@@ -163,6 +163,19 @@ public class Entity : Damageable
         }
         
         gameManager.RemoveEntity(this);
+
+        if (team.GetSide() == Side.Enemy)
+        {
+            Team playerTeam = gameManager.GetTeams().Find(t => t.GetSide() == Side.Player);
+            gameManager.GainGoldByKill(playerTeam, team);
+            gameManager.GainExpByKill(playerTeam, team);
+        }
+        else if (team.GetSide() == Side.Player)
+        {
+            Team enemyTeam = gameManager.GetTeams().Find(t => t.GetSide() == Side.Enemy);
+            gameManager.GainGoldByKill(enemyTeam, team);
+            gameManager.GainExpByKill(enemyTeam, team);
+        }
     }
 
     public bool IsKilled()

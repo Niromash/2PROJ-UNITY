@@ -38,7 +38,6 @@ public class GameManager : MonoBehaviour
         GameObject towerLeft = GameObject.Find("TowerLeft");
         GameObject towerRight = GameObject.Find("TowerRight");
         
-
         teams.Add(new Team(Side.Player, towerLeft, this));
         teams.Add(new Team(Side.Enemy, towerRight, this));
 
@@ -140,7 +139,7 @@ public class GameManager : MonoBehaviour
 
         return null;
     }
-    
+
     public Turret GetTurret(GameObject go)
     {
         foreach (Team team in teams)

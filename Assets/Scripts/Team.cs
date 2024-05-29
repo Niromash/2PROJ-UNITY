@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 public class Team
 {
@@ -10,6 +12,7 @@ public class Team
     private readonly List<Entity> entities;
     private readonly Tower tower;
     private readonly Queue<EntityToSpawn> entitiesToSpawn;
+    private Age currentAge;
     private int gold;
     private int experience;
     private int maxExperience;
@@ -19,6 +22,7 @@ public class Team
 
     public Team(Side side, GameObject towerGameObject, GameManager gameManager)
     {
+        currentAge = new PrehistoricAge();
         this.side = side;
         tower = new Tower(500, towerGameObject, this, gameManager);
         entities = new List<Entity>();
@@ -32,7 +36,7 @@ public class Team
         goldCountText = goldcount.GetComponent<TextMeshProUGUI>();
         expCountText = expcount.GetComponent<TextMeshProUGUI>();
         expBarImage = expBar.GetComponent<Image>();
-        
+
         UpdateExpBar();
         DisplayGold();
         UpdateExpBar();
@@ -86,7 +90,7 @@ public class Team
     {
         return entitiesToSpawn;
     }
-    
+
     public Side GetSide()
     {
         return side;
@@ -130,11 +134,11 @@ public class Team
     {
         while (GameManager.GetGameState().Equals(GameState.Playing))
         {
-            AddGold(10);
+            AddGold(Convert.ToInt32(Math.Round(10 * currentAge.incomeMultiplier)));
             yield return new WaitForSeconds(1);
         }
     }
-    
+
     public void UpdateExpBar()
     {
         if (expBarImage != null)
@@ -143,17 +147,23 @@ public class Team
             expBarImage.color = Color.Lerp(Color.cyan, Color.blue, expPercentage);
             expBarImage.fillAmount = expPercentage;
         }
-        if  (expCountText != null)
+
+        if (expCountText != null)
         {
             expCountText.text = experience.ToString();
         }
     }
-    
+
     public void DisplayGold()
     {
         if (goldCountText != null)
         {
             goldCountText.text = gold.ToString();
         }
+    }
+
+    public void SetCurrentAge(Age age)
+    {
+        currentAge = age;
     }
 }

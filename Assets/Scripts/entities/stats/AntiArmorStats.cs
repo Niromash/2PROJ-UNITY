@@ -3,7 +3,7 @@ public class AntiArmorStats : CharacterStats
 {
     public AntiArmorStats()
     {
-        name = "Anti-Armor";
+        name = "AntiArmor";
         maxHealth = 200f;
         health = maxHealth;
         damagePerSecond = 30f;

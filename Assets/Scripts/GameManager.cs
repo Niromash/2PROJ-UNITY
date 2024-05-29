@@ -1,38 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Unity.VisualStudio.Editor;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    private List<Turret> turrets;
-    private Queue<Entity> entityQueue;
     private List<Team> teams;
     private Camera mainCamera;
     private GameObject backgroundCanvasGameObject;
     private bool isSceneLoaded;
     private static GameState gameState;
-    private int playerGold;
-    private int enemyGold;
-    private int playerExperience;
-    private int enemyExperience;
     private List<Spell> spells;
 
     public GameManager()
     {
-        entityQueue = new Queue<Entity>();
-        turrets = new List<Turret>();
         teams = new List<Team>();
         gameState = GameState.NotStarted;
         spells = new List<Spell>();
-        ;
-        playerGold = 0;
-        playerExperience = 0;
-        enemyGold = 0;
-        enemyExperience = 0;
     }
 
     private void OnEnable()
@@ -56,10 +41,16 @@ public class GameManager : MonoBehaviour
         teams.Add(new Team(Side.Player, towerLeft, this));
         teams.Add(new Team(Side.Enemy, towerRight, this));
 
+        if (!isSceneLoaded) return;
         gameState = GameState.Playing;
 
         // Async task to create a new enemy entity
         StartCoroutine(CreateEntity());
+
+        foreach (Team team in teams)
+        {
+            StartCoroutine(team.SpawnEntities(this));
+        }
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -99,7 +90,8 @@ public class GameManager : MonoBehaviour
 
     private void MoveEntities()
     {
-        foreach (Entity entity in entityQueue)
+        List<Entity> entities = teams.SelectMany(team => team.GetEntities()).ToList();
+        foreach (Entity entity in entities)
         {
             MoveEntity(entity);
         }
@@ -115,27 +107,22 @@ public class GameManager : MonoBehaviour
         int entityCount = 0;
         while (gameState.Equals(GameState.Playing))
         {
-            GameObject entityToSpawn = entityCount % 2 == 0 ? frankiTanki : marcel;
             CharacterStats stats = entityCount % 2 == 0 ? new InfantryStats() : new AntiArmorStats();
-            // Create a new entity
-            GameObject baseEntity = Instantiate(entityToSpawn, new Vector3(25, 0f, 0), Quaternion.identity);
-            baseEntity.SetActive(true);
-            // remove the tag so that the spawned object is not considered a template
-            baseEntity.tag = "Untagged";
-            // Flip the entity sprite to face the enemy side
-            baseEntity.GetComponent<SpriteRenderer>().flipX = true;
-            AddEntity(new Entity(baseEntity, enemyTeam, stats, this));
-            entityCount++;
+            if (stats.deploymentCost > enemyTeam.GetGold())
+            {
+                Debug.Log("Not enough gold to spawn enemy entity " + stats.name);
+            }
+            else
+            {
+                GameObject entityToSpawn = entityCount % 2 == 0 ? frankiTanki : marcel;
+                enemyTeam.AddEntity(entityToSpawn, stats, new Vector3(25, 0f, 0));
+                enemyTeam.RemoveGold(stats.deploymentCost);
+                entityCount++;
+            }
 
             // Wait for 10 seconds before creating another entity
-            yield return new WaitForSeconds(5);
+            yield return new WaitForSeconds(3);
         }
-    }
-
-    public void AddEntity(Entity entity)
-    {
-        entityQueue.Enqueue(entity);
-        teams.Find(team => team.GetSide().Equals(entity.GetTeam().GetSide())).AddEntity(entity);
     }
 
     public Entity GetEntity(GameObject go)
@@ -250,13 +237,6 @@ public class GameManager : MonoBehaviour
         entity.GetRigidbody().transform.position += new Vector3(horizontalMovement * Time.deltaTime, 0, 0);
     }
 
-    public void RemoveEntity(Entity entity)
-    {
-        entityQueue = new Queue<Entity>(entityQueue.Where(s => s != entity));
-        teams.Find(team => team.GetSide().Equals(entity.GetTeam().GetSide())).RemoveEntity(entity);
-        Destroy(entity.GetGameObject());
-    }
-
     public Tower GetTower(GameObject go)
     {
         Team team = teams.Find(team => team.GetTower().GetGameObject() == go);
@@ -268,8 +248,9 @@ public class GameManager : MonoBehaviour
         return team.GetTower();
     }
 
-    public void EndGame()
+    public void EndGame(Damager damager)
     {
+        Debug.Log("Game Over! " + damager.GetTeam().GetSide() + " team won, killed by " + damager.GetName());
         gameState = GameState.Finished;
     }
 
@@ -297,59 +278,5 @@ public class GameManager : MonoBehaviour
     public static GameState GetGameState()
     {
         return gameState;
-    }
-
-    public void GainGoldByKill(Team killerTeam, Team killedTeam)
-    {
-        if (killerTeam != null && killedTeam != null)
-        {
-            int goldAmount = 25;
-            killerTeam.AddGold(goldAmount);
-            if (killerTeam.GetSide() == Side.Player)
-            {
-                playerGold += goldAmount;
-            }
-            else if (killedTeam.GetSide() == Side.Enemy)
-            {
-                enemyGold += goldAmount;
-            }
-        }
-    }
-
-    public void GainExpByKill(Team killerTeam, Team killedTeam)
-    {
-        if (killerTeam != null && killedTeam != null)
-        {
-            int expAmount = 150;
-            killerTeam.AddExperience(expAmount);
-            if (killedTeam.GetSide() == Side.Player)
-            {
-                playerExperience += expAmount;
-            }
-            else if (killerTeam.GetSide() == Side.Enemy)
-            {
-                enemyExperience += expAmount;
-            }
-        }
-    }
-
-    public int GetPlayerGold()
-    {
-        return playerGold;
-    }
-
-    public int GetEnemyGold()
-    {
-        return enemyGold;
-    }
-
-    public int GetPlayerExperience()
-    {
-        return playerExperience;
-    }
-
-    public int GetEnemyExperience()
-    {
-        return enemyExperience;
     }
 }

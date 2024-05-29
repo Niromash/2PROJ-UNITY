@@ -1,20 +1,15 @@
-﻿using System;
-using System.Reflection;
-using UnityEngine;
-using Random = UnityEngine.Random;
+﻿using UnityEngine;
 
-public abstract class Spell
+public abstract class Spell : Damager
 {
     private readonly GameObject gameObject;
-    private readonly Side side;
-    private readonly GameManager gameManager;
+    private readonly Team team;
     private static SpellStats spellStats;
 
-    protected Spell(string gameObjectName, Side side, SpellStats spellStats, GameManager gameManager)
+    protected Spell(string gameObjectName, Team team, SpellStats spellStats)
     {
         gameObject = GameObject.Instantiate(GameObject.Find(gameObjectName));
-        this.side = side;
-        this.gameManager = gameManager;
+        this.team = team;
         Spell.spellStats = spellStats;
     }
 
@@ -23,14 +18,24 @@ public abstract class Spell
         return gameObject;
     }
 
-    public Side GetSide()
+    public Team GetTeam()
     {
-        return side;
+        return team;
     }
 
     public static SpellStats GetSpellStats()
     {
         return spellStats;
+    }
+
+    public DamagerStats GetDamagerStats()
+    {
+        return spellStats;
+    }
+
+    public string GetName()
+    {
+        return spellStats.name;
     }
 
     public abstract void ApplyEffect(Entity entity);

@@ -1,7 +1,7 @@
 ﻿public interface Damageable : Collidable, HasTeam
 {
-    void TakeDamage(float damage);
+    void TakeDamage(Damager damager);
     float GetHealth();
-    void Kill();
+    void Kill(Damager damager);
 }
 

@@ -31,12 +31,10 @@ public class CollisionController : MonoBehaviour
             if (collidedSource == null)
             {
                 if (HandleTowerCollision(collidedTarget, gameManager.GetTower(collision.gameObject))) return;
-                if (HandleMeteorCollision(gameManager.GetMeteor(collision.gameObject))) return;
             }
             else
             {
                 if (HandleTowerCollision(collidedSource, gameManager.GetTower(gameObject))) return;
-                if (HandleMeteorCollision(gameManager.GetMeteor(gameObject))) return;
             }
         }
 
@@ -79,19 +77,6 @@ public class CollisionController : MonoBehaviour
         if (tower.GetTeam().GetSide().Equals(entity.GetTeam().GetSide())) return false;
 
         entity.SetCollidedTowerForwards(tower);
-        Debug.Log(tower.GetTeam().GetSide() + " tower has been hit by " + entity.GetTeam().GetSide());
-        // StartCoroutine(DamageOverTime(tower, entity));
-
-        return true;
-    }
-
-    private bool HandleMeteorCollision(Meteor meteor)
-    {
-        if (meteor == null) return false;
-
-        Debug.Log("Meteor collided: " + meteor.GetGameObject().name);
-        meteor.GetGameObject().SetActive(false);
-        Destroy(meteor.GetGameObject());
 
         return true;
     }

@@ -72,7 +72,7 @@ public class AttackController : MonoBehaviour
             if (enemiesInRange.Count > 0)
             {
                 // Attack the first enemy in the list, which is the closest one
-                enemiesInRange[0].TakeDamage(sourceEntity.GetStats().damagePerSecond);
+                enemiesInRange[0].TakeDamage(sourceEntity);
             }
 
             yield return new WaitForSeconds(1);

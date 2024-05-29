@@ -59,12 +59,12 @@ public class Tower : Damageable
         return extremeCell;
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(Damager damager)
     {
-        health -= damage;
+        health -= damager.GetDamagerStats().GetDamage();
         if (health <= 0)
         {
-            Kill();
+            Kill(damager);
         }
 
         UpdateHealthBar();
@@ -75,10 +75,10 @@ public class Tower : Damageable
         return health;
     }
 
-    public void Kill()
+    public void Kill(Damager damager)
     {
         // Destroy the tower, probably the end of the game
-        gameManager.EndGame();
+        gameManager.EndGame(damager);
     }
 
     public Team GetTeam()

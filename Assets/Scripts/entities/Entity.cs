@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Entity : Damageable
+public class Entity : Damageable, Damager, Nameable
 {
     private readonly GameObject gameObject;
     private readonly GameObject healthBar;
@@ -44,12 +44,12 @@ public class Entity : Damageable
     {
         return rb;
     }
-    
+
     public SpriteRenderer GetSpriteRenderer()
     {
         return spriteRenderer;
     }
-    
+
     public void SetForwardCollide(Entity entity)
     {
         collidedEntityForwards = entity;
@@ -113,17 +113,12 @@ public class Entity : Damageable
         healthBar.transform.localScale = healthBarScale;
     }
 
-    public void TakeDamageFromEntity(Entity entity)
+    public void TakeDamage(Damager damager)
     {
-        TakeDamage(entity.GetStats().damagePerSecond);
-    }
-
-    public void TakeDamage(float damage)
-    {
-        stats.health -= damage;
+        stats.health -= damager.GetDamagerStats().GetDamage();
         if (stats.health <= 0)
         {
-            Kill();
+            Kill(damager);
         }
 
         UpdateHealthBar();
@@ -134,37 +129,49 @@ public class Entity : Damageable
         return stats.health;
     }
 
-    public void Kill()
+    public void Kill(Damager damager)
     {
         isKilled = true;
-        
+
         // set to the backward entity, the forward entity null
         if (collidedEntityBackwards != null)
         {
             collidedEntityBackwards.SetForwardCollide(null);
         }
-        
+
         // if the entity forward is enemy, set the forward entity null for the forward entity of the killed entity
         if (collidedEntityForwards != null && !collidedEntityForwards.GetTeam().GetSide().Equals(team.GetSide()))
         {
             collidedEntityForwards.SetForwardCollide(null);
         }
-        
-        gameManager.RemoveEntity(this);
+
+        team.RemoveEntity(this);
+        damager.GetTeam().AddExperience(stats.deathExperience);
+        damager.GetTeam().AddGold(stats.deathGold);
     }
 
     public bool IsKilled()
     {
         return isKilled;
     }
-    
+
     public Vector3 GetPosition()
     {
         return gameObject.transform.position;
     }
-    
+
     public Vector3 GetSize()
     {
         return spriteRenderer.bounds.size;
+    }
+
+    public DamagerStats GetDamagerStats()
+    {
+        return stats;
+    }
+
+    public string GetName()
+    {
+        return stats.name;
     }
 }

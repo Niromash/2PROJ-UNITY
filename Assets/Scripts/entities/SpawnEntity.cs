@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnEntity : MonoBehaviour
@@ -15,13 +13,13 @@ public class SpawnEntity : MonoBehaviour
         Team playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
         Spawn(tankPrefab, playerTeam, new TankStats());
     }
-
+    
     public void InfantryPlayerSpawn()
     {
         Team playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
         Spawn(infantryPrefab, playerTeam, new InfantryStats());
     }
-    
+
     public void AntiArmorPlayerSpawn()
     {
         Team playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
@@ -30,12 +28,14 @@ public class SpawnEntity : MonoBehaviour
 
     private void Spawn(GameObject prefab, Team team, CharacterStats stats)
     {
-        GameObject spawnedObject = Instantiate(prefab, spawnPosition, Quaternion.identity);
-        spawnedObject.SetActive(true);
-        // remove the tag so that the spawned object is not considered a template
-        spawnedObject.tag = "Untagged";
+        if (stats.deploymentCost > team.GetGold())
+        {
+            Debug.Log("Not enough gold to spawn entity " + prefab.name);
+            return;
+        }
 
-        Entity entity = new Entity(spawnedObject, team, stats, gameManager);
-        gameManager.AddEntity(entity);
+        team.AddEntity(prefab, stats, spawnPosition);
+        team.RemoveGold(stats.deploymentCost);
+        Debug.Log("Spawned entity " + stats.name + ". Gold left: " + team.GetGold());
     }
 }

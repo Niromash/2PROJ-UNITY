@@ -19,11 +19,16 @@ public class Tower : Damageable
     {
         GameObject healthBar = GameObject.Find(team.GetSide().Equals(Side.Player) ? "TowerLeftHealthBar" : "TowerRightHealthBar");
         healthBarImage = healthBar.GetComponent<Image>();
-        
+    
         tileMap = towerGameObject.GetComponent<Tilemap>();
         turrets = new List<Turret>();
-        Turret newTurret = new Turret(towerGameObject.transform.GetChild(0).gameObject, new FirstTurret(), team.GetSide());
-        turrets.Add(newTurret);
+    
+        for (int i = 0; i < 3; i++)
+        {
+            GameObject turretGameObject = towerGameObject.transform.GetChild(i).gameObject;
+            Turret newTurret = new Turret(turretGameObject, new FirstTurret(), team);
+            turrets.Add(newTurret);
+        }
         
 
         // Get the position of the most left/right tile of the tower depending on the team
@@ -34,9 +39,10 @@ public class Tower : Damageable
         this.towerGameObject = towerGameObject;
         this.team = team;
         this.gameManager = gameManager;
-        
+    
         UpdateHealthBar();
     }
+
 
     // Function to find the extreme tile position (leftmost or rightmost) of the tower
     private Vector3Int GetExtremeTilePosition(Tilemap tileMap, bool findLeftmost)
@@ -58,6 +64,7 @@ public class Tower : Damageable
 
         return extremeCell;
     }
+    
 
     public void TakeDamage(float damage)
     {

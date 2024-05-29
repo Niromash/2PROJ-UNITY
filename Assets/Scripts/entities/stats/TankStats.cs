@@ -3,7 +3,7 @@ public class TankStats : CharacterStats
 {
     public TankStats()
     {
-        maxHealth = 200f;
+        maxHealth = 300f;
         health = maxHealth;
         damagePerSecond = 30f;
         attackSpeed = 70f;

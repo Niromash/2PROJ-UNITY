@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class TurretAttackController : MonoBehaviour
 {
     public GameManager gameManager;
+    public GameObject bulletPrefab;
     private Turret sourceTurret;
 
     void Start()
@@ -21,7 +22,7 @@ public class TurretAttackController : MonoBehaviour
 
         StartCoroutine(CheckForEnemiesInRange());
     }
-    
+
     public List<Damageable> GetEnemiesInRange(float range)
     {
         List<Damageable> enemiesInRange = new List<Damageable>();
@@ -36,7 +37,7 @@ public class TurretAttackController : MonoBehaviour
                 continue;
             }
 
-            if (iteratedEntity != null && !iteratedEntity.GetTeam().GetSide().Equals(sourceTurret.GetSide()))
+            if (iteratedEntity != null && !iteratedEntity.GetTeam().GetSide().Equals(sourceTurret.GetTeam().GetSide()))
             {
                 // Calculate the distance considering the size of the entity
                 float distanceToEntity = Vector2.Distance(transform.position, iteratedEntity.GetPosition());
@@ -51,13 +52,22 @@ public class TurretAttackController : MonoBehaviour
         }
 
         // Sort the list by distance
+        // enemiesInRange.Sort((a, b) =>
+        // {
+        //     float distanceA = Vector2.Distance(transform.position, a.GetPosition());
+        //     float distanceB = Vector2.Distance(transform.position, b.GetPosition());
+        //     return distanceA.CompareTo(distanceB);
+        // });
+        //
+        // return enemiesInRange;
+
+        // Sort the list by the distance to the tower
         enemiesInRange.Sort((a, b) =>
         {
-            float distanceA = Vector2.Distance(transform.position, a.GetPosition());
-            float distanceB = Vector2.Distance(transform.position, b.GetPosition());
+            float distanceA = Vector2.Distance(sourceTurret.GetTeam().GetTower().GetPosition(), a.GetPosition());
+            float distanceB = Vector2.Distance(sourceTurret.GetTeam().GetTower().GetPosition(), b.GetPosition());
             return distanceA.CompareTo(distanceB);
         });
-
         return enemiesInRange;
     }
 
@@ -69,6 +79,9 @@ public class TurretAttackController : MonoBehaviour
             if (enemiesInRange.Count > 0)
             {
                 enemiesInRange[0].TakeDamage(sourceTurret.GetStats().damagePerSecond);
+
+                var bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+                bullet.GetComponent<Rigidbody2D>().velocity = (enemiesInRange[0].GetPosition() - transform.position).normalized * sourceTurret.GetStats().bulletSpeed;
             }
 
             yield return new WaitForSeconds(1);

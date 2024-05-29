@@ -9,6 +9,9 @@ public class SpawnEntity : MonoBehaviour
     public GameObject infantryPrefab;
     public GameObject antiArmorPrefab;
     public Vector2 spawnPosition;
+    private int infantryCount = 0;
+    private int antiArmorCount = 0;
+
     
     public void TankPlayerSpawn()
     {
@@ -16,9 +19,7 @@ public class SpawnEntity : MonoBehaviour
         Spawn(tankPrefab, playerTeam, new TankStats());
     }
     
-    private int infantryCount = 0;
-    private int antiArmorCount = 0;
-    
+   
     
     public void InfantryPlayerSpawn()
     {
@@ -40,19 +41,24 @@ public class SpawnEntity : MonoBehaviour
             return;
         }
 
+        string entityName;
         // Increment the counter for the entity type and add it to the name
-        if (entityType == "Infantry")
+        if (prefab.name == "Infantry")
         {
             infantryCount++;
-            spawnedObject.name = entityType + infantryCount;
+            entityName = prefab.name + infantryCount;
         }
-        else if (entityType == "AntiArmor")
+        else if (prefab.name == "AntiArmor")
         {
             antiArmorCount++;
-            spawnedObject.name = entityType + antiArmorCount;
+            entityName = prefab.name + antiArmorCount;
+        }
+        else
+        {
+            entityName = prefab.name;
         }
 
-        team.AddEntity(prefab, stats, spawnPosition);
+        team.AddEntity(prefab, stats, spawnPosition, entityName);
         team.RemoveGold(stats.deploymentCost);
     }
 }

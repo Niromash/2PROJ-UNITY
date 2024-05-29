@@ -66,9 +66,9 @@ public class Team
         DisplayGold();
     }
 
-    public void AddEntity(GameObject prefab, CharacterStats stats, Vector3 spawnPosition)
+    public void AddEntity(GameObject prefab, CharacterStats stats, Vector3 spawnPosition, string entityName)
     {
-        entitiesToSpawn.Enqueue(new EntityToSpawn(prefab, this, stats, spawnPosition));
+        entitiesToSpawn.Enqueue(new EntityToSpawn(prefab, this, stats, spawnPosition, entityName));
     }
 
     public void RemoveEntity(Entity entity)
@@ -110,6 +110,7 @@ public class Team
                 spawnedObject.tag = "Untagged";
 
                 if (GetSide().Equals(Side.Enemy)) spawnedObject.GetComponent<SpriteRenderer>().flipX = true;
+                spawnedObject.name = entityToSpawn.GetEntityName();
 
                 entities.Add(new Entity(spawnedObject, this, entityToSpawn.GetStats(), gameManager));
 

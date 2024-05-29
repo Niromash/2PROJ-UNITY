@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour
             else
             {
                 GameObject entityToSpawn = entityCount % 2 == 0 ? frankiTanki : marcel;
-                enemyTeam.AddEntity(entityToSpawn, stats, new Vector3(25, 0f, 0));
+                enemyTeam.AddEntity(entityToSpawn, stats, new Vector3(25, 0f, 0), stats.name);
                 enemyTeam.RemoveGold(stats.deploymentCost);
                 entityCount++;
             }

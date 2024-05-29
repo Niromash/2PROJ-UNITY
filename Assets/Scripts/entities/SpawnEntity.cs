@@ -8,6 +8,7 @@ public class SpawnEntity : MonoBehaviour
     public GameObject tankPrefab;
     public GameObject infantryPrefab;
     public GameObject antiArmorPrefab;
+    public GameObject supportPrefab;
     public Vector2 spawnPosition;
     
     public void TankPlayerSpawn()
@@ -26,6 +27,12 @@ public class SpawnEntity : MonoBehaviour
     {
         Team playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
         Spawn(antiArmorPrefab, playerTeam, new AntiArmorStats());
+    }
+    
+    public void SupportPlayerSpawn()
+    {
+        Team playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
+        Spawn(supportPrefab, playerTeam, new SupportStats());
     }
 
     private void Spawn(GameObject prefab, Team team, CharacterStats stats)

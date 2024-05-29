@@ -1,56 +1,80 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Team
 {
     private readonly Side side;
-    private int gold;
-    private int experience;
     private readonly List<Entity> entities;
     private readonly Tower tower;
-    private readonly List<Turret> turrets;
-
-    public int Gold
-    {
-        get { return gold; }
-        set { gold = value; }
-    }
-
-    public int Experience
-    {
-        get { return experience; }
-        set { experience = value; }
-    }
+    private readonly Queue<EntityToSpawn> entitiesToSpawn;
+    private int gold;
+    private int experience;
+    private int maxExperience;
+    private Image expBarImage;
+    private TextMeshProUGUI goldCountText;
+    private TextMeshProUGUI expCountText;
 
     public Team(Side side, GameObject towerGameObject, GameManager gameManager)
     {
         this.side = side;
         tower = new Tower(500, towerGameObject, this, gameManager);
         entities = new List<Entity>();
-        turrets = new List<Turret>();
+        entitiesToSpawn = new Queue<EntityToSpawn>();
+        gold = 500;
+        experience = 0;
+        maxExperience = 500; // exemple d'expérience maximale pour remplir la barre
+        GameObject expBar = GameObject.Find(side.Equals(Side.Player) ? "TowerLeftExpBar" : "TowerRightExpBar");
+        GameObject goldcount = GameObject.Find(side.Equals(Side.Player) ? "GoldLeft" : "GoldRight");
+        GameObject expcount = GameObject.Find(side.Equals(Side.Player) ? "ExpLeftText" : "ExpRightText");
+        goldCountText = goldcount.GetComponent<TextMeshProUGUI>();
+        expCountText = expcount.GetComponent<TextMeshProUGUI>();
+        expBarImage = expBar.GetComponent<Image>();
+        
+        UpdateExpBar();
+        DisplayGold();
+        UpdateExpBar();
+    }
+
+    public int GetGold()
+    {
+        return gold;
+    }
+
+    public int GetExperience()
+    {
+        return experience;
     }
 
     public void AddGold(int amount)
     {
         gold += amount;
-        Debug.Log("Gain de" + amount + "gold");
+        DisplayGold();
     }
 
     public void AddExperience(int amount)
     {
         experience += amount;
-        Debug.Log("Gain de " + amount + " d'experience!");
+        UpdateExpBar();
     }
 
-    public void AddEntity(Entity entity)
+    public void RemoveGold(int amount)
     {
-        entities.Add(entity);
+        gold -= amount;
+        DisplayGold();
+    }
+
+    public void AddEntity(GameObject prefab, CharacterStats stats, Vector3 spawnPosition)
+    {
+        entitiesToSpawn.Enqueue(new EntityToSpawn(prefab, this, stats, spawnPosition));
     }
 
     public void RemoveEntity(Entity entity)
     {
         entities.Remove(entity);
+        Object.Destroy(entity.GetGameObject());
     }
 
     public List<Entity> GetEntities()
@@ -58,21 +82,11 @@ public class Team
         return entities;
     }
 
-    public void AddTurret(Turret turret)
+    public Queue<EntityToSpawn> GetEntitiesToSpawnQueue()
     {
-        turrets.Add(turret);
+        return entitiesToSpawn;
     }
-
-    public void RemoveTurret(Turret turret)
-    {
-        turrets.Remove(turret);
-    }
-
-    public List<Turret> GetTurrets()
-    {
-        return turrets;
-    }
-
+    
     public Side GetSide()
     {
         return side;
@@ -81,5 +95,64 @@ public class Team
     public Tower GetTower()
     {
         return tower;
+    }
+
+    public IEnumerator SpawnEntities(GameManager gameManager)
+    {
+        while (GameManager.GetGameState().Equals(GameState.Playing))
+        {
+            if (entitiesToSpawn.Count > 0)
+            {
+                EntityToSpawn entityToSpawn = entitiesToSpawn.Dequeue();
+                GameObject spawnedObject = Object.Instantiate(entityToSpawn.GetPrefab(),
+                    entityToSpawn.GetSpawnPosition(), Quaternion.identity);
+                spawnedObject.SetActive(true);
+                spawnedObject.tag = "Untagged";
+
+                if (GetSide().Equals(Side.Enemy)) spawnedObject.GetComponent<SpriteRenderer>().flipX = true;
+
+                entities.Add(new Entity(spawnedObject, this, entityToSpawn.GetStats(), gameManager));
+
+                // get the spawn delay from the stats of the next entity to spawn without removing it from the queue
+                float spawnDelay = entitiesToSpawn.Count > 0
+                    ? entitiesToSpawn.Peek().GetStats().deploymentTime / 1000
+                    : 0;
+
+                yield return new WaitForSeconds(spawnDelay); // the deployment time of the next entity to spawn
+            }
+
+            yield return new WaitForSeconds(1f);
+        }
+    }
+
+    public IEnumerator GainPassiveGolds()
+    {
+        while (GameManager.GetGameState().Equals(GameState.Playing))
+        {
+            AddGold(10);
+            yield return new WaitForSeconds(1);
+        }
+    }
+    
+    public void UpdateExpBar()
+    {
+        if (expBarImage != null)
+        {
+            float expPercentage = (float)experience / maxExperience;
+            expBarImage.color = Color.Lerp(Color.cyan, Color.blue, expPercentage);
+            expBarImage.fillAmount = expPercentage;
+        }
+        if  (expCountText != null)
+        {
+            expCountText.text = experience.ToString();
+        }
+    }
+    
+    public void DisplayGold()
+    {
+        if (goldCountText != null)
+        {
+            goldCountText.text = gold.ToString();
+        }
     }
 }

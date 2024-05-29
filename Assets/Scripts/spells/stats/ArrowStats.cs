@@ -2,6 +2,7 @@
 {
     public ArrowStats()
     {
+        name = "Arrow";
         damage = 15f;
         spellCount = 30;
         wavesCount = 4;

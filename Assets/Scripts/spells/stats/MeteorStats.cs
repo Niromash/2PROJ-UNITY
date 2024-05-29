@@ -2,6 +2,7 @@
 {
     public MeteorStats()
     {
+        name = "Meteor";
         damage = 30f;
         spellCount = 20;
         wavesCount = 2;

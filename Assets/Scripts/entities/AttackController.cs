@@ -24,7 +24,7 @@ public class AttackController : MonoBehaviour
     }
 
     // GetEnemiesInRange returns a list of enemies within a certain range (including entites and towers)
-    private List<Damageable> GetEnemiesInRange(float range)
+    public List<Damageable> GetEnemiesInRange(float range)
     {
         List<Damageable> enemiesInRange = new List<Damageable>();
 
@@ -72,10 +72,12 @@ public class AttackController : MonoBehaviour
             if (enemiesInRange.Count > 0)
             {
                 // Attack the first enemy in the list, which is the closest one
-                enemiesInRange[0].TakeDamage(sourceEntity.GetStats().damagePerSecond);
+                enemiesInRange[0].TakeDamage(sourceEntity);
             }
 
             yield return new WaitForSeconds(1);
         }
     }
+    
+    
 }

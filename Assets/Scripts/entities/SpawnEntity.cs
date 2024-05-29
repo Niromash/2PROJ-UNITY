@@ -5,41 +5,40 @@ using UnityEngine;
 public class SpawnEntity : MonoBehaviour
 {
     public GameManager gameManager;
+    public GameObject tankPrefab;
     public GameObject infantryPrefab;
     public GameObject antiArmorPrefab;
     public Vector2 spawnPosition;
     
+    public void TankPlayerSpawn()
+    {
+        Team playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
+        Spawn(tankPrefab, playerTeam, new TankStats());
+    }
+    
     private int infantryCount = 0;
     private int antiArmorCount = 0;
     
-    // public void InfantryEnemySpawn()
-    // {
-    //     Spawn(infantryPrefab, Side.Enemy);
-    // }
-    //
-    // public void AntiArmorEnemySpawn()
-    // {
-    //     Spawn(antiArmorPrefab, Side.Enemy);
-    // }
     
     public void InfantryPlayerSpawn()
     {
         Team playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
-        Spawn(infantryPrefab, playerTeam, new InfantryStats(), "Infantry");
+        Spawn(infantryPrefab, playerTeam, new InfantryStats());
     }
 
     public void AntiArmorPlayerSpawn()
     {
         Team playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
-        Spawn(antiArmorPrefab, playerTeam, new AntiArmorStats(), "AntiArmor");
+        Spawn(antiArmorPrefab, playerTeam, new AntiArmorStats());
     }
 
-    private void Spawn(GameObject prefab, Team team, CharacterStats stats, string entityType)
+    private void Spawn(GameObject prefab, Team team, CharacterStats stats)
     {
-        GameObject spawnedObject = Instantiate(prefab, spawnPosition, Quaternion.identity);
-        spawnedObject.SetActive(true);
-        // remove the tag so that the spawned object is not considered a template
-        spawnedObject.tag = "Untagged";
+        if (stats.deploymentCost > team.GetGold())
+        {
+            Debug.Log("Not enough gold to spawn entity " + prefab.name);
+            return;
+        }
 
         // Increment the counter for the entity type and add it to the name
         if (entityType == "Infantry")
@@ -53,7 +52,7 @@ public class SpawnEntity : MonoBehaviour
             spawnedObject.name = entityType + antiArmorCount;
         }
 
-        Entity entity = new Entity(spawnedObject, team, stats, gameManager);
-        gameManager.AddEntity(entity);
+        team.AddEntity(prefab, stats, spawnPosition);
+        team.RemoveGold(stats.deploymentCost);
     }
 }

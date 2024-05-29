@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Entity : Damageable
+public class Entity : Damageable, Damager, Nameable
 {
     private readonly GameObject gameObject;
     private readonly GameObject healthBar;
@@ -44,12 +44,12 @@ public class Entity : Damageable
     {
         return rb;
     }
-    
+
     public SpriteRenderer GetSpriteRenderer()
     {
         return spriteRenderer;
     }
-    
+
     public void SetForwardCollide(Entity entity)
     {
         collidedEntityForwards = entity;
@@ -112,15 +112,13 @@ public class Entity : Damageable
         // Apply the new local scale to the health bar
         healthBar.transform.localScale = healthBarScale;
     }
-    
-    
-    
+
     public float GetWidth()
     {
         // Assuming the entity's size is determined by its GameObject's sprite renderer
         return gameObject.GetComponent<SpriteRenderer>().bounds.size.x;
     }
-
+    
     public bool IsInRange(Entity other)
     {
         float distance = Vector3.Distance(this.GetGameObject().transform.position, other.GetGameObject().transform.position);
@@ -130,12 +128,12 @@ public class Entity : Damageable
         return distance <= this.GetStats().range;
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(Damager damager)
     {
-        stats.health -= damage;
+        stats.health -= damager.GetDamagerStats().GetDamage();
         if (stats.health <= 0)
         {
-            Kill();
+            Kill(damager);
         }
 
         UpdateHealthBar();
@@ -146,7 +144,7 @@ public class Entity : Damageable
         return stats.health;
     }
 
-    public void Kill()
+    public void Kill(Damager damager)
     {
         isKilled = true;
         
@@ -162,20 +160,9 @@ public class Entity : Damageable
             collidedEntityForwards.SetForwardCollide(null);
         }
         
-        gameManager.RemoveEntity(this);
-
-        if (team.GetSide() == Side.Enemy)
-        {
-            Team playerTeam = gameManager.GetTeams().Find(t => t.GetSide() == Side.Player);
-            gameManager.GainGoldByKill(playerTeam, team);
-            gameManager.GainExpByKill(playerTeam, team);
-        }
-        else if (team.GetSide() == Side.Player)
-        {
-            Team enemyTeam = gameManager.GetTeams().Find(t => t.GetSide() == Side.Enemy);
-            gameManager.GainGoldByKill(enemyTeam, team);
-            gameManager.GainExpByKill(enemyTeam, team);
-        }
+        team.RemoveEntity(this);
+        damager.GetTeam().AddExperience(stats.deathExperience);
+        damager.GetTeam().AddGold(stats.deathGold);
     }
 
     public bool IsKilled()
@@ -191,5 +178,15 @@ public class Entity : Damageable
     public Vector3 GetSize()
     {
         return spriteRenderer.bounds.size;
+    }
+
+    public DamagerStats GetDamagerStats()
+    {
+        return stats;
+    }
+
+    public string GetName()
+    {
+        return stats.name;
     }
 }

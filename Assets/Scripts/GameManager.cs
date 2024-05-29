@@ -50,6 +50,7 @@ public class GameManager : MonoBehaviour
         foreach (Team team in teams)
         {
             StartCoroutine(team.SpawnEntities(this));
+            StartCoroutine(team.GainPassiveGolds());
         }
     }
 

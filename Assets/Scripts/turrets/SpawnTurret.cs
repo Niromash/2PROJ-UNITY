@@ -6,7 +6,6 @@ public class SpawnTurret : MonoBehaviour
 {
     public GameManager gameManager;
     public GameObject bulletPrefab;
-    public Entity player;
     private int currentTurretIndex = 0;
     private List<Turret> inactiveTurrets = new List<Turret>(); // Ajout de la liste inactiveTurrets
 

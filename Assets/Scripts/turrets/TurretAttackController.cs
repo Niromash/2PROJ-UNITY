@@ -69,7 +69,7 @@ public class TurretAttackController : MonoBehaviour
             List<Damageable> enemiesInRange = GetEnemiesInRange(sourceTurret.GetStats().range);
             if (enemiesInRange.Count > 0)
             {
-                enemiesInRange[0].TakeDamage(sourceTurret.GetStats().damagePerSecond);
+                enemiesInRange[0].TakeDamage(sourceTurret);
 
                 var bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
                 bullet.GetComponent<Rigidbody2D>().velocity = (enemiesInRange[0].GetPosition() - transform.position).normalized * sourceTurret.GetStats().bulletSpeed;

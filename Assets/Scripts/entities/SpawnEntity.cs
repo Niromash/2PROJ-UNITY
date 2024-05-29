@@ -20,8 +20,6 @@ public class SpawnEntity : MonoBehaviour
         Spawn(tankPrefab, playerTeam, new TankStats());
     }
     
-   
-    
     public void InfantryPlayerSpawn()
     {
         Team playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
@@ -59,6 +57,14 @@ public class SpawnEntity : MonoBehaviour
         {
             antiArmorCount++;
             entityName = prefab.name + antiArmorCount;
+        }
+        else if (prefab.name == "Tank")
+        {
+            entityName = prefab.name;
+        }
+        else if (prefab.name == "Support")
+        {
+            entityName = prefab.name;
         }
         else
         {

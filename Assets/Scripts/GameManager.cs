@@ -101,8 +101,8 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator CreateEntity()
     {
-        GameObject frankiTanki = GameObject.Find("FrankiTanki");
-        GameObject marcel = GameObject.Find("Marcel");
+        GameObject frankiTanki = GameObject.Find("Tank");
+        GameObject marcel = GameObject.Find("Infantry");
 
         Team enemyTeam = teams.Find(team => team.GetSide().Equals(Side.Enemy));
 

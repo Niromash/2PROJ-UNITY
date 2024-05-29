@@ -55,11 +55,6 @@ public class Turret : Damager
         return stats.name;
     }
 
-    public Team GetTeam()
-    {
-        return team;
-    }
-
     public DamagerStats GetDamagerStats()
     {
         return stats;

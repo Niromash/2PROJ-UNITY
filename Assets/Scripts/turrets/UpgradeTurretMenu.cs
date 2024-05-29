@@ -3,16 +3,16 @@
 public class UpgradeTurretMenu : MonoBehaviour
 {
     public Canvas upgradeTurretCanvas;
-    private bool isOpen = false;
-    
+    private bool isMainOpen = false;
+
     void Start()
     {
         upgradeTurretCanvas.gameObject.SetActive(false);
     }
-    
+
     public void OpenUpgradeTurretMenu()
     {
-        if (isOpen)
+        if (isMainOpen)
         {
             CloseTurretMenu();
         }
@@ -21,17 +21,16 @@ public class UpgradeTurretMenu : MonoBehaviour
             OpenTurretMenu();
         }
     }
-    
+
     void OpenTurretMenu()
     {
-        isOpen = true;
+        isMainOpen = true;
         upgradeTurretCanvas.gameObject.SetActive(true);
     }
-    
+
     public void CloseTurretMenu()
     {
-        isOpen = false;
+        isMainOpen = false;
         upgradeTurretCanvas.gameObject.SetActive(false);
     }
-    
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class TurretAttackController : MonoBehaviour
 {
     public GameManager gameManager;
+    public GameObject bulletPrefab;
     private Turret sourceTurret;
 
     void Start()
@@ -53,8 +54,8 @@ public class TurretAttackController : MonoBehaviour
         // Sort the list by distance
         enemiesInRange.Sort((a, b) =>
         {
-            float distanceA = Vector2.Distance(transform.position, a.GetPosition());
-            float distanceB = Vector2.Distance(transform.position, b.GetPosition());
+            float distanceA = Vector2.Distance(sourceTurret.GetTeam().GetTower().GetPosition(), a.GetPosition());
+            float distanceB = Vector2.Distance(sourceTurret.GetTeam().GetTower().GetPosition(), b.GetPosition());
             return distanceA.CompareTo(distanceB);
         });
 
@@ -68,7 +69,10 @@ public class TurretAttackController : MonoBehaviour
             List<Damageable> enemiesInRange = GetEnemiesInRange(sourceTurret.GetStats().range);
             if (enemiesInRange.Count > 0)
             {
-                enemiesInRange[0].TakeDamage(sourceTurret);
+                enemiesInRange[0].TakeDamage(sourceTurret.GetStats().damagePerSecond);
+
+                var bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+                bullet.GetComponent<Rigidbody2D>().velocity = (enemiesInRange[0].GetPosition() - transform.position).normalized * sourceTurret.GetStats().bulletSpeed;
             }
 
             yield return new WaitForSeconds(1);

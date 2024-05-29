@@ -44,7 +44,6 @@ public class GameManager : MonoBehaviour
 
         if (!isSceneLoaded) return;
         gameState = GameState.Playing;
-
         // Async task to create a new enemy entity
         StartCoroutine(CreateEntity());
 
@@ -58,8 +57,9 @@ public class GameManager : MonoBehaviour
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         isSceneLoaded = scene.name == "SampleScene" && mode == LoadSceneMode.Single;
+        
     }
-
+    
     void Update()
     {
         if (!isSceneLoaded) return;

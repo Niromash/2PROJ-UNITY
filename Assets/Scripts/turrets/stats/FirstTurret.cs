@@ -2,10 +2,9 @@
 {
     public FirstTurret()
     {
-        health = 100f;
         damagePerSecond = 30f;
-        attackSpeed = 70f;
-        range = 20f;
+        range = 6f;
         deploymentCost = 500f;
+        bulletSpeed = 10f;
     }
 }

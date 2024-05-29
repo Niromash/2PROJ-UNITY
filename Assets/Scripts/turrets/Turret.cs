@@ -5,15 +5,37 @@ public class Turret : Damager
 {
     private GameObject gameObject;
     private GameManager gameManager;
-    private readonly TurretStats stats;
-    private List<Turret> turrets;
     private Team team;
+    private readonly TurretStats stats;
+    private int upgradeCount = 0;
+    private List<Turret> turrets;
 
     public Turret(GameObject go, TurretStats stats, Team team)
     {
         gameObject = go;
         this.stats = stats;
         this.team = team;
+    }
+
+    public bool CanUpgrade()
+    {
+        return upgradeCount < 3;
+    }
+
+    public void Upgrade(float factor)
+    {
+        if (!CanUpgrade())
+        {
+            Debug.LogWarning("Turret has reached maximum upgrades.");
+            return;
+        }
+        upgradeCount++;
+    }
+
+
+    public Team GetTeam()
+    {
+        return team;
     }
     
     public GameObject GetGameObject()
@@ -22,6 +44,7 @@ public class Turret : Damager
     }
     
     
+
     public TurretStats GetStats()
     {
         return stats;

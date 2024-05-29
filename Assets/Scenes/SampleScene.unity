@@ -2449,7 +2449,7 @@ GameObject:
   - component: {fileID: 894787034}
   - component: {fileID: 894787035}
   m_Layer: 0
-  m_Name: Marcel
+  m_Name: Infantry
   m_TagString: Template
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3063,7 +3063,7 @@ GameObject:
   - component: {fileID: 1014623028}
   - component: {fileID: 1014623029}
   m_Layer: 0
-  m_Name: FrankiTanki
+  m_Name: Tank
   m_TagString: Template
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

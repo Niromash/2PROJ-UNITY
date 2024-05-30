@@ -24,14 +24,25 @@ public class EvolveAge : MonoBehaviour
             return;
         }
 
+        Age lastAge = ages.Peek();
+        if (team.GetExperience() < lastAge.GetAgeEvolvingCost())
+        {
+            Debug.Log("Not enough experience to evolve");
+            return;
+        }
+
         currentAge = ages.Dequeue();
 
         Debug.Log("Evolving age for team " + team.GetSide() + " to " + currentAge.GetName());
         team.SetCurrentAge(currentAge);
+        team.RemoveExperience(currentAge.GetAgeEvolvingCost());
 
         ChangeBackground();
         ChangeEntitySprites();
         ChangeSpellSprite();
+
+        // If no more ages to evolve, block button and display message and change button sprite
+        // and add a new entity button to spawn the last age special entity
     }
 
     private void ChangeBackground()

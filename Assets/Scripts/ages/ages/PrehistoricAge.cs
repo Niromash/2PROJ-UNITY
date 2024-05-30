@@ -4,7 +4,8 @@ public class PrehistoricAge : Age
 {
     public PrehistoricAge()
     {
-        incomeMultiplier = 1.5f;
+        goldMultiplier = 1f;
+        experienceMultiplier = 1f;
         entitiesStatsMultiplier = 2f;
         turretsStatsMultiplier = 1f;
     }
@@ -27,5 +28,10 @@ public class PrehistoricAge : Age
     public override SpellStats GetSpellStats()
     {
         return new MeteorStats();
+    }
+
+    public override int GetAgeEvolvingCost()
+    {
+        return 0;
     }
 }

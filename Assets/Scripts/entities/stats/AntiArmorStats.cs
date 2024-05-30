@@ -1,5 +1,4 @@
-﻿// Marcel
-public class AntiArmorStats : CharacterStats
+﻿public class AntiArmorStats : CharacterStats
 {
     public AntiArmorStats()
     {

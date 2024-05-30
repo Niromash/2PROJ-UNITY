@@ -12,7 +12,6 @@ public class Entity : Damageable, Damager
     private Entity collidedEntityBackwards;
     private Tower collidedTowerForwards;
     private readonly CharacterStats stats;
-    private readonly Age age;
     private bool isKilled;
 
     public Entity(GameObject go, Team team, CharacterStats stats)
@@ -22,11 +21,8 @@ public class Entity : Damageable, Damager
         this.stats = stats;
         gameObject = go;
         this.team = team;
-        age = team.GetCurrentAge();
         healthBarImage = gameObject.transform.GetChild(0).GetChild(0).GetComponent<Image>();
 
-        // Update stats with age multiplier
-        stats.ApplyMultiplier(age.entitiesStatsMultiplier);
         UpdateHealthBar();
     }
 

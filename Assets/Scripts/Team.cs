@@ -70,6 +70,12 @@ public class Team
         DisplayGold();
     }
 
+    public void RemoveExperience(int amount)
+    {
+        experience -= amount;
+        UpdateExpBar();
+    }
+
     public void AddEntity(GameObject prefab, CharacterStats stats, Vector3 spawnPosition, string entityName)
     {
         entitiesToSpawn.Enqueue(new EntityToSpawn(prefab, this, stats, spawnPosition, entityName));
@@ -134,7 +140,7 @@ public class Team
     {
         while (GameManager.GetGameState().Equals(GameState.Playing))
         {
-            AddGold(Convert.ToInt32(Math.Round(10 * currentAge.incomeMultiplier)));
+            AddGold(Convert.ToInt32(Math.Round(10 * currentAge.GetGoldMultiplier())));
             yield return new WaitForSeconds(1);
         }
     }

@@ -12,8 +12,8 @@
         return damagePerSecond;
     }
 
-    public void ApplyMultiplier(float multiplier)
+    public void ApplyMultiplier(AgeMultipliers multipliers)
     {
-        damagePerSecond *= multiplier;
+        damagePerSecond *= multipliers.GetTurretsStatsMultiplier();
     }
 }

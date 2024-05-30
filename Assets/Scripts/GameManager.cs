@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
 
         GameObject towerLeft = GameObject.Find("TowerLeft");
         GameObject towerRight = GameObject.Find("TowerRight");
-        
+
         teams.Add(new Team(Side.Player, towerLeft, this));
         teams.Add(new Team(Side.Enemy, towerRight, this));
 
@@ -56,9 +56,8 @@ public class GameManager : MonoBehaviour
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         isSceneLoaded = scene.name == "SampleScene" && mode == LoadSceneMode.Single;
-        
     }
-    
+
     void Update()
     {
         if (!isSceneLoaded) return;
@@ -109,6 +108,7 @@ public class GameManager : MonoBehaviour
         while (gameState.Equals(GameState.Playing))
         {
             CharacterStats stats = entityCount % 2 == 0 ? new TankStats() : new InfantryStats();
+            stats.ApplyMultiplier(enemyTeam.GetCurrentAge()); // Update stats with age multiplier
             if (stats.deploymentCost > enemyTeam.GetGold())
             {
                 Debug.Log("Not enough gold to spawn enemy entity " + stats.name);

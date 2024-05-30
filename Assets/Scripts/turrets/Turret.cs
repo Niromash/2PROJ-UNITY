@@ -17,7 +17,7 @@ public class Turret : Damager
         this.stats = stats;
         this.team = team;
         age = team.GetCurrentAge();
-        stats.ApplyMultiplier(age.turretsStatsMultiplier);
+        stats.ApplyMultiplier(age);
     }
 
     public bool CanUpgrade()

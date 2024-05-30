@@ -4,7 +4,8 @@ public class MedievalAge : Age
 {
     public MedievalAge()
     {
-        incomeMultiplier = 2f;
+        goldMultiplier = 1.2f;
+        experienceMultiplier = 2f;
         entitiesStatsMultiplier = 3f;
         turretsStatsMultiplier = 1.5f;
     }
@@ -27,5 +28,10 @@ public class MedievalAge : Age
     public override SpellStats GetSpellStats()
     {
         return new ArrowStats();
+    }
+
+    public override int GetAgeEvolvingCost()
+    {
+        return 70;
     }
 }

@@ -40,6 +40,7 @@ public class SpawnEntity : MonoBehaviour
 
     private void Spawn(GameObject prefab, Team team, CharacterStats stats)
     {
+        stats.ApplyMultiplier(team.GetCurrentAge()); // Update stats with age multiplier
         if (stats.deploymentCost > team.GetGold())
         {
             Debug.Log("Not enough gold to spawn entity " + prefab.name);

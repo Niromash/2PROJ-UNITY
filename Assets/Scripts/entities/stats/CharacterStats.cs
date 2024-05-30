@@ -1,4 +1,6 @@
-﻿public abstract class CharacterStats : DamagerStats
+﻿using UnityEngine;
+
+public abstract class CharacterStats : DamagerStats
 {
     public string name = "Character";
     public float maxHealth = 100f;
@@ -16,13 +18,13 @@
         return damagePerSecond;
     }
 
-    public void ApplyMultiplier(float multiplier)
+    public void ApplyMultiplier(AgeMultipliers multipliers)
     {
-        maxHealth *= multiplier;
-        health *= multiplier;
-        damagePerSecond *= multiplier;
-        deploymentCost = (int)(deploymentCost * multiplier);
-        deathExperience = (int)(deathExperience * multiplier);
-        deathGold = (int)(deathGold * multiplier);
+        maxHealth *= multipliers.GetEntitiesStatsMultiplier();
+        health *= multipliers.GetEntitiesStatsMultiplier();
+        damagePerSecond *= multipliers.GetEntitiesStatsMultiplier();
+        deploymentCost = (int)(deploymentCost * multipliers.GetGoldMultiplier());
+        deathExperience = (int)(deathExperience * multipliers.GetExperienceMultiplier());
+        deathGold = (int)(deathGold * multipliers.GetGoldMultiplier());
     }
 }

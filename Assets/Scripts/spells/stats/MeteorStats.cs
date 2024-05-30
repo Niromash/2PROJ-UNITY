@@ -2,13 +2,15 @@
 {
     public MeteorStats()
     {
-        name = "Meteor";
-        damage = 30f;
+        damage = 60f;
         spellCount = 20;
         wavesCount = 2;
         cooldown = 200f;
         deploymentCost = 100f;
-        deploymentTime = 100f;
-        deathExperience = 100f;
+    }
+    
+    public override string GetName()
+    {
+        return "Meteor";
     }
 }

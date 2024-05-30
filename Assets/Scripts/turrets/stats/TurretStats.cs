@@ -1,18 +1,19 @@
-﻿public abstract class TurretStats : DamagerStats
+﻿public abstract class TurretStats : DamagerStats, Nameable
 {
     public float damagePerSecond = 100f;
     public float range = 20f;
     public float deploymentCost = 100f;
-    public string name = "Turret";
     public float bulletSpeed = 10f;
-    
+
+    public abstract string GetName();
+
     public float GetDamage()
     {
         return damagePerSecond;
     }
-    
-    public void Upgrade(float upgradeFactor)
+
+    public void ApplyMultiplier(float multiplier)
     {
-        damagePerSecond *= upgradeFactor;
+        damagePerSecond *= multiplier;
     }
 }

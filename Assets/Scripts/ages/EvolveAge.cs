@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
 
 public class EvolveAge : MonoBehaviour
@@ -17,11 +18,17 @@ public class EvolveAge : MonoBehaviour
     public void Evolve()
     {
         Team team = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
+        if (ages.Count == 0)
+        {
+            Debug.Log("No more ages to evolve");
+            return;
+        }
+
         currentAge = ages.Dequeue();
 
         Debug.Log("Evolving age for team " + team.GetSide() + " to " + currentAge.GetName());
         team.SetCurrentAge(currentAge);
-        
+
         ChangeBackground();
         ChangeEntitySprites();
         ChangeSpellSprite();
@@ -36,7 +43,9 @@ public class EvolveAge : MonoBehaviour
             Debug.LogError("Background not found");
             return;
         }
-        background.GetComponent<Renderer>().material.mainTexture = Resources.Load<Texture>("Ages/" + currentAge.GetBackgroundAssetName());
+
+        background.GetComponent<Renderer>().material.mainTexture =
+            Resources.Load<Texture>("Ages/" + currentAge.GetBackgroundAssetName());
     }
 
     private void ChangeEntitySprites()
@@ -50,9 +59,10 @@ public class EvolveAge : MonoBehaviour
                 Debug.LogError("SpriteRenderer not found");
                 return;
             }
-            spriteRenderer.sprite = Resources.Load<Sprite>("EntitySprites/" + currentAge.GetName() + "/" + child.name.ToLower());
-        }
 
+            spriteRenderer.sprite =
+                Resources.Load<Sprite>("EntitySprites/" + currentAge.GetName() + "/" + child.name.ToLower());
+        }
     }
 
     private void ChangeSpellSprite()
@@ -63,14 +73,14 @@ public class EvolveAge : MonoBehaviour
             Debug.LogError("Button not found");
             return;
         }
-        
+
         Image spriteRenderer = button.GetComponent<Image>();
         if (spriteRenderer == null)
         {
             Debug.LogError("SpriteRenderer not found");
             return;
         }
-        
+
         spriteRenderer.sprite = Resources.Load<Sprite>("SpellSprites/" + currentAge.GetName().ToLower() + "/button");
     }
 }

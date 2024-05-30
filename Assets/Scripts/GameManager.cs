@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
         Vector3 newCameraPosition = mainCamera.transform.position +
                                     new Vector3(horizontal * Time.deltaTime * 10, mainCamera.velocity.y, 0);
 
-        newCameraPosition.x = Mathf.Clamp(newCameraPosition.x, 0f, 24.09f);
+        newCameraPosition.x = Mathf.Clamp(newCameraPosition.x, 1f, 24.09f);
 
         mainCamera.transform.position = newCameraPosition;
 
@@ -84,7 +84,7 @@ public class GameManager : MonoBehaviour
                                         new Vector3(horizontal * Time.deltaTime * 10,
                                             backgroundCanvasGameObject.transform.position.y, 0);
 
-        newBackgroundPosition.x = Mathf.Clamp(newBackgroundPosition.x, 0f, 24.09f);
+        newBackgroundPosition.x = Mathf.Clamp(newBackgroundPosition.x, 1f, 24.09f);
 
         backgroundCanvasGameObject.transform.position = newBackgroundPosition;
     }
@@ -108,7 +108,7 @@ public class GameManager : MonoBehaviour
         int entityCount = 0;
         while (gameState.Equals(GameState.Playing))
         {
-            CharacterStats stats = entityCount % 2 == 0 ? new InfantryStats() : new AntiArmorStats();
+            CharacterStats stats = entityCount % 2 == 0 ? new TankStats() : new InfantryStats();
             if (stats.deploymentCost > enemyTeam.GetGold())
             {
                 Debug.Log("Not enough gold to spawn enemy entity " + stats.name);
@@ -122,7 +122,7 @@ public class GameManager : MonoBehaviour
             }
 
             // Wait for 10 seconds before creating another entity
-            yield return new WaitForSeconds(3);
+            yield return new WaitForSeconds(30);
         }
     }
 

@@ -7,7 +7,6 @@ public class TankStats : CharacterStats
         maxHealth = 300f;
         health = maxHealth;
         damagePerSecond = 30f;
-        attackSpeed = 70f;
         blockPerSecondMovementSpeed = 0.8f;
         range = 5f;
         deploymentCost = 500;

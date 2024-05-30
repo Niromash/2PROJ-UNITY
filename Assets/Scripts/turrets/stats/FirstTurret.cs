@@ -7,4 +7,9 @@
         deploymentCost = 500f;
         bulletSpeed = 10f;
     }
+
+    public override string GetName()
+    {
+        return "First Turret";
+    }
 }

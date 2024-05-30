@@ -9,12 +9,15 @@ public class Turret : Damager
     private readonly TurretStats stats;
     private int upgradeCount = 0;
     private List<Turret> turrets;
+    private readonly Age age;
 
     public Turret(GameObject go, TurretStats stats, Team team)
     {
         gameObject = go;
         this.stats = stats;
         this.team = team;
+        age = team.GetCurrentAge();
+        stats.ApplyMultiplier(age.turretsStatsMultiplier);
     }
 
     public bool CanUpgrade()
@@ -29,6 +32,7 @@ public class Turret : Damager
             Debug.LogWarning("Turret has reached maximum upgrades.");
             return;
         }
+
         upgradeCount++;
     }
 
@@ -37,13 +41,12 @@ public class Turret : Damager
     {
         return team;
     }
-    
+
     public GameObject GetGameObject()
     {
         return gameObject;
     }
-    
-    
+
 
     public TurretStats GetStats()
     {
@@ -52,7 +55,7 @@ public class Turret : Damager
 
     public string GetName()
     {
-        return stats.name;
+        return stats.GetName();
     }
 
     public DamagerStats GetDamagerStats()

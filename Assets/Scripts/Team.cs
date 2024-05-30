@@ -116,7 +116,7 @@ public class Team
                 if (GetSide().Equals(Side.Enemy)) spawnedObject.GetComponent<SpriteRenderer>().flipX = true;
                 spawnedObject.name = entityToSpawn.GetEntityName();
 
-                entities.Add(new Entity(spawnedObject, this, entityToSpawn.GetStats(), gameManager));
+                entities.Add(new Entity(spawnedObject, this, entityToSpawn.GetStats()));
 
                 // get the spawn delay from the stats of the next entity to spawn without removing it from the queue
                 float spawnDelay = entitiesToSpawn.Count > 0
@@ -165,5 +165,10 @@ public class Team
     public void SetCurrentAge(Age age)
     {
         currentAge = age;
+    }
+    
+    public Age GetCurrentAge()
+    {
+        return currentAge;
     }
 }

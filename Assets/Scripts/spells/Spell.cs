@@ -35,7 +35,7 @@ public abstract class Spell : Damager
 
     public string GetName()
     {
-        return spellStats.name;
+        return spellStats.GetName();
     }
 
     public abstract void ApplyEffect(Entity entity);

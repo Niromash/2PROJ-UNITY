@@ -2,13 +2,15 @@
 {
     public ArrowStats()
     {
-        name = "Arrow";
         damage = 15f;
         spellCount = 30;
         wavesCount = 4;
         cooldown = 200f;
         deploymentCost = 100f;
-        deploymentTime = 100f;
-        deathExperience = 100f;
+    }
+
+    public override string GetName()
+    {
+        return "Arrow";
     }
 }

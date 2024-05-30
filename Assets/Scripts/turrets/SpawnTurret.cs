@@ -7,7 +7,7 @@ public class SpawnTurret : MonoBehaviour
     public GameManager gameManager;
     public GameObject bulletPrefab;
     private int currentTurretIndex = 0;
-    private List<Turret> inactiveTurrets = new List<Turret>(); // Ajout de la liste inactiveTurrets
+    private List<Turret> inactiveTurrets = new List<Turret>(); 
 
 
     public void ShowNextTurret()
@@ -36,6 +36,7 @@ public class SpawnTurret : MonoBehaviour
             {
                 return;
             }
+            
 
             foreach (var turret in turrets)
             {

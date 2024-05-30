@@ -145,7 +145,6 @@ public class GameManager : MonoBehaviour
     {
         foreach (Team team in teams)
         {
-            Debug.Log(team.GetTower().GetTurrets());
             Turret turretFound = team.GetTower().GetTurrets().Find(turret => turret.GetGameObject() == go);
             if (turretFound != null)
             {

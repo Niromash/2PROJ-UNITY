@@ -39,7 +39,7 @@ public class SpawnEntity : MonoBehaviour
     }
 
     private void Spawn(GameObject prefab, Team team, CharacterStats stats)
-    {
+    { 
         if (stats.deploymentCost > team.GetGold())
         {
             Debug.Log("Not enough gold to spawn entity " + prefab.name);

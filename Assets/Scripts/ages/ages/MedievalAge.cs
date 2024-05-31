@@ -34,4 +34,9 @@ public class MedievalAge : Age
     {
         return 70;
     }
+
+    public override int GetAgeLevel()
+    {
+        return 2;
+    }
 }

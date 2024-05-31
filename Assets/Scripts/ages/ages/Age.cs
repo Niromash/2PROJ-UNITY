@@ -6,12 +6,13 @@ public abstract class Age : AgeMultipliers
     protected float experienceMultiplier = 1;
     protected float entitiesStatsMultiplier = 1;
     protected float turretsStatsMultiplier = 1;
-    
+
     public abstract string GetName();
     public abstract string GetBackgroundAssetName();
     public abstract Type GetSpellType();
     public abstract SpellStats GetSpellStats();
     public abstract int GetAgeEvolvingCost();
+    public abstract int GetAgeLevel();
 
     public float GetGoldMultiplier()
     {
@@ -22,12 +23,12 @@ public abstract class Age : AgeMultipliers
     {
         return experienceMultiplier;
     }
-    
+
     public float GetEntitiesStatsMultiplier()
     {
         return entitiesStatsMultiplier;
     }
-    
+
     public float GetTurretsStatsMultiplier()
     {
         return turretsStatsMultiplier;

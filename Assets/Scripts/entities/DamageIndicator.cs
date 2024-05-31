@@ -12,8 +12,7 @@ public class DamageIndicator : MonoBehaviour
         // Créer une nouvelle instance de l'indicateur de dégâts
         GameObject damageText = Instantiate(damageTextPrefab, canvasTransform);
 
-        // Ajouter un décalage à la position de l'indicateur de dégâts
-        Vector3 offset = new Vector3(Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f), 0);
+        Vector3 offset = new Vector3(Random.Range(1.2f, 1.7f), Random.Range(-0.5f, 0.5f), 0);
         position += offset;
 
         // Configurer la position du texte de dégâts

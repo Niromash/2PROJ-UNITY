@@ -177,4 +177,9 @@ public class Team
     {
         return currentAge;
     }
+
+    public bool GreaterAgeThan(Team team)
+    {
+        return currentAge.GetAgeLevel() > team.GetCurrentAge().GetAgeLevel();
+    }
 }

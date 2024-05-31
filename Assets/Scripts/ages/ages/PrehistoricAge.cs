@@ -34,4 +34,9 @@ public class PrehistoricAge : Age
     {
         return 0;
     }
+
+    public override int GetAgeLevel()
+    {
+        return 1;
+    }
 }

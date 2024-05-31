@@ -18,6 +18,7 @@ public class EvolveAge : MonoBehaviour
     public void Evolve()
     {
         Team team = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
+        Team enemyTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Enemy));
         if (ages.Count == 0)
         {
             Debug.Log("No more ages to evolve");
@@ -37,9 +38,13 @@ public class EvolveAge : MonoBehaviour
         team.SetCurrentAge(currentAge);
         team.RemoveExperience(currentAge.GetAgeEvolvingCost());
 
-        ChangeBackground();
-        ChangeEntitySprites();
         ChangeSpellSprite();
+        ChangeEntitySprites();
+
+        if (team.GreaterAgeThan(enemyTeam))
+        {
+            ChangeBackground();
+        }
 
         // If no more ages to evolve, block button and display message and change button sprite
         // and add a new entity button to spawn the last age special entity
@@ -61,18 +66,21 @@ public class EvolveAge : MonoBehaviour
 
     private void ChangeEntitySprites()
     {
-        GameObject entities = GameObject.Find("Entities");
+        GameObject entities = GameObject.Find("SpawnEntities");
         foreach (Transform child in entities.transform)
         {
-            SpriteRenderer spriteRenderer = child.GetComponent<SpriteRenderer>();
-            if (spriteRenderer == null)
+            if (child.gameObject.name.Contains("Button"))
             {
-                Debug.LogError("SpriteRenderer not found");
-                return;
-            }
+                Image spriteRenderer = child.gameObject.GetComponent<Image>();
+                if (spriteRenderer == null)
+                {
+                    Debug.LogError("SpriteRenderer not found");
+                    return;
+                }
 
-            spriteRenderer.sprite =
-                Resources.Load<Sprite>("EntitySprites/" + currentAge.GetName() + "/" + child.name.ToLower());
+                spriteRenderer.sprite =
+                    Resources.Load<Sprite>("EntitySprites/" + currentAge.GetName() + "/" + child.name.ToLower());
+            }
         }
     }
 

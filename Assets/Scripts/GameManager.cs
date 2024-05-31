@@ -37,11 +37,12 @@ public class GameManager : MonoBehaviour
 
         GameObject towerLeft = GameObject.Find("TowerLeft");
         GameObject towerRight = GameObject.Find("TowerRight");
-
+        
+        if (!isSceneLoaded) return;
+        
         teams.Add(new Team(Side.Player, towerLeft, this));
         teams.Add(new Team(Side.Enemy, towerRight, this));
-
-        if (!isSceneLoaded) return;
+        
         gameState = GameState.Playing;
         // Async task to create a new enemy entity
         StartCoroutine(CreateEntity());

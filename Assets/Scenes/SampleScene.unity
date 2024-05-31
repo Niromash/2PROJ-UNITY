@@ -1212,10 +1212,10 @@ MonoBehaviour:
       - m_Target: {fileID: 544143590}
         m_TargetAssemblyTypeName: SpawnEntity, Assembly-CSharp
         m_MethodName: InfantryPlayerSpawn
-        m_Mode: 1
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 200961180}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2911,10 +2911,10 @@ MonoBehaviour:
       - m_Target: {fileID: 544143590}
         m_TargetAssemblyTypeName: SpawnEntity, Assembly-CSharp
         m_MethodName: AntiArmorPlayerSpawn
-        m_Mode: 1
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 590060193}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -3663,10 +3663,10 @@ MonoBehaviour:
       - m_Target: {fileID: 544143590}
         m_TargetAssemblyTypeName: SpawnEntity, Assembly-CSharp
         m_MethodName: SupportPlayerSpawn
-        m_Mode: 1
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 723774106}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -4056,7 +4056,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 6
 --- !u!114 &821160307
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4649,10 +4649,10 @@ MonoBehaviour:
       - m_Target: {fileID: 544143590}
         m_TargetAssemblyTypeName: SpawnEntity, Assembly-CSharp
         m_MethodName: TankPlayerSpawn
-        m_Mode: 1
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 924179027}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -8075,7 +8075,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.12365919, y: -0.08932495}
+  m_Offset: {x: -0.12365919, y: 0.046346486}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -8086,7 +8086,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.9497393, y: 4.1567497}
+  m_Size: {x: 1.9497393, y: 3.885407}
   m_EdgeRadius: 0
 --- !u!50 &1360481933
 Rigidbody2D:
@@ -8114,7 +8114,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 6
 --- !u!114 &1360481934
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8897,7 +8897,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.40601158, y: -0.12008655}
+  m_Offset: {x: -0.40601158, y: 0.0054166913}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -8908,7 +8908,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.4647598, y: 4.045307}
+  m_Size: {x: 2.4647598, y: 3.7943006}
   m_EdgeRadius: 0
 --- !u!50 &1451847108
 Rigidbody2D:
@@ -12039,7 +12039,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 6
 --- !u!114 &2000102108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12330,7 +12330,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 6
 --- !u!114 &2037981784
 MonoBehaviour:
   m_ObjectHideFlags: 0

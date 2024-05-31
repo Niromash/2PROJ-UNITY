@@ -27,4 +27,11 @@ public abstract class CharacterStats : DamagerStats
         deathExperience = (int)(deathExperience * multipliers.GetExperienceMultiplier());
         deathGold = (int)(deathGold * multipliers.GetGoldMultiplier());
     }
+
+    public CharacterStats GetMultipliedStats(Age age)
+    {
+        CharacterStats stats = (CharacterStats)MemberwiseClone();
+        stats.ApplyMultiplier(age);
+        return stats;
+    }
 }

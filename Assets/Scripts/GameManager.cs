@@ -108,8 +108,9 @@ public class GameManager : MonoBehaviour
         while (gameState.Equals(GameState.Playing))
         {
             CharacterStats stats = entityCount % 2 == 0 ? new TankStats() : new InfantryStats();
-            stats.ApplyMultiplier(enemyTeam.GetCurrentAge()); // Update stats with age multiplier
-            if (stats.deploymentCost > enemyTeam.GetGold())
+            CharacterStats multipliedStats = stats.GetMultipliedStats(enemyTeam.GetCurrentAge());
+
+            if (multipliedStats.deploymentCost > enemyTeam.GetGold())
             {
                 Debug.Log("Not enough gold to spawn enemy entity " + stats.name);
             }
@@ -117,7 +118,7 @@ public class GameManager : MonoBehaviour
             {
                 GameObject entityToSpawn = entityCount % 2 == 0 ? frankiTanki : marcel;
                 enemyTeam.AddEntity(entityToSpawn, stats, new Vector3(25, 0f, 0), stats.name);
-                enemyTeam.RemoveGold(stats.deploymentCost);
+                enemyTeam.RemoveGold(multipliedStats.deploymentCost);
                 entityCount++;
             }
 

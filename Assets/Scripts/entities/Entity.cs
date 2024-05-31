@@ -23,6 +23,7 @@ public class Entity : Damageable, Damager
         this.team = team;
         healthBarImage = gameObject.transform.GetChild(0).GetChild(0).GetComponent<Image>();
 
+        stats.ApplyMultiplier(team.GetCurrentAge()); // Update stats with age multiplier
         UpdateHealthBar();
     }
 
@@ -114,7 +115,7 @@ public class Entity : Damageable, Damager
         }
 
         DamageIndicator damageIndicator = gameObject.AddComponent<DamageIndicator>();
-        damageIndicator.damageTextPrefab = GameObject.Find("DamagePreview");
+        damageIndicator.damageTextPrefab = GameObject.Find("DamageValue");
         damageIndicator.canvasTransform = GameObject.Find("DamageCanvas").transform;
         damageIndicator.ShowDamage(damager.GetDamagerStats().GetDamage(), gameObject.transform.position);
 

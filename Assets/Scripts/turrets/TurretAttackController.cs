@@ -14,6 +14,9 @@ public class TurretAttackController : MonoBehaviour
         if (!gameObject.activeSelf) return; // Check if the turret is enabled
         
         sourceTurret = gameManager.GetTurret(gameObject);
+        
+        Debug.Log("Turret found: " + sourceTurret.GetName());
+        
         if (sourceTurret == null)
         {
             Debug.LogError("Turret not found for " + gameObject.name);
@@ -22,7 +25,7 @@ public class TurretAttackController : MonoBehaviour
 
         StartCoroutine(CheckForEnemiesInRange());
     }
-    
+
     public List<Damageable> GetEnemiesInRange(float range)
     {
         List<Damageable> enemiesInRange = new List<Damageable>();
@@ -51,14 +54,13 @@ public class TurretAttackController : MonoBehaviour
             }
         }
 
-        // Sort the list by distance
+        // Sort the list by the distance to the tower
         enemiesInRange.Sort((a, b) =>
         {
             float distanceA = Vector2.Distance(sourceTurret.GetTeam().GetTower().GetPosition(), a.GetPosition());
             float distanceB = Vector2.Distance(sourceTurret.GetTeam().GetTower().GetPosition(), b.GetPosition());
             return distanceA.CompareTo(distanceB);
         });
-
         return enemiesInRange;
     }
 

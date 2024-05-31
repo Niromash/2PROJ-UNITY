@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnEntity : MonoBehaviour
@@ -10,8 +8,8 @@ public class SpawnEntity : MonoBehaviour
     public GameObject antiArmorPrefab;
     public GameObject supportPrefab;
     public Vector2 spawnPosition;
-    private int infantryCount = 0;
-    private int antiArmorCount = 0;
+    private int infantryCount;
+    private int antiArmorCount;
 
     
     public void TankPlayerSpawn()

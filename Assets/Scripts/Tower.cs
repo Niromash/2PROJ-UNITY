@@ -22,11 +22,11 @@ public class Tower : Damageable
     
         tileMap = towerGameObject.GetComponent<Tilemap>();
         turrets = new List<Turret>();
-    
+        
         for (int i = 0; i < 3; i++)
         {
             GameObject turretGameObject = towerGameObject.transform.GetChild(i).gameObject;
-            Turret newTurret = new Turret(towerGameObject.transform.GetChild(0).gameObject, new FirstTurret(),team);
+            Turret newTurret = new Turret(turretGameObject, new FirstTurret(), team);
             turrets.Add(newTurret);
         }
         

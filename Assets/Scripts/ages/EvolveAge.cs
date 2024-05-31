@@ -56,7 +56,6 @@ public class EvolveAge : MonoBehaviour
 
     private void ChangeBackground()
     {
-        // Todo: change background to new age background for the most advanced team
         GameObject background = GameObject.Find("Quad");
         if (background == null)
         {

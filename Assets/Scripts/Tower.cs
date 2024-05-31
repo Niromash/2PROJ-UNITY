@@ -29,8 +29,6 @@ public class Tower : Damageable
             Turret newTurret = new Turret(turretGameObject, new FirstTurret(), team);
             turrets.Add(newTurret);
         }
-        
-        
 
         // Get the position of the most left/right tile of the tower depending on the team
         minCellPosition = GetExtremeTilePosition(tileMap, team.GetSide().Equals(Side.Enemy));
@@ -72,6 +70,11 @@ public class Tower : Damageable
         {
             Kill(damager);
         }
+        
+        DamageIndicator damageIndicator = towerGameObject.AddComponent<DamageIndicator>();
+        damageIndicator.damageTextPrefab = GameObject.Find("DamageValue");
+        damageIndicator.canvasTransform = GameObject.Find("DamageCanvas").transform;
+        damageIndicator.ShowDamage(damager.GetDamagerStats().GetDamage(), GetPosition());
 
         UpdateHealthBar();
     }

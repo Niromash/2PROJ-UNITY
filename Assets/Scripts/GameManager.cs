@@ -37,12 +37,12 @@ public class GameManager : MonoBehaviour
 
         GameObject towerLeft = GameObject.Find("TowerLeft");
         GameObject towerRight = GameObject.Find("TowerRight");
-        
+
         if (!isSceneLoaded) return;
-        
+
         teams.Add(new Team(Side.Player, towerLeft, this));
         teams.Add(new Team(Side.Enemy, towerRight, this));
-        
+
         gameState = GameState.Playing;
         // Async task to create a new enemy entity
         StartCoroutine(CreateEntity());
@@ -124,7 +124,7 @@ public class GameManager : MonoBehaviour
             }
 
             // Wait for 10 seconds before creating another entity
-            yield return new WaitForSeconds(30);
+            yield return new WaitForSeconds(2);
         }
     }
 
@@ -161,7 +161,7 @@ public class GameManager : MonoBehaviour
     private Entity GetCollidingFrontEnemy(Entity entity)
     {
         Entity forwardEntity = entity.GetCollidedEntityForwards();
-        if (forwardEntity == null) return null;
+        if (forwardEntity == null || forwardEntity.GetGameObject() == null) return null;
 
         if (!forwardEntity.GetTeam().GetSide().Equals(entity.GetTeam().GetSide()))
         {

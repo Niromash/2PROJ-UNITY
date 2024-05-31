@@ -7,7 +7,7 @@ public class Turret : Damager
     private GameManager gameManager;
     private Team team;
     private readonly TurretStats stats;
-    private int upgradeCount = 0;
+    private int upgradeCount;
     private List<Turret> turrets;
     private readonly Age age;
 

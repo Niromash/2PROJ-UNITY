@@ -22,7 +22,10 @@ public class DamageIndicator : MonoBehaviour
         // Configurer le texte de l'indicateur pour afficher le montant des dégâts
         TextMeshProUGUI text = damageText.GetComponent<TextMeshProUGUI>();
         text.text = damage.ToString();
-        text.color = Color.red;
+        // Vertical Gradient from CF4144FF to E15030FF
+        text.colorGradient = new VertexGradient(new Color(0.811f, 0.255f, 0.267f, 1f),
+            new Color(0.882f, 0.314f, 0.188f, 1f), new Color(0.882f, 0.314f, 0.188f, 1f),
+            new Color(0.811f, 0.255f, 0.267f, 1f));
         text.fontSize = 16; // Ajustez cette valeur selon vos besoins
 
         // Démarrer l'animation de montée du texte
@@ -63,7 +66,12 @@ public class DamageIndicator : MonoBehaviour
             rectTransform.GetComponent<TextMeshProUGUI>().fontSize =
                 initialFontSize * (1 + t * 0.5f); // Augmenter la taille pour plus d'intensité
 
-            rectTransform.GetComponent<TextMeshProUGUI>().color = Color.Lerp(Color.red, new Color(0.5f, 0, 0), t);
+            // Modifier la couleur du texte
+            Color startColor = new Color(0.811f, 0.255f, 0.267f, 1f); // #CF4144FF
+            Color endColor = new Color(0.882f, 0.314f, 0.188f, 1f); // #E15030FF
+            rectTransform.GetComponent<TextMeshProUGUI>().color = Color.Lerp(startColor, endColor, t);
+
+            // rectTransform.GetComponent<TextMeshProUGUI>().color = Color.Lerp(Color.red, new Color(0.5f, 0, 0), t);
 
             yield return null;
         }

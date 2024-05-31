@@ -5,10 +5,15 @@ public class PauseMenu : MonoBehaviour
 {
     public Canvas pauseCanvas;
     private bool isPaused;
+    private float previousTimeScale;
+
+    public static float requestedTimeScale = -1f;
 
     void Start()
     {
         pauseCanvas.gameObject.SetActive(false);
+        isPaused = false;
+        previousTimeScale = 1f;
     }
 
     void Update()
@@ -28,6 +33,7 @@ public class PauseMenu : MonoBehaviour
 
     void PauseGame()
     {
+        previousTimeScale = Time.timeScale;
         Time.timeScale = 0;
         isPaused = true;
         pauseCanvas.gameObject.SetActive(true);
@@ -36,7 +42,8 @@ public class PauseMenu : MonoBehaviour
 
     public void ResumeGame()
     {
-        Time.timeScale = 1;
+        Time.timeScale = requestedTimeScale > 0 ? requestedTimeScale : previousTimeScale;
+        requestedTimeScale = -1f;
         isPaused = false;
         pauseCanvas.gameObject.SetActive(false);
         Debug.Log("Game Resumed");
@@ -46,5 +53,10 @@ public class PauseMenu : MonoBehaviour
     {
         Resources.UnloadUnusedAssets();
         SceneManager.LoadScene("MainMenu");
+    }
+
+    public static bool IsGamePaused()
+    {
+        return Time.timeScale == 0;
     }
 }

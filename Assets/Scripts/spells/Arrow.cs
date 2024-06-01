@@ -10,7 +10,6 @@ public class Arrow : Spell
     {
         if (entity.GetTeam().GetSide().Equals(GetTeam().GetSide())) return;
 
-        Debug.Log("Arrow hit: " + entity.GetGameObject().name);
         entity.TakeDamage(this);
     }
 }

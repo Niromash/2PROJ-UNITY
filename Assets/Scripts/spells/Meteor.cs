@@ -10,7 +10,6 @@ public class Meteor : Spell
     {
         if (entity.GetTeam().GetSide().Equals(GetTeam().GetSide())) return;
 
-        Debug.Log("Meteor hit: " + entity.GetGameObject().name);
         entity.TakeDamage(this);
     }
 }

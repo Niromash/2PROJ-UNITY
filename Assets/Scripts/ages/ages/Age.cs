@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 public abstract class Age : EntityStatsMultipliable, TurretStatsMultipliable
 {
@@ -14,7 +16,8 @@ public abstract class Age : EntityStatsMultipliable, TurretStatsMultipliable
     public abstract SpellStats GetSpellStats();
     public abstract int GetAgeEvolvingCost();
     public abstract int GetAgeLevel();
-
+    public abstract List<Vector3> GetTurretsPositions();
+    
     public float GetGoldMultiplier()
     {
         return goldMultiplier;
@@ -24,7 +27,7 @@ public abstract class Age : EntityStatsMultipliable, TurretStatsMultipliable
     {
         return experienceMultiplier;
     }
-    
+
     public float GetAdditionalIncomeMultiplier()
     {
         return additionalIncomeMultiplier;
@@ -39,4 +42,5 @@ public abstract class Age : EntityStatsMultipliable, TurretStatsMultipliable
     {
         return turretsMultiplier;
     }
+
 }

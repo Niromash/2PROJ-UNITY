@@ -5,7 +5,7 @@
         damage = 15f;
         spellCount = 30;
         wavesCount = 4;
-        cooldown = 200f;
+        cooldown = 3 * 1000f; // in millis
         deploymentCost = 100;
     }
 

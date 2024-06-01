@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class MedievalAge : Age
 {
@@ -51,5 +53,15 @@ public class MedievalAge : Age
     public override int GetAgeLevel()
     {
         return 2;
+    }
+
+    public override List<Vector3> GetTurretsPositions()
+    {
+        Vector3 turretPosition1 = new Vector3(-15.5f, 8, 0);
+        Vector3 turretPosition2 = new Vector3(-16.5f, 8, 0);
+        Vector3 turretPosition3 = new Vector3(-17.5f, 8, 0);
+        Vector3 turretPosition4 = new Vector3(-18.5f, 8, 0);
+
+        return new List<Vector3> { turretPosition1, turretPosition2, turretPosition3, turretPosition4 };
     }
 }

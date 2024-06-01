@@ -122,9 +122,12 @@ public class Team
         }
     }
 
-    public void AddEntity(GameObject prefab, CharacterStats stats, Vector3 spawnPosition, string entityName)
+    public bool AddEntity(GameObject prefab, CharacterStats stats, Vector3 spawnPosition, string entityName)
     {
+        // if the queue is larger than 10, we don't add the entity to spawn
+        if (entitiesToSpawn.Count > 10) return false;
         entitiesToSpawn.Enqueue(new EntityToSpawn(prefab, this, stats, spawnPosition, entityName));
+        return true;
     }
 
     public void RemoveEntity(Entity entity)
@@ -274,7 +277,7 @@ public class Team
 
         ToggleLockEntity(entityIndexToToggle);
     }
-    
+
     public void CastSpells(Type spellType, SpellStats spellStats)
     {
         if (experience < spellStats.deploymentCost)
@@ -282,7 +285,7 @@ public class Team
             Debug.Log("Not enough experience to deploy this spell " + spellStats.GetName());
             return;
         }
-        
+
         if (spellCooldowns > Time.time)
         {
             Debug.Log("Spell is on cooldown: " + spellStats.GetName());

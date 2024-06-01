@@ -18,6 +18,8 @@ public class BulletCollisionController : MonoBehaviour
             Entity collidedEntity = gameManager.GetEntity(collider.gameObject);
             if (collidedEntity != null)
             {
+                if (collidedEntity.GetTeam().GetSide()
+                    .Equals(bulletMetadata.GetSourceTurret().GetTeam().GetSide())) return;
                 collidedEntity.TakeDamage(bulletMetadata.GetSourceTurret());
                 Destroy(gameObject);
             }

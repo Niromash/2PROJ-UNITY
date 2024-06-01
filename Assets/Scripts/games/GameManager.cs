@@ -119,9 +119,11 @@ public class GameManager : MonoBehaviour
             else
             {
                 GameObject entityToSpawn = entityCount % 2 == 0 ? frankiTanki : marcel;
-                enemyTeam.AddEntity(entityToSpawn, stats, new Vector3(37, 0f, 0), stats.GetName());
-                enemyTeam.RemoveGold(multipliedStats.deploymentCost);
-                entityCount++;
+                if (enemyTeam.AddEntity(entityToSpawn, stats, new Vector3(37, 0f, 0), stats.GetName()))
+                {
+                    enemyTeam.RemoveGold(multipliedStats.deploymentCost);
+                    entityCount++;
+                }
             }
 
             // Wait for 10 seconds before creating another entity

@@ -12,4 +12,9 @@ public class SupportStats : CharacterStats
         deploymentTime = 300f;
         deathExperience = 100;
     }
+    
+    public override string GetName()
+    {
+        return "Support";
+    }
 }

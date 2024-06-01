@@ -2,7 +2,6 @@
 {
     public AntiArmorStats()
     {
-        name = "AntiArmor";
         maxHealth = 200f;
         health = maxHealth;
         damagePerSecond = 30f;
@@ -12,5 +11,10 @@
         deploymentTime = 500f;
         deathExperience = 100;
         deathGold = 50;
+    }
+
+    public override string GetName()
+    {
+        return "AntiArmor";
     }
 }

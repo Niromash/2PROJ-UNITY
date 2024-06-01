@@ -6,15 +6,27 @@ public class PrehistoricAge : Age
     {
         goldMultiplier = 1f;
         experienceMultiplier = 1f;
-        entitiesStatsMultiplier = 2f;
-        turretsStatsMultiplier = 1f;
+        entitiesMultiplier = new AgeMultipliers.Entities
+        {
+            damagePerSecond = 2f,
+            maxHealth = 1.5f,
+            range = 1.2f,
+            deploymentTime = 1,
+            blockPerSecondMovementSpeed = 1.5f
+        };
+        turretsMultiplier = new AgeMultipliers.Turrets
+        {
+            damagePerSecond = 1.5f,
+            range = 1.2f,
+            bulletSpeed = 1.5f,
+        };
     }
 
     public override string GetName()
     {
         return "Prehistoric";
     }
-    
+
     public override string GetBackgroundAssetName()
     {
         return "prehistoric_background";

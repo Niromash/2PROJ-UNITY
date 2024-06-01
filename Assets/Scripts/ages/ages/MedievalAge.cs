@@ -6,8 +6,20 @@ public class MedievalAge : Age
     {
         goldMultiplier = 1.2f;
         experienceMultiplier = 2f;
-        entitiesStatsMultiplier = 3f;
-        turretsStatsMultiplier = 1.5f;
+        entitiesMultiplier = new AgeMultipliers.Entities
+        {
+            damagePerSecond = 3f,
+            maxHealth = 3f,
+            range = 2f,
+            deploymentTime = .8f,
+            blockPerSecondMovementSpeed = 1.7f
+        };
+        turretsMultiplier = new AgeMultipliers.Turrets
+        {
+            damagePerSecond = 2f,
+            range = 1.2f,
+            bulletSpeed = 2f,
+        };
     }
 
     public override string GetName()

@@ -3,7 +3,6 @@ public class TankStats : CharacterStats
 {
     public TankStats()
     {
-        name = "Tank";
         maxHealth = 300f;
         health = maxHealth;
         damagePerSecond = 30f;
@@ -13,5 +12,10 @@ public class TankStats : CharacterStats
         deploymentTime = 300f;
         deathExperience = 100;
         deathGold = 100;
+    }
+    
+    public override string GetName()
+    {
+        return "Tank";
     }
 }

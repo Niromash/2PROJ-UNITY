@@ -170,6 +170,6 @@ public class Entity : Damageable, Damager
 
     public string GetName()
     {
-        return stats.name;
+        return stats.GetName();
     }
 }

@@ -4,7 +4,7 @@
     {
         damagePerSecond = 30f;
         range = 6f;
-        deploymentCost = 500f;
+        deploymentCost = 500;
         bulletSpeed = 10f;
     }
 

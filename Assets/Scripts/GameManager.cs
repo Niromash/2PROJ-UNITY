@@ -38,17 +38,18 @@ public class GameManager : MonoBehaviour
         GameObject towerLeft = GameObject.Find("TowerLeft");
         GameObject towerRight = GameObject.Find("TowerRight");
 
+        if (!isSceneLoaded) return;
+
         teams.Add(new Team(Side.Player, towerLeft, this));
         teams.Add(new Team(Side.Enemy, towerRight, this));
 
-        if (!isSceneLoaded) return;
         gameState = GameState.Playing;
         // Async task to create a new enemy entity
         StartCoroutine(CreateEntity());
 
         foreach (Team team in teams)
         {
-            StartCoroutine(team.SpawnEntities(this));
+            StartCoroutine(team.SpawnEntities());
             StartCoroutine(team.GainPassiveGolds());
         }
     }
@@ -112,18 +113,18 @@ public class GameManager : MonoBehaviour
 
             if (multipliedStats.deploymentCost > enemyTeam.GetGold())
             {
-                Debug.Log("Not enough gold to spawn enemy entity " + stats.name);
+                Debug.Log("Not enough gold to spawn enemy entity " + stats.GetName());
             }
             else
             {
                 GameObject entityToSpawn = entityCount % 2 == 0 ? frankiTanki : marcel;
-                enemyTeam.AddEntity(entityToSpawn, stats, new Vector3(25, 0f, 0), stats.name);
+                enemyTeam.AddEntity(entityToSpawn, stats, new Vector3(25, 0f, 0), stats.GetName());
                 enemyTeam.RemoveGold(multipliedStats.deploymentCost);
                 entityCount++;
             }
 
             // Wait for 10 seconds before creating another entity
-            yield return new WaitForSeconds(30);
+            yield return new WaitForSeconds(2);
         }
     }
 
@@ -160,7 +161,7 @@ public class GameManager : MonoBehaviour
     private Entity GetCollidingFrontEnemy(Entity entity)
     {
         Entity forwardEntity = entity.GetCollidedEntityForwards();
-        if (forwardEntity == null) return null;
+        if (forwardEntity == null || forwardEntity.GetGameObject() == null) return null;
 
         if (!forwardEntity.GetTeam().GetSide().Equals(entity.GetTeam().GetSide()))
         {
@@ -222,6 +223,8 @@ public class GameManager : MonoBehaviour
         // if the new position is in an entity in front (check with entity rigidbody size), then stop moving
         if (entity.GetCollidedEntityForwards() != null)
         {
+            if (entity.GetCollidedEntityForwards().GetGameObject() == null) return;
+
             float distance;
             if (entity.GetTeam().GetSide().Equals(Side.Player))
             {

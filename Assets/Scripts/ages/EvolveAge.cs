@@ -17,8 +17,8 @@ public class EvolveAge : MonoBehaviour
 
     public void Evolve()
     {
-        Team team = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
-        Team enemyTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Enemy));
+        Team team = gameManager.GetTeams().Find(t => t.GetSide().Equals(Side.Player));
+        Team enemyTeam = gameManager.GetTeams().Find(t => t.GetSide().Equals(Side.Enemy));
         if (ages.Count == 0)
         {
             Debug.Log("No more ages to evolve");
@@ -38,6 +38,10 @@ public class EvolveAge : MonoBehaviour
         team.SetCurrentAge(currentAge);
         team.RemoveExperience(currentAge.GetAgeEvolvingCost());
 
+        // Remove the last locked entity of the team and lock a random entity
+        int randomEntityIndexToLock = Random.Range(0, 3);
+        team.ToggleLockEntityUi(randomEntityIndexToLock);
+
         ChangeSpellSprite();
         ChangeEntitySprites();
 
@@ -52,7 +56,6 @@ public class EvolveAge : MonoBehaviour
 
     private void ChangeBackground()
     {
-        // Todo: change background to new age background for the most advanced team
         GameObject background = GameObject.Find("Quad");
         if (background == null)
         {
@@ -69,18 +72,15 @@ public class EvolveAge : MonoBehaviour
         GameObject entities = GameObject.Find("SpawnEntities");
         foreach (Transform child in entities.transform)
         {
-            if (child.gameObject.name.Contains("Button"))
+            Image spriteRenderer = child.gameObject.GetComponent<Image>();
+            if (spriteRenderer == null)
             {
-                Image spriteRenderer = child.gameObject.GetComponent<Image>();
-                if (spriteRenderer == null)
-                {
-                    Debug.LogError("SpriteRenderer not found");
-                    return;
-                }
-
-                spriteRenderer.sprite =
-                    Resources.Load<Sprite>("EntitySprites/" + currentAge.GetName() + "/" + child.name.ToLower());
+                Debug.LogError("SpriteRenderer not found");
+                return;
             }
+
+            spriteRenderer.sprite =
+                Resources.Load<Sprite>("EntitySprites/" + currentAge.GetName() + "/" + child.name.ToLower());
         }
     }
 

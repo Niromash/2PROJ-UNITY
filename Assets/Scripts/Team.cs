@@ -13,22 +13,30 @@ public class Team
     private readonly Tower tower;
     private readonly Queue<EntityToSpawn> entitiesToSpawn;
     private Age currentAge;
+
     private int gold;
     private int experience;
     private int maxExperience;
+    private readonly object goldLock = new object();
+    private readonly object experienceLock = new object();
+
     private Image expBarImage;
     private TextMeshProUGUI goldCountText;
     private TextMeshProUGUI expCountText;
+    private int? lockedEntityIndex;
 
     public Team(Side side, GameObject towerGameObject, GameManager gameManager)
     {
         currentAge = new PrehistoricAge();
+        if (side.Equals(Side.Player)) ToggleLockEntityUi(3); // the player has ui
+        else ToggleLockEntity(0); // the enemy has no UI
+
         this.side = side;
         tower = new Tower(500, towerGameObject, this, gameManager);
         entities = new List<Entity>();
         entitiesToSpawn = new Queue<EntityToSpawn>();
-        gold = 500;
-        experience = 0;
+        gold = 5000;
+        experience = 5000;
         maxExperience = 500; // exemple d'expérience maximale pour remplir la barre
         GameObject expBar = GameObject.Find(side.Equals(Side.Player) ? "TowerLeftExpBar" : "TowerRightExpBar");
         GameObject goldcount = GameObject.Find(side.Equals(Side.Player) ? "GoldLeft" : "GoldRight");
@@ -54,25 +62,41 @@ public class Team
 
     public void AddGold(int amount)
     {
-        gold += amount;
+        lock (goldLock)
+        {
+            gold += amount;
+        }
+
         DisplayGold();
     }
 
     public void AddExperience(int amount)
     {
-        experience += amount;
+        lock (experienceLock)
+        {
+            experience += amount;
+        }
+
         UpdateExpBar();
     }
 
     public void RemoveGold(int amount)
     {
-        gold -= amount;
+        lock (goldLock)
+        {
+            gold -= amount;
+        }
+
         DisplayGold();
     }
 
     public void RemoveExperience(int amount)
     {
-        experience -= amount;
+        lock (goldLock)
+        {
+            experience -= amount;
+        }
+
         UpdateExpBar();
     }
 
@@ -107,7 +131,7 @@ public class Team
         return tower;
     }
 
-    public IEnumerator SpawnEntities(GameManager gameManager)
+    public IEnumerator SpawnEntities()
     {
         while (GameManager.GetGameState().Equals(GameState.Playing))
         {
@@ -172,7 +196,7 @@ public class Team
     {
         currentAge = age;
     }
-    
+
     public Age GetCurrentAge()
     {
         return currentAge;
@@ -181,5 +205,50 @@ public class Team
     public bool GreaterAgeThan(Team team)
     {
         return currentAge.GetAgeLevel() > team.GetCurrentAge().GetAgeLevel();
+    }
+
+    public void ToggleLockEntity(int? entityIndexToToggle)
+    {
+        if (lockedEntityIndex != null) lockedEntityIndex = null;
+        else lockedEntityIndex = entityIndexToToggle;
+    }
+
+    public void ToggleLockEntityUi(int? entityIndexToToggle)
+    {
+        GameObject spawnEntitiesButtons = GameObject.Find("SpawnEntities");
+        if (spawnEntitiesButtons == null)
+        {
+            Debug.LogError("SpawnEntities GameObject not found");
+            return;
+        }
+
+        if (lockedEntityIndex != null)
+        {
+            // Remove the lock object if it exists
+            GameObject existingLockObject =
+                spawnEntitiesButtons.transform.GetChild(lockedEntityIndex.Value).Find("Lock").gameObject;
+            if (existingLockObject != null)
+            {
+                Object.Destroy(existingLockObject);
+            }
+
+            ToggleLockEntity(entityIndexToToggle);
+        }
+
+        if (entityIndexToToggle == null) return;
+
+        GameObject childToLock = spawnEntitiesButtons.transform.GetChild(entityIndexToToggle.Value).gameObject;
+
+        GameObject lockPrefab = Resources.Load<GameObject>("Common/lock/Lock");
+        GameObject lockObject = Object.Instantiate(lockPrefab, childToLock.transform.position, Quaternion.identity);
+        lockObject.name = "Lock";
+        lockObject.transform.SetParent(childToLock.transform);
+
+        ToggleLockEntity(entityIndexToToggle);
+    }
+
+    public int? GetLockedEntityIndex()
+    {
+        return lockedEntityIndex;
     }
 }

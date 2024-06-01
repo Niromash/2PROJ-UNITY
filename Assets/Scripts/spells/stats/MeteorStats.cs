@@ -6,7 +6,7 @@
         spellCount = 20;
         wavesCount = 2;
         cooldown = 200f;
-        deploymentCost = 100f;
+        deploymentCost = 100;
     }
     
     public override string GetName()

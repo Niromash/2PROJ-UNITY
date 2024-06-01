@@ -1,4 +1,4 @@
-﻿public interface EntityMultipliable
+﻿public interface EntityStatsMultipliable
 {
     EntityMultipliers GetEntitiesStatsMultiplier();
     float GetGoldMultiplier();

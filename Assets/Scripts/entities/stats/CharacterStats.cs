@@ -27,7 +27,7 @@
         return damagePerSecond;
     }
 
-    public void ApplyMultiplier(EntityMultipliable multipliers)
+    public void ApplyMultiplier(EntityStatsMultipliable multipliers)
     {
         EntityMultipliers entitiesStatsMultiplier = multipliers.GetEntitiesStatsMultiplier();
 

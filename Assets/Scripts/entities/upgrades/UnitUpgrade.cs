@@ -1,4 +1,4 @@
-public abstract class UnitUpgrade : EntityMultipliable
+public abstract class UnitUpgrade : EntityStatsMultipliable
 {
     protected int upgradeCost;
     protected EntityMultipliers entityMultipliers;

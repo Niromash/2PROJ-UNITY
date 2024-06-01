@@ -12,17 +12,17 @@ public class UpgradeUnits
         this.team = team;
 
         Queue<UnitUpgrade> tankUpgrades = new Queue<UnitUpgrade>();
-        tankUpgrades.Enqueue(new AntiArmorUpgrade1());
-        tankUpgrades.Enqueue(new AntiArmorUpgrade2());
-        tankUpgrades.Enqueue(new AntiArmorUpgrade3());
+        tankUpgrades.Enqueue(new TankUpgrade1());
+        tankUpgrades.Enqueue(new TankUpgrade2());
+        tankUpgrades.Enqueue(new TankUpgrade3());
         Queue<UnitUpgrade> infantryUpgrades = new Queue<UnitUpgrade>();
-        infantryUpgrades.Enqueue(new AntiArmorUpgrade1());
-        infantryUpgrades.Enqueue(new AntiArmorUpgrade2());
-        infantryUpgrades.Enqueue(new AntiArmorUpgrade3());
+        infantryUpgrades.Enqueue(new InfantryUpgrade1());
+        infantryUpgrades.Enqueue(new InfantryUpgrade2());
+        infantryUpgrades.Enqueue(new InfantryUpgrade3());
         Queue<UnitUpgrade> supportUpgrades = new Queue<UnitUpgrade>();
-        supportUpgrades.Enqueue(new AntiArmorUpgrade1());
-        supportUpgrades.Enqueue(new AntiArmorUpgrade2());
-        supportUpgrades.Enqueue(new AntiArmorUpgrade3());
+        supportUpgrades.Enqueue(new SupportUpgrade1());
+        supportUpgrades.Enqueue(new SupportUpgrade2());
+        supportUpgrades.Enqueue(new SupportUpgrade3());
         Queue<UnitUpgrade> antiArmorUpgrades = new Queue<UnitUpgrade>();
         antiArmorUpgrades.Enqueue(new AntiArmorUpgrade1());
         antiArmorUpgrades.Enqueue(new AntiArmorUpgrade2());

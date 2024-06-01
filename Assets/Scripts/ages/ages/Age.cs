@@ -3,6 +3,7 @@
 public abstract class Age : EntityStatsMultipliable, TurretStatsMultipliable
 {
     protected float goldMultiplier = 1;
+    protected float additionalIncomeMultiplier = 1;
     protected float experienceMultiplier = 1;
     protected EntityMultipliers entitiesMultiplier = new EntityMultipliers();
     protected TurretMultipliers turretsMultiplier = new TurretMultipliers();
@@ -22,6 +23,11 @@ public abstract class Age : EntityStatsMultipliable, TurretStatsMultipliable
     public float GetExperienceMultiplier()
     {
         return experienceMultiplier;
+    }
+    
+    public float GetAdditionalIncomeMultiplier()
+    {
+        return additionalIncomeMultiplier;
     }
 
     public EntityMultipliers GetEntitiesStatsMultiplier()

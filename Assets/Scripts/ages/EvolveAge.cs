@@ -8,6 +8,7 @@ public class EvolveAge : MonoBehaviour
     public GameManager gameManager;
     private Queue<Age> ages;
     private Age currentAge;
+    public Button extraEntityButton;
 
     public void Start()
     {
@@ -17,6 +18,8 @@ public class EvolveAge : MonoBehaviour
 
     public void Evolve()
     {
+        if (!GameManager.GetGameState().Equals(GameState.Playing)) return;
+
         Team team = gameManager.GetTeams().Find(t => t.GetSide().Equals(Side.Player));
         Team enemyTeam = gameManager.GetTeams().Find(t => t.GetSide().Equals(Side.Enemy));
         if (ages.Count == 0)
@@ -50,8 +53,34 @@ public class EvolveAge : MonoBehaviour
             ChangeBackground();
         }
 
-        // If no more ages to evolve, block button and display message and change button sprite
-        // and add a new entity button to spawn the last age special entity
+        if (ages.Count == 0)
+        {
+            // Block change age button
+            GameObject button = GameObject.Find("ChangeAge");
+            if (button == null)
+            {
+                Debug.LogError("Button not found");
+                return;
+            }
+
+            // todo If no more ages to evolve, display message
+
+            GameObject lockPrefab = Resources.Load<GameObject>("Common/lock/Lock");
+            GameObject lockObject = Instantiate(lockPrefab, button.transform.position, Quaternion.identity);
+            lockObject.name = "Lock";
+            lockObject.transform.SetParent(button.transform);
+            // Give parent size to lock object
+            lockObject.GetComponent<RectTransform>().sizeDelta = button.GetComponent<RectTransform>().sizeDelta;
+            button.GetComponent<Button>().interactable = false;
+
+
+            extraEntityButton.interactable = true;
+            Transform child = extraEntityButton.transform.Find("Lock");
+            if (child != null)
+            {
+                Destroy(child.gameObject);
+            }
+        }
     }
 
     private void ChangeBackground()

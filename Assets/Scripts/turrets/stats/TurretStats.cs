@@ -1,4 +1,6 @@
-﻿public abstract class TurretStats : DamagerStats, Nameable
+﻿using UnityEngine;
+
+public abstract class TurretStats : DamagerStats, Nameable
 {
     public float damagePerSecond = 100f;
     public float range = 20f;
@@ -17,7 +19,15 @@
         TurretMultipliers turretsStatsMultiplier = multipliers.GetTurretsStatsMultiplier();
         damagePerSecond *= turretsStatsMultiplier.damagePerSecond;
         range *= turretsStatsMultiplier.range;
-        deploymentCost *= (int)(deploymentCost * multipliers.GetGoldMultiplier());
+        
+        deploymentCost = (int)(deploymentCost * multipliers.GetGoldMultiplier());
         bulletSpeed *= turretsStatsMultiplier.bulletSpeed;
+    }
+
+    public TurretStats GetMultipliedStats(TurretStatsMultipliable multipliers)
+    {
+        TurretStats multipliedStats = (TurretStats)MemberwiseClone();
+        multipliedStats.ApplyMultiplier(multipliers);
+        return multipliedStats;
     }
 }

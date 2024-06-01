@@ -5,6 +5,7 @@ public class MedievalAge : Age
     public MedievalAge()
     {
         goldMultiplier = 1.2f;
+        additionalIncomeMultiplier = 5f;
         experienceMultiplier = 2f;
         entitiesMultiplier = new EntityMultipliers
         {

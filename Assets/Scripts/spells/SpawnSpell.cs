@@ -13,7 +13,9 @@ public class SpawnSpell : MonoBehaviour
     }
 
     private void Spawn(Team team, Type spellType, SpellStats spellStats)
-    {
+    { 
+        if (!GameManager.GetGameState().Equals(GameState.Playing)) return;
+        
         if (team.GetGold() < spellStats.deploymentCost)
         {
             Debug.Log("Not enough gold to deploy this spell " + spellStats.GetName());

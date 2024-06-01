@@ -25,6 +25,7 @@ public class Team
     private TextMeshProUGUI expCountText;
     private int? lockedEntityIndex;
     private readonly UpgradeUnits upgradeUnits;
+    private readonly UpgradeTurrets upgradeTurrets;
 
     public Team(Side side, GameObject towerGameObject, GameManager gameManager)
     {
@@ -47,6 +48,7 @@ public class Team
         expBarImage = expBar.GetComponent<Image>();
 
         upgradeUnits = new UpgradeUnits(this);
+        upgradeTurrets = new UpgradeTurrets(this);
 
         UpdateExpBar();
         DisplayGold();
@@ -167,7 +169,7 @@ public class Team
     {
         while (GameManager.GetGameState().Equals(GameState.Playing))
         {
-            AddGold(Convert.ToInt32(Math.Round(10 * currentAge.GetGoldMultiplier())));
+            AddGold(Convert.ToInt32(Math.Round(10 * currentAge.GetGoldMultiplier() * currentAge.GetAdditionalIncomeMultiplier())));
             yield return new WaitForSeconds(1);
         }
     }
@@ -234,6 +236,7 @@ public class Team
             {
                 Object.Destroy(existingLockObject);
             }
+            spawnEntitiesButtons.transform.GetChild(lockedEntityIndex.Value).GetComponent<Button>().interactable = true;
 
             ToggleLockEntity(entityIndexToToggle);
         }
@@ -246,6 +249,7 @@ public class Team
         GameObject lockObject = Object.Instantiate(lockPrefab, childToLock.transform.position, Quaternion.identity);
         lockObject.name = "Lock";
         lockObject.transform.SetParent(childToLock.transform);
+        childToLock.GetComponent<Button>().interactable = false;
 
         ToggleLockEntity(entityIndexToToggle);
     }
@@ -258,5 +262,10 @@ public class Team
     public UpgradeUnits GetUpgradeUnits()
     {
         return upgradeUnits;
+    }
+
+    public UpgradeTurrets GetUpgradeTurrets()
+    {
+        return upgradeTurrets;
     }
 }

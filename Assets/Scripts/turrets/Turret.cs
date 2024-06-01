@@ -9,31 +9,54 @@ public class Turret : Damager
     private readonly TurretStats stats;
     private int upgradeCount;
     private List<Turret> turrets;
-    private readonly Age age;
+    private Age age;
+    private readonly int index;
 
-    public Turret(GameObject go, TurretStats stats, Team team)
+    public Turret(GameObject go, TurretStats stats, Team team, int index)
     {
         gameObject = go;
         this.stats = stats;
         this.team = team;
-        age = team.GetCurrentAge();
-        stats.ApplyMultiplier(age);
+        this.index = index;
+        if (gameObject.activeSelf)
+        {
+            // If the turret is active (bought), we apply the multiplier
+            age = team.GetCurrentAge();
+            stats.ApplyMultiplier(age);
+        }
     }
 
     public bool CanUpgrade()
     {
-        return upgradeCount < 3;
+        // We can upgrade turrets only if the 3 turrets are active, the team age is the same as the turret age
+        return upgradeCount < 3 && age == team.GetCurrentAge() && team.GetUpgradeTurrets().CanUpgradeTurret(index);
     }
 
-    public void Upgrade(float factor)
+    public void Upgrade()
     {
         if (!CanUpgrade())
         {
-            Debug.LogWarning("Turret has reached maximum upgrades.");
+            Debug.LogWarning("Turret cannot be upgraded"); 
             return;
         }
 
+        team.GetUpgradeTurrets().UpgradeTurret(index);
         upgradeCount++;
+
+        Debug.Log("Turret upgraded!");
+        var changeSprite = gameObject.GetComponent<ChangeSprite>();
+        if (changeSprite != null)
+        {
+            changeSprite.ChangeSpriteToNextLevel();
+        }
+
+        stats.ApplyMultiplier(team.GetUpgradeTurrets().GetTurretUpgrade(index));
+    }
+
+    public void MakeActive(Age age)
+    {
+        this.age = age;
+        stats.ApplyMultiplier(age);
     }
 
 

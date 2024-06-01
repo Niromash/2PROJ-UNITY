@@ -26,7 +26,7 @@ public class Tower : Damageable
         for (int i = 0; i < 3; i++)
         {
             GameObject turretGameObject = towerGameObject.transform.GetChild(i).gameObject;
-            Turret newTurret = new Turret(turretGameObject, new FirstTurret(), team);
+            Turret newTurret = new Turret(turretGameObject, new FirstTurret(), team, i);
             turrets.Add(newTurret);
         }
 

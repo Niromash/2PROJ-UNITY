@@ -55,9 +55,18 @@ public class SpawnEntity : MonoBehaviour
         GameObject supportPrefab = GetCurrentEntitiesGameObject(playerTeam).transform.Find("Support").gameObject;
         Spawn(button, supportPrefab, playerTeam, new SupportStats());
     }
+    
+    public void ExtraEntityPlayerSpawn(Button button)
+    {
+        Team playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
+        GameObject extraEntityPrefab = GetCurrentEntitiesGameObject(playerTeam).transform.Find("ExtraEntity").gameObject;
+        Spawn(button, extraEntityPrefab, playerTeam, new ExtraEntityStats());
+    }
 
     private void Spawn(Button spawnButton, GameObject prefab, Team team, CharacterStats stats)
     {
+        if (!GameManager.GetGameState().Equals(GameState.Playing)) return;
+        
         if (team.GetLockedEntityIndex() == spawnButton.transform.GetSiblingIndex())
         {
             Debug.Log("Entity locked, please upgrade to unlock");

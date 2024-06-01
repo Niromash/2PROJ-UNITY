@@ -12,5 +12,8 @@ public enum EntityTypes
     Support = 3,
     
     [Description("AntiArmor")]
-    AntiArmor = 4
+    AntiArmor = 4,
+    
+    [Description("Extra")]
+    Extra = 5
 }

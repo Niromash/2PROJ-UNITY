@@ -5,6 +5,7 @@ public class PrehistoricAge : Age
     public PrehistoricAge()
     {
         goldMultiplier = 1f;
+        additionalIncomeMultiplier = 1f;
         experienceMultiplier = 1f;
         entitiesMultiplier = new EntityMultipliers
         {

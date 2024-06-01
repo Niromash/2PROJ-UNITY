@@ -5,20 +5,30 @@ using System.Collections.Generic;
 public class SpawnTurret : MonoBehaviour
 {
     public GameManager gameManager;
-    public GameObject bulletPrefab;
     private int currentTurretIndex = 0;
-    private List<Turret> inactiveTurrets = new List<Turret>(); 
+    private List<Turret> inactiveTurrets = new List<Turret>();
 
 
     public void ShowNextTurret()
     {
+        if (!GameManager.GetGameState().Equals(GameState.Playing)) return;
+
         var playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
         if (playerTeam != null)
         {
             var turrets = playerTeam.GetTower().GetTurrets();
             if (currentTurretIndex < turrets.Count)
             {
-                turrets[currentTurretIndex].GetGameObject().SetActive(true);
+                Turret turret = turrets[currentTurretIndex];
+                if (turret.GetStats().deploymentCost > playerTeam.GetGold())
+                {
+                    Debug.Log("Not enough gold to deploy turret");
+                    return;
+                }
+
+                playerTeam.RemoveGold(turret.GetStats().deploymentCost);
+                turret.GetGameObject().SetActive(true);
+                turret.MakeActive(playerTeam.GetCurrentAge());
                 currentTurretIndex++;
             }
         }
@@ -26,84 +36,74 @@ public class SpawnTurret : MonoBehaviour
 
     public void UpgradeTurrets()
     {
+        if (!GameManager.GetGameState().Equals(GameState.Playing)) return;
+
         var playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
         if (playerTeam != null)
         {
             var turrets = playerTeam.GetTower().GetTurrets();
 
-            // Vérifiez que les trois tourelles sont actives
+            // We can upgrade turrets only if the 3 turrets are active
             if (turrets.Where(turret => turret.GetGameObject().activeInHierarchy).Count() != 3)
             {
                 return;
             }
             
-
+            if (!playerTeam.GetUpgradeTurrets().CanUpgradeTurrets())
+            {
+                Debug.Log("Cannot upgrade turrets");
+                return;
+            }
+            
             foreach (var turret in turrets)
             {
-                if (turret.CanUpgrade())
-                {
-                    turret.Upgrade(1.2f);
-                    var changeSprite = turret.GetGameObject().GetComponent<ChangeSprite>();
-                    if (changeSprite != null)
-                    {
-                        changeSprite.ChangeSpriteToNextLevel();
-                    }
-                }
+                turret.Upgrade();
+            }
+        }
+    }
+
+    private void RemoveTurret(int index)
+    {
+        if (!GameManager.GetGameState().Equals(GameState.Playing)) return;
+
+        var playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
+        if (playerTeam != null)
+        {
+            var turrets = playerTeam.GetTower().GetTurrets();
+            if (turrets.Count > index)
+            {
+                var turret = turrets[index];
+                turret.GetGameObject().SetActive(false);
+                turrets.RemoveAt(index);
+
+                // Refund the player half of the deployment cost
+                playerTeam.AddGold(turret.GetStats().deploymentCost / 2);
+
+                inactiveTurrets.Add(turret);
             }
         }
     }
     
     public void RemoveFirstTurret()
     {
-        var playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
-        if (playerTeam != null)
-        {
-            var turrets = playerTeam.GetTower().GetTurrets();
-            if (turrets.Count > 0)
-            {
-                var turret = turrets[0];
-                turret.GetGameObject().SetActive(false);
-                turrets.RemoveAt(0);
-                inactiveTurrets.Add(turret);
-            }
-        }
+       RemoveTurret(0);
     }
 
     public void RemoveSecondTurret()
     {
-        var playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
-        if (playerTeam != null)
-        {
-            var turrets = playerTeam.GetTower().GetTurrets();
-            if (turrets.Count > 1)
-            {
-                var turret = turrets[1];
-                turret.GetGameObject().SetActive(false);
-                turrets.RemoveAt(1);
-                inactiveTurrets.Add(turret);
-            }
-        }
+       RemoveTurret(1);
     }
-    
+
 
     public void RemoveThirdTurret()
     {
-        var playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
-        if (playerTeam != null)
-        {
-            var turrets = playerTeam.GetTower().GetTurrets();
-            if (turrets.Count > 2)
-            {
-                var turret = turrets[2];
-                turret.GetGameObject().SetActive(false);
-                turrets.RemoveAt(2);
-                inactiveTurrets.Add(turret);
-            }
-        }
+       RemoveTurret(2);
     }
-    
+
     public void ReactivateTurret()
     {
+        if (!GameManager.GetGameState().Equals(GameState.Playing)) return;
+
         if (inactiveTurrets.Count > 0)
         {
             var turret = inactiveTurrets[0];
@@ -118,8 +118,4 @@ public class SpawnTurret : MonoBehaviour
             }
         }
     }
-
-    
-    
-    
 }

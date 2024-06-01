@@ -1,6 +1,6 @@
 ﻿using System;
 
-public abstract class Age : AgeMultipliers
+public abstract class Age : AgeMultipliers, EntityMultipliable
 {
     protected float goldMultiplier = 1;
     protected float experienceMultiplier = 1;

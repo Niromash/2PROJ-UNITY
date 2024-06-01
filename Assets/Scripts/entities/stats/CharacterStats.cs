@@ -27,39 +27,21 @@
         return damagePerSecond;
     }
 
-    public void ApplyMultiplier(AgeMultipliers multipliers)
+    public void ApplyMultiplier(EntityMultipliable multipliers)
     {
-        EntityMultipliers entities =
-            multipliers.GetEntitiesStatsMultiplier();
+        EntityMultipliers entitiesStatsMultiplier = multipliers.GetEntitiesStatsMultiplier();
 
-        maxHealth *= entities.maxHealth;
+        maxHealth *= entitiesStatsMultiplier.maxHealth;
         health = maxHealth; // Re update the health
 
-        damagePerSecond *= entities.damagePerSecond;
-        blockPerSecondMovementSpeed *= entities.blockPerSecondMovementSpeed;
-        range *= entities.range;
-        deploymentTime *= entities.deploymentTime;
+        damagePerSecond *= entitiesStatsMultiplier.damagePerSecond;
+        blockPerSecondMovementSpeed *= entitiesStatsMultiplier.blockPerSecondMovementSpeed;
+        range *= entitiesStatsMultiplier.range;
+        deploymentTime *= entitiesStatsMultiplier.deploymentTime;
 
         deploymentCost = (int)(deploymentCost * multipliers.GetGoldMultiplier());
         deathExperience = (int)(deathExperience * multipliers.GetExperienceMultiplier());
         deathGold = (int)(deathGold * multipliers.GetGoldMultiplier());
-    }
-
-    public void ApplyEntitiesMultiplier(UnitUpgrade upgrade)
-    {
-        EntityMultipliers entityMultipliers = upgrade.GetEntityMultipliers();
-
-        maxHealth *= entityMultipliers.maxHealth;
-        health = maxHealth; // Re update the health
-
-        damagePerSecond *= entityMultipliers.damagePerSecond;
-        blockPerSecondMovementSpeed *= entityMultipliers.blockPerSecondMovementSpeed;
-        range *= entityMultipliers.range;
-        deploymentTime *= entityMultipliers.deploymentTime;
-
-        deploymentCost = (int)(deploymentCost * upgrade.GetGoldMultiplier());
-        deathExperience = (int)(deathExperience * upgrade.GetExperienceMultiplier());
-        deathGold = (int)(deathGold * upgrade.GetGoldMultiplier());
     }
 
     public CharacterStats GetMultipliedStats(Team team)
@@ -68,7 +50,7 @@
 
         stats.ApplyMultiplier(team.GetCurrentAge());
         UnitUpgrade unitUpgrade = team.GetUpgradeUnits().GetUnitUpgrade(GetEntityType());
-        if (unitUpgrade != null) stats.ApplyEntitiesMultiplier(unitUpgrade);
+        if (unitUpgrade != null) stats.ApplyMultiplier(unitUpgrade);
 
         return stats;
     }

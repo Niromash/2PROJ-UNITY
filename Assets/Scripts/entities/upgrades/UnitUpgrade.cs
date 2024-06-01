@@ -1,4 +1,4 @@
-public abstract class UnitUpgrade
+public abstract class UnitUpgrade : EntityMultipliable
 {
     protected int upgradeCost;
     protected EntityMultipliers entityMultipliers;
@@ -13,7 +13,7 @@ public abstract class UnitUpgrade
         return upgradeCost;
     }
 
-    public EntityMultipliers GetEntityMultipliers()
+    public EntityMultipliers GetEntitiesStatsMultiplier()
     {
         return entityMultipliers;
     }

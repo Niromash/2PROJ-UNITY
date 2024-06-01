@@ -2,7 +2,7 @@
 {
     public float damagePerSecond = 100f;
     public float range = 20f;
-    public float deploymentCost = 100f;
+    public int deploymentCost = 100;
     public float bulletSpeed = 10f;
 
     public abstract string GetName();
@@ -14,6 +14,10 @@
 
     public void ApplyMultiplier(AgeMultipliers multipliers)
     {
-        damagePerSecond *= multipliers.GetTurretsStatsMultiplier();
+        AgeMultipliers.Turrets turretsStatsMultiplier = multipliers.GetTurretsStatsMultiplier();
+        damagePerSecond *= turretsStatsMultiplier.damagePerSecond;
+        range *= turretsStatsMultiplier.range;
+        deploymentCost *= (int)(deploymentCost * multipliers.GetGoldMultiplier());
+        bulletSpeed *= turretsStatsMultiplier.bulletSpeed;
     }
 }

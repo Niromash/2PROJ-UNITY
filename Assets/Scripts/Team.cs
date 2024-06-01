@@ -13,9 +13,13 @@ public class Team
     private readonly Tower tower;
     private readonly Queue<EntityToSpawn> entitiesToSpawn;
     private Age currentAge;
+
     private int gold;
     private int experience;
     private int maxExperience;
+    private readonly object goldLock = new object();
+    private readonly object experienceLock = new object();
+
     private Image expBarImage;
     private TextMeshProUGUI goldCountText;
     private TextMeshProUGUI expCountText;
@@ -58,25 +62,41 @@ public class Team
 
     public void AddGold(int amount)
     {
-        gold += amount;
+        lock (goldLock)
+        {
+            gold += amount;
+        }
+
         DisplayGold();
     }
 
     public void AddExperience(int amount)
     {
-        experience += amount;
+        lock (experienceLock)
+        {
+            experience += amount;
+        }
+
         UpdateExpBar();
     }
 
     public void RemoveGold(int amount)
     {
-        gold -= amount;
+        lock (goldLock)
+        {
+            gold -= amount;
+        }
+
         DisplayGold();
     }
 
     public void RemoveExperience(int amount)
     {
-        experience -= amount;
+        lock (goldLock)
+        {
+            experience -= amount;
+        }
+
         UpdateExpBar();
     }
 
@@ -111,7 +131,7 @@ public class Team
         return tower;
     }
 
-    public IEnumerator SpawnEntities(GameManager gameManager)
+    public IEnumerator SpawnEntities()
     {
         while (GameManager.GetGameState().Equals(GameState.Playing))
         {

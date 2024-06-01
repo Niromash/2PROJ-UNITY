@@ -3,7 +3,6 @@ public class InfantryStats : CharacterStats
 {
     public InfantryStats()
     {
-        name = "Infantry";
         maxHealth = 200f;
         health = maxHealth;
         damagePerSecond = 50f;
@@ -13,5 +12,10 @@ public class InfantryStats : CharacterStats
         deploymentTime = 1000f;
         deathExperience = 100;
         deathGold = 100;
+    }
+
+    public override string GetName()
+    {
+        return "Infantry";
     }
 }

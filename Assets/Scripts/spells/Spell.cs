@@ -4,7 +4,7 @@ public abstract class Spell : Damager
 {
     private readonly GameObject gameObject;
     private readonly Team team;
-    private static SpellStats spellStats;
+    protected static SpellStats spellStats;
 
     protected Spell(string gameObjectName, Team team, SpellStats spellStats)
     {

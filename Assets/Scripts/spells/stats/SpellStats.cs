@@ -4,7 +4,7 @@
     public int spellCount = 10;
     public int wavesCount = 1;
     public float cooldown = 100f;
-    public float deploymentCost = 100f; // cost in xp
+    public int deploymentCost = 100; // cost in xp
 
     public abstract string GetName();
 

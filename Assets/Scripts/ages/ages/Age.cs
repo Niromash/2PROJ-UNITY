@@ -4,8 +4,8 @@ public abstract class Age : AgeMultipliers
 {
     protected float goldMultiplier = 1;
     protected float experienceMultiplier = 1;
-    protected float entitiesStatsMultiplier = 1;
-    protected float turretsStatsMultiplier = 1;
+    protected AgeMultipliers.Entities entitiesMultiplier = new AgeMultipliers.Entities();
+    protected AgeMultipliers.Turrets turretsMultiplier = new AgeMultipliers.Turrets();
 
     public abstract string GetName();
     public abstract string GetBackgroundAssetName();
@@ -24,13 +24,13 @@ public abstract class Age : AgeMultipliers
         return experienceMultiplier;
     }
 
-    public float GetEntitiesStatsMultiplier()
+    public AgeMultipliers.Entities GetEntitiesStatsMultiplier()
     {
-        return entitiesStatsMultiplier;
+        return entitiesMultiplier;
     }
 
-    public float GetTurretsStatsMultiplier()
+    public AgeMultipliers.Turrets GetTurretsStatsMultiplier()
     {
-        return turretsStatsMultiplier;
+        return turretsMultiplier;
     }
 }

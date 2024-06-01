@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
 
         foreach (Team team in teams)
         {
-            StartCoroutine(team.SpawnEntities(this));
+            StartCoroutine(team.SpawnEntities());
             StartCoroutine(team.GainPassiveGolds());
         }
     }
@@ -113,12 +113,12 @@ public class GameManager : MonoBehaviour
 
             if (multipliedStats.deploymentCost > enemyTeam.GetGold())
             {
-                Debug.Log("Not enough gold to spawn enemy entity " + stats.name);
+                Debug.Log("Not enough gold to spawn enemy entity " + stats.GetName());
             }
             else
             {
                 GameObject entityToSpawn = entityCount % 2 == 0 ? frankiTanki : marcel;
-                enemyTeam.AddEntity(entityToSpawn, stats, new Vector3(25, 0f, 0), stats.name);
+                enemyTeam.AddEntity(entityToSpawn, stats, new Vector3(25, 0f, 0), stats.GetName());
                 enemyTeam.RemoveGold(multipliedStats.deploymentCost);
                 entityCount++;
             }
@@ -223,6 +223,8 @@ public class GameManager : MonoBehaviour
         // if the new position is in an entity in front (check with entity rigidbody size), then stop moving
         if (entity.GetCollidedEntityForwards() != null)
         {
+            if (entity.GetCollidedEntityForwards().GetGameObject() == null) return;
+
             float distance;
             if (entity.GetTeam().GetSide().Equals(Side.Player))
             {

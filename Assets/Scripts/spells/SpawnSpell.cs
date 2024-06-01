@@ -6,7 +6,7 @@ public class SpawnSpell : MonoBehaviour
 {
     public GameManager gameManager;
 
-    public void SpawnAge()
+    public void SpawnPlayerAge()
     {
         Team team = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
         Spawn(team, team.GetCurrentAge().GetSpellType(), team.GetCurrentAge().GetSpellStats());
@@ -14,6 +14,14 @@ public class SpawnSpell : MonoBehaviour
 
     private void Spawn(Team team, Type spellType, SpellStats spellStats)
     {
+        if (team.GetGold() < spellStats.deploymentCost)
+        {
+            Debug.Log("Not enough gold to deploy this spell " + spellStats.GetName());
+            return;
+        }
+
+        team.RemoveGold(spellStats.deploymentCost);
+
         for (int i = 0; i < spellStats.spellCount; i++)
         {
             for (int j = 0;
@@ -25,7 +33,7 @@ public class SpawnSpell : MonoBehaviour
                     12 + j * 4 // Augmentez la valeur de y pour chaque couche
                 );
 
-                Spell spell = Activator.CreateInstance(spellType, new object[] { team }) as Spell;
+                Spell spell = Activator.CreateInstance(spellType, team) as Spell;
                 if (spell == null) continue;
                 spell.GetGameObject().transform.position = spawnPosition;
                 // unfreeze y position

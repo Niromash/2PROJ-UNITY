@@ -24,6 +24,7 @@ public class Team
     private TextMeshProUGUI goldCountText;
     private TextMeshProUGUI expCountText;
     private int? lockedEntityIndex;
+    private readonly UpgradeUnits upgradeUnits;
 
     public Team(Side side, GameObject towerGameObject, GameManager gameManager)
     {
@@ -44,6 +45,8 @@ public class Team
         goldCountText = goldcount.GetComponent<TextMeshProUGUI>();
         expCountText = expcount.GetComponent<TextMeshProUGUI>();
         expBarImage = expBar.GetComponent<Image>();
+
+        upgradeUnits = new UpgradeUnits(this);
 
         UpdateExpBar();
         DisplayGold();
@@ -250,5 +253,10 @@ public class Team
     public int? GetLockedEntityIndex()
     {
         return lockedEntityIndex;
+    }
+
+    public UpgradeUnits GetUpgradeUnits()
+    {
+        return upgradeUnits;
     }
 }

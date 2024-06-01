@@ -13,8 +13,8 @@ public class SupportStats : CharacterStats
         deathExperience = 100;
     }
     
-    public override string GetName()
+    public override EntityTypes GetEntityType()
     {
-        return "Support";
+        return EntityTypes.Support;
     }
 }

@@ -6,7 +6,7 @@ public class PrehistoricAge : Age
     {
         goldMultiplier = 1f;
         experienceMultiplier = 1f;
-        entitiesMultiplier = new AgeMultipliers.Entities
+        entitiesMultiplier = new EntityMultipliers
         {
             damagePerSecond = 2f,
             maxHealth = 1.5f,
@@ -14,7 +14,7 @@ public class PrehistoricAge : Age
             deploymentTime = 1,
             blockPerSecondMovementSpeed = 1.5f
         };
-        turretsMultiplier = new AgeMultipliers.Turrets
+        turretsMultiplier = new TurretMultipliers
         {
             damagePerSecond = 1.5f,
             range = 1.2f,

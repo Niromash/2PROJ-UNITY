@@ -5,18 +5,8 @@ public class InfantryUpgrade : UnitUpgrade
         upgradeCost = 100;
     }
 
-    public override string GetName()
+    public override EntityTypes GetName()
     {
-        return "Infantry Upgrade";
-    }
-
-    public override string GetUnitType()
-    {
-        return "Infantry";
-    }
-
-    public override int GetUpgradeCost()
-    {
-        return upgradeCost;
+        return EntityTypes.Infantry;
     }
 }

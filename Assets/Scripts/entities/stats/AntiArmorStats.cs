@@ -13,8 +13,8 @@
         deathGold = 50;
     }
 
-    public override string GetName()
+    public override EntityTypes GetEntityType()
     {
-        return "AntiArmor";
+        return EntityTypes.AntiArmor;
     }
 }

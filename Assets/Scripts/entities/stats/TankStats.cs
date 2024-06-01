@@ -14,8 +14,8 @@ public class TankStats : CharacterStats
         deathGold = 100;
     }
     
-    public override string GetName()
+    public override EntityTypes GetEntityType()
     {
-        return "Tank";
+        return EntityTypes.Tank;
     }
 }

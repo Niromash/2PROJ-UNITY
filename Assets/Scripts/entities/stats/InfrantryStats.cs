@@ -14,8 +14,8 @@ public class InfantryStats : CharacterStats
         deathGold = 100;
     }
 
-    public override string GetName()
+    public override EntityTypes GetEntityType()
     {
-        return "Infantry";
+        return EntityTypes.Infantry;
     }
 }

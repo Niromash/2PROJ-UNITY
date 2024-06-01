@@ -64,7 +64,7 @@ public class SpawnEntity : MonoBehaviour
             return;
         }
 
-        CharacterStats multipliedStats = stats.GetMultipliedStats(team.GetCurrentAge());
+        CharacterStats multipliedStats = stats.GetMultipliedStats(team);
         if (multipliedStats.deploymentCost > team.GetGold())
         {
             Debug.Log("Not enough gold to spawn entity " + prefab.name);

@@ -5,18 +5,8 @@ public class SupportUpgrade : UnitUpgrade
         upgradeCost = 100;
     }
 
-    public override string GetName()
+    public override EntityTypes GetName()
     {
-        return "Support Upgrade";
-    }
-
-    public override string GetUnitType()
-    {
-        return "Support";
-    }
-
-    public override int GetUpgradeCost()
-    {
-        return upgradeCost;
+        return EntityTypes.Support;
     }
 }

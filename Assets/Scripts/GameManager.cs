@@ -109,7 +109,7 @@ public class GameManager : MonoBehaviour
         while (gameState.Equals(GameState.Playing))
         {
             CharacterStats stats = entityCount % 2 == 0 ? new TankStats() : new InfantryStats();
-            CharacterStats multipliedStats = stats.GetMultipliedStats(enemyTeam.GetCurrentAge());
+            CharacterStats multipliedStats = stats.GetMultipliedStats(enemyTeam);
 
             if (multipliedStats.deploymentCost > enemyTeam.GetGold())
             {

@@ -24,6 +24,10 @@ public class Entity : Damageable, Damager
         healthBarImage = gameObject.transform.GetChild(0).GetChild(0).GetComponent<Image>();
 
         stats.ApplyMultiplier(team.GetCurrentAge()); // Update stats with age multiplier
+
+        UnitUpgrade unitUpgrade = team.GetUpgradeUnits().GetUnitUpgrade(stats.GetEntityType());
+        if (unitUpgrade != null) stats.ApplyEntitiesMultiplier(unitUpgrade);
+        
         UpdateHealthBar();
     }
 

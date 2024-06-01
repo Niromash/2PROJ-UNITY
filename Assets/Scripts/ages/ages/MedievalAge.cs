@@ -6,7 +6,7 @@ public class MedievalAge : Age
     {
         goldMultiplier = 1.2f;
         experienceMultiplier = 2f;
-        entitiesMultiplier = new AgeMultipliers.Entities
+        entitiesMultiplier = new EntityMultipliers
         {
             damagePerSecond = 3f,
             maxHealth = 3f,
@@ -14,7 +14,7 @@ public class MedievalAge : Age
             deploymentTime = .8f,
             blockPerSecondMovementSpeed = 1.7f
         };
-        turretsMultiplier = new AgeMultipliers.Turrets
+        turretsMultiplier = new TurretMultipliers
         {
             damagePerSecond = 2f,
             range = 1.2f,

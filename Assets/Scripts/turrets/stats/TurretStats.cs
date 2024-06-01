@@ -14,7 +14,7 @@
 
     public void ApplyMultiplier(AgeMultipliers multipliers)
     {
-        AgeMultipliers.Turrets turretsStatsMultiplier = multipliers.GetTurretsStatsMultiplier();
+        TurretMultipliers turretsStatsMultiplier = multipliers.GetTurretsStatsMultiplier();
         damagePerSecond *= turretsStatsMultiplier.damagePerSecond;
         range *= turretsStatsMultiplier.range;
         deploymentCost *= (int)(deploymentCost * multipliers.GetGoldMultiplier());

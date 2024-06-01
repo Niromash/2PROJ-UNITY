@@ -5,18 +5,8 @@ public class TankUpgrade : UnitUpgrade
         upgradeCost = 100;
     }
 
-    public override string GetName()
+    public override EntityTypes GetName()
     {
-        return "Tank Upgrade";
-    }
-
-    public override string GetUnitType()
-    {
-        return "Tank";
-    }
-
-    public override int GetUpgradeCost()
-    {
-        return upgradeCost;
+        return EntityTypes.Tank;
     }
 }

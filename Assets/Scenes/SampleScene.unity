@@ -9387,9 +9387,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1535413585}
-        m_TargetAssemblyTypeName: RemoveSubMenu, Assembly-CSharp
-        m_MethodName: OpenSubMenu
+      - m_Target: {fileID: 871198561}
+        m_TargetAssemblyTypeName: SpawnTurret, Assembly-CSharp
+        m_MethodName: RemoveTurret
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

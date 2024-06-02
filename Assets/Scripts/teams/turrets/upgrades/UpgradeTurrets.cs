@@ -10,7 +10,11 @@ public class UpgradeTurrets
     public UpgradeTurrets(Team team)
     {
         this.team = team;
+        InitUpgrades();
+    }
 
+    private void InitUpgrades()
+    {
         Queue<TurretUpgrade> turret1Upgrades = new Queue<TurretUpgrade>();
         turret1Upgrades.Enqueue(new TurretUpgrade1());
         turret1Upgrades.Enqueue(new TurretUpgrade2());
@@ -35,6 +39,11 @@ public class UpgradeTurrets
             { 2, null },
             { 3, null },
         };
+    }
+
+    public void ResetUpgrades()
+    {
+        InitUpgrades();
     }
 
     private int GetTurretsCount()
@@ -91,5 +100,17 @@ public class UpgradeTurrets
 
         // check if we can buy all turrets
         return (turretUpgrades[0].Peek().GetUpgradeCost() * GetTurretsCount()) <= team.GetGold();
+    }
+
+    public void ResetTurretUpgrade(int turretIndex)
+    {
+        turretUpgrades[turretIndex].Clear();
+        turretUpgrades[turretIndex] = new Queue<TurretUpgrade>(new List<TurretUpgrade>
+        {
+            new TurretUpgrade1(),
+            new TurretUpgrade2()
+        });
+
+        currentTurretLevels[turretIndex] = null;
     }
 }

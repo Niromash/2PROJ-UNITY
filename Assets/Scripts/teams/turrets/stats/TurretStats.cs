@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-public abstract class TurretStats : DamagerStats, Nameable
+public abstract class TurretStats : DamagerStats, Nameable, ICloneable
 {
     public float damagePerSecond = 100f;
     public float range = 20f;
@@ -29,5 +30,10 @@ public abstract class TurretStats : DamagerStats, Nameable
         TurretStats multipliedStats = (TurretStats)MemberwiseClone();
         multipliedStats.ApplyMultiplier(multipliers);
         return multipliedStats;
+    }
+
+    public object Clone()
+    {
+        return MemberwiseClone();
     }
 }

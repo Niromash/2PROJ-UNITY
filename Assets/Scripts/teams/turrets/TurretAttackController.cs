@@ -23,6 +23,17 @@ public class TurretAttackController : MonoBehaviour
         StartCoroutine(CheckForEnemiesInRange());
     }
 
+    private void OnEnable()
+    {
+        Start();
+    }
+
+    private void OnDisable()
+    {
+        StopAllCoroutines();
+        sourceTurret = null;
+    }
+
     public List<Damageable> GetEnemiesInRange(float range)
     {
         List<Damageable> enemiesInRange = new List<Damageable>();

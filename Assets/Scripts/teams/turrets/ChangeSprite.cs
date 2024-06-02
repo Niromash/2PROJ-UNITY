@@ -15,6 +15,20 @@ public class ChangeSprite : MonoBehaviour
             Debug.LogError("SpriteRenderer component not found on GameObject: " + gameObject.name);
         }
     }
+    
+    public void ChangeToFirstTurret()
+    {
+        if (firstTurretSprite != null)
+        {
+            spriteRenderer.sprite = firstTurretSprite;
+            spriteRenderer.enabled = false;
+            spriteRenderer.enabled = true;
+        }
+        else
+        {
+            Debug.LogError("firstTurretSprite is not assigned for: " + gameObject.name);
+        }
+    }
 
     public void ChangeToSecondTurret()
     {

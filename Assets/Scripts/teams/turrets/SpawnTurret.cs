@@ -6,8 +6,6 @@ public class SpawnTurret : MonoBehaviour
 {
     public GameManager gameManager;
     private int currentTurretIndex = 0;
-    private List<Turret> inactiveTurrets = new List<Turret>();
-
 
     public void ShowNextTurret()
     {
@@ -23,6 +21,14 @@ public class SpawnTurret : MonoBehaviour
                 if (turret.GetStats().deploymentCost > playerTeam.GetGold())
                 {
                     Debug.Log("Not enough gold to deploy turret");
+                    return;
+                }
+
+                // Check if any active turret has a higher level than the turret to be deployed
+                var activeTurrets = turrets.Where(t => t.GetGameObject().activeInHierarchy);
+                if (activeTurrets.Any(t => t.GetLevel() > turret.GetLevel()))
+                {
+                    Debug.Log("Cannot deploy a turret with a lower level than any active turret");
                     return;
                 }
 
@@ -43,18 +49,18 @@ public class SpawnTurret : MonoBehaviour
         {
             var turrets = playerTeam.GetTower().GetTurrets();
 
-            // We can upgrade turrets only if the 3 turrets are active
+            // We can upgrade turrets only if the 4 turrets are active
             if (turrets.Where(turret => turret.GetGameObject().activeInHierarchy).Count() != 4)
             {
                 return;
             }
-            
+
             if (!playerTeam.GetUpgradeTurrets().CanUpgradeTurrets())
             {
                 Debug.Log("Cannot upgrade turrets");
                 return;
             }
-            
+
             foreach (var turret in turrets)
             {
                 turret.Upgrade();
@@ -62,7 +68,7 @@ public class SpawnTurret : MonoBehaviour
         }
     }
 
-    private void RemoveTurret(int index)
+    public void RemoveTurret()
     {
         if (!GameManager.GetGameState().Equals(GameState.Playing)) return;
 
@@ -70,56 +76,21 @@ public class SpawnTurret : MonoBehaviour
         if (playerTeam != null)
         {
             var turrets = playerTeam.GetTower().GetTurrets();
-            if (turrets.Count > index)
+            // Remove the last active turret
+            for (int i = turrets.Count - 1; i >= 0; i--)
             {
-                var turret = turrets[index];
-                turret.GetGameObject().SetActive(false);
-                turrets.RemoveAt(index);
+                if (turrets[i].GetGameObject().activeInHierarchy)
+                {
+                    turrets[i].GetGameObject().SetActive(false);
+                    // Refund the player half of the deployment cost
+                    playerTeam.AddGold(turrets[i].GetStats().deploymentCost / 2);
+                    turrets[i].ResetLevel();
+                    turrets[i].ResetSprite();
+                    turrets[i].ResetStats();
 
-                // Refund the player half of the deployment cost
-                playerTeam.AddGold(turret.GetStats().deploymentCost / 2);
-
-                inactiveTurrets.Add(turret);
-            }
-        }
-    }
-    
-    public void RemoveFirstTurret()
-    {
-       RemoveTurret(0);
-    }
-
-    public void RemoveSecondTurret()
-    {
-       RemoveTurret(1);
-    }
-
-
-    public void RemoveThirdTurret()
-    {
-       RemoveTurret(2);
-    }
-    
-    public void RemoveFourthTurret()
-    {
-       RemoveTurret(3);
-    }
-
-    public void ReactivateTurret()
-    {
-        if (!GameManager.GetGameState().Equals(GameState.Playing)) return;
-
-        if (inactiveTurrets.Count > 0)
-        {
-            var turret = inactiveTurrets[0];
-            turret.GetGameObject().SetActive(true);
-            inactiveTurrets.RemoveAt(0);
-            // Ajoutez la tourelle à la liste des tourelles actives
-            var playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
-            if (playerTeam != null)
-            {
-                var turrets = playerTeam.GetTower().GetTurrets();
-                turrets.Add(turret);
+                    currentTurretIndex--;
+                    break;
+                }
             }
         }
     }

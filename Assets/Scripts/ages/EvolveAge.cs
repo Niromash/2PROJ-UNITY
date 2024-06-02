@@ -52,6 +52,13 @@ public class EvolveAge : MonoBehaviour
         if (team.GreaterAgeThan(enemyTeam))
         {
             ChangeBackground();
+            
+            // Force all teams to update their turret position according to the most advanced age team
+            gameManager.SetMostAdvancedAgeTeam(team);
+            foreach (Team t in gameManager.GetTeams())
+            {
+                t.UpdateTurretPosition();
+            }
         }
 
         if (ages.Count == 0)

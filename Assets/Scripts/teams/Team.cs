@@ -112,7 +112,7 @@ public class Team
 
     public void UpdateTurretPosition()
     {
-        List<Vector3> turretsPositions = currentAge.GetTurretsPositions();
+        List<Vector3> turretsPositions = gameManager.GetMostAdvancedAgeTeam().GetCurrentAge().GetTurretsPositions();
         List<Turret> turrets = tower.GetTurrets();
         if (turretsPositions.Count != turrets.Count) return;
 

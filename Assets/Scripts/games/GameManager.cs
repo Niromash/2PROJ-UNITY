@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     private List<Spell> spells;
     private readonly EntityStrengthWeakness entityStrengthWeakness;
     private static float audioVolume;
+    private Team mostAdvancedAgeTeam;
 
     public GameManager()
     {
@@ -43,7 +44,7 @@ public class GameManager : MonoBehaviour
         GameObject towerRight = GameObject.Find("TowerRight");
 
         if (!isSceneLoaded) return;
-        
+
         teams.Add(new Team(Side.Player, towerLeft, this));
         teams.Add(new Team(Side.Enemy, towerRight, this));
 
@@ -316,9 +317,19 @@ public class GameManager : MonoBehaviour
     {
         audioVolume = volume;
     }
-    
+
     public static float GetAudioVolume()
     {
         return audioVolume;
+    }
+
+    public void SetMostAdvancedAgeTeam(Team team)
+    {
+        mostAdvancedAgeTeam = team;
+    }
+
+    public Team GetMostAdvancedAgeTeam()
+    {
+        return mostAdvancedAgeTeam;
     }
 }

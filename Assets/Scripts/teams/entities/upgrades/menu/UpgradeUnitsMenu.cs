@@ -3,7 +3,7 @@ using UnityEngine;
 public class UpgradeUnitsMenu : MonoBehaviour
 {
     public Canvas upgradeUnitsCanvas;
-    private bool isMainOpen = false;
+    private bool isMainOpen;
 
     void Start()
     {

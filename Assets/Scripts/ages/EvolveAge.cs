@@ -9,6 +9,7 @@ public class EvolveAge : MonoBehaviour
     private Queue<Age> ages;
     private Age currentAge;
     public Button extraEntityButton;
+    public Button extraEntityUpgradeButton;
 
     public void Start()
     {
@@ -73,9 +74,16 @@ public class EvolveAge : MonoBehaviour
             lockObject.GetComponent<RectTransform>().sizeDelta = button.GetComponent<RectTransform>().sizeDelta;
             button.GetComponent<Button>().interactable = false;
 
-
             extraEntityButton.interactable = true;
+            extraEntityUpgradeButton.interactable = true;
+
             Transform child = extraEntityButton.transform.Find("Lock");
+            if (child != null)
+            {
+                Destroy(child.gameObject);
+            }
+
+            child = extraEntityUpgradeButton.transform.Find("Lock");
             if (child != null)
             {
                 Destroy(child.gameObject);

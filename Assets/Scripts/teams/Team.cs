@@ -241,12 +241,21 @@ public class Team
         else lockedEntityIndex = entityIndexToToggle;
     }
 
+    // Todo refaire parce sinon lolo pas content
     public void ToggleLockEntityUi(int? entityIndexToToggle)
     {
         GameObject spawnEntitiesButtons = GameObject.Find("SpawnEntities");
         if (spawnEntitiesButtons == null)
         {
             Debug.LogError("SpawnEntities GameObject not found");
+            return;
+        }
+
+        GameObject upgradeEntitesButtons =
+            CustomGameObjects.FindMaybeDisabledGameObjectByName("Menus", "upgradeUnitsMenu");
+        if (spawnEntitiesButtons == null)
+        {
+            Debug.LogError("upgradeUnitsMenu GameObject not found");
             return;
         }
 
@@ -260,7 +269,18 @@ public class Team
                 Object.Destroy(existingLockObject);
             }
 
-            spawnEntitiesButtons.transform.GetChild(lockedEntityIndex.Value).GetComponent<Button>().interactable = true;
+            existingLockObject =
+                upgradeEntitesButtons.transform.GetChild(lockedEntityIndex.Value).Find("Lock").gameObject;
+            if (existingLockObject != null)
+            {
+                Object.Destroy(existingLockObject);
+            }
+
+            if (entityIndexToToggle == lockedEntityIndex)
+            {
+                ToggleLockEntity(entityIndexToToggle);
+                return;
+            }
 
             ToggleLockEntity(entityIndexToToggle);
         }
@@ -268,12 +288,18 @@ public class Team
         if (entityIndexToToggle == null) return;
 
         GameObject childToLock = spawnEntitiesButtons.transform.GetChild(entityIndexToToggle.Value).gameObject;
-
         GameObject lockPrefab = Resources.Load<GameObject>("Common/lock/Lock");
         GameObject lockObject = Object.Instantiate(lockPrefab, childToLock.transform.position, Quaternion.identity);
         lockObject.name = "Lock";
         lockObject.transform.SetParent(childToLock.transform);
-        childToLock.GetComponent<Button>().interactable = false;
+
+        childToLock = upgradeEntitesButtons.transform.GetChild(entityIndexToToggle.Value).gameObject;
+        lockPrefab = Resources.Load<GameObject>("Common/lock/Lock");
+        lockObject = Object.Instantiate(lockPrefab, childToLock.transform.position, Quaternion.identity);
+        lockObject.name = "Lock";
+        lockObject.transform.SetParent(childToLock.transform);
+        lockObject.GetComponent<RectTransform>().sizeDelta = childToLock.GetComponent<RectTransform>().sizeDelta;
+        lockObject.transform.localScale = new Vector3(1, 1, 1);
 
         ToggleLockEntity(entityIndexToToggle);
     }

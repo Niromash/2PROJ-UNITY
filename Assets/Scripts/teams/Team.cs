@@ -21,6 +21,7 @@ public class Team
     private readonly object goldLock = new object();
     private readonly object experienceLock = new object();
 
+    private float teamGoldMultiplier = 1;
     private Image expBarImage;
     private TextMeshProUGUI goldCountText;
     private TextMeshProUGUI expCountText;
@@ -190,8 +191,7 @@ public class Team
     {
         while (GameManager.GetGameState().Equals(GameState.Playing))
         {
-            AddGold(Convert.ToInt32(Math.Round(10 * currentAge.GetGoldMultiplier() *
-                                               currentAge.GetAdditionalIncomeMultiplier())));
+            AddGold(Convert.ToInt32(Math.Round(10 * currentAge.GetGoldMultiplier() * currentAge.GetAdditionalIncomeMultiplier() * teamGoldMultiplier)));
             yield return new WaitForSeconds(1);
         }
     }
@@ -356,5 +356,10 @@ public class Team
     public UpgradeTurrets GetUpgradeTurrets()
     {
         return upgradeTurrets;
+    }
+    
+    public void SetTeamGoldMultiplier(float multiplier)
+    {
+        teamGoldMultiplier = multiplier;
     }
 }

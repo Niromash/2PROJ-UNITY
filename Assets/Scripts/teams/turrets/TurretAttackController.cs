@@ -91,7 +91,7 @@ public class TurretAttackController : MonoBehaviour
                 // Calculate the direction towards the top of the enemy
                 Vector2 direction = firstEnemy.GetPosition() - transform.position;
                 direction.Normalize();
-                
+
                 // Add force to the bullet
                 rigidbody2D.AddForce(direction * sourceTurret.GetStats().bulletSpeed, ForceMode2D.Impulse);
 

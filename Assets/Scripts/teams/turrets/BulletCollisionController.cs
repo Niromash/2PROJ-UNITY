@@ -5,6 +5,7 @@ public class BulletCollisionController : MonoBehaviour
 {
     public GameManager gameManager;
     private BulletMetadata bulletMetadata;
+    public AudioSource popAudio;
 
     public void Start()
     {
@@ -21,6 +22,7 @@ public class BulletCollisionController : MonoBehaviour
                 if (collidedEntity.GetTeam().GetSide()
                     .Equals(bulletMetadata.GetSourceTurret().GetTeam().GetSide())) return;
                 collidedEntity.TakeDamage(bulletMetadata.GetSourceTurret());
+                popAudio.Play();
                 Destroy(gameObject);
             }
         }

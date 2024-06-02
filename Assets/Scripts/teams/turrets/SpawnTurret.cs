@@ -38,7 +38,7 @@ public class SpawnTurret : MonoBehaviour
                     return;
                 }
 
-                string basePath = "Turrets/" + playerTeam.GetCurrentAge().GetName().ToLower() + "/";
+                string basePath = "Turrets/" + team.GetCurrentAge().GetName().ToLower() + "/";
 
                 spriteRenderer.sprite =
                     Resources.Load<Sprite>(basePath + (turret.GetLevel() + 1));
@@ -49,7 +49,6 @@ public class SpawnTurret : MonoBehaviour
                 changeSprite.secondTurretSprite = Resources.Load<Sprite>(basePath + "2");
                 changeSprite.thirdTurretSprite = Resources.Load<Sprite>(basePath + "3");
 
-                playerTeam.RemoveGold(turret.GetStats().deploymentCost);
                 team.RemoveGold(turret.GetStats().deploymentCost);
                 turret.GetGameObject().SetActive(true);
                 turret.MakeActive(team.GetCurrentAge());
@@ -57,14 +56,14 @@ public class SpawnTurret : MonoBehaviour
             }
         }
     }
-    
+
     public void ShowPlayerNextTurret()
     {
         var playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
 
         ShowNextTurret(playerTeam);
     }
-    
+
 
     public void UpgradeTurrets()
     {

@@ -9,7 +9,10 @@ public class GameMusic : MonoBehaviour
     {
         if (!isSceneLoaded) return;
 
-        gameObject.GetComponent<AudioSource>().Play();
+        AudioSource audioSource = gameObject.GetComponent<AudioSource>();
+        audioSource.volume = GameManager.GetAudioVolume();
+        
+        audioSource.Play();
     }
 
     private void OnEnable()

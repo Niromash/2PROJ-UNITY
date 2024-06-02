@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class GameManager : MonoBehaviour
     private static GameState gameState;
     private List<Spell> spells;
     private readonly EntityStrengthWeakness entityStrengthWeakness;
+    private static float audioVolume;
 
     public GameManager()
     {
@@ -41,7 +43,7 @@ public class GameManager : MonoBehaviour
         GameObject towerRight = GameObject.Find("TowerRight");
 
         if (!isSceneLoaded) return;
-
+        
         teams.Add(new Team(Side.Player, towerLeft, this));
         teams.Add(new Team(Side.Enemy, towerRight, this));
 
@@ -308,5 +310,15 @@ public class GameManager : MonoBehaviour
     public EntityStrengthWeakness GetEntityStrengthWeakness()
     {
         return entityStrengthWeakness;
+    }
+
+    public static void SetAudioVolume(float volume)
+    {
+        audioVolume = volume;
+    }
+    
+    public static float GetAudioVolume()
+    {
+        return audioVolume;
     }
 }

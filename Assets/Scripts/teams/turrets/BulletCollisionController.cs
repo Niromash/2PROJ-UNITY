@@ -22,6 +22,7 @@ public class BulletCollisionController : MonoBehaviour
                 if (collidedEntity.GetTeam().GetSide()
                     .Equals(bulletMetadata.GetSourceTurret().GetTeam().GetSide())) return;
                 collidedEntity.TakeDamage(bulletMetadata.GetSourceTurret());
+                popAudio.volume = GameManager.GetAudioVolume();
                 popAudio.Play();
                 Destroy(gameObject);
             }

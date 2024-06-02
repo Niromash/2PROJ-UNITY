@@ -47,7 +47,8 @@ public class MedievalAge : Age
 
     public override int GetAgeEvolvingCost()
     {
-        return 400;
+        return 0;
+        // return 400;
     }
 
     public override int GetAgeLevel()

@@ -16,8 +16,10 @@ public class EvolveAge : MonoBehaviour
     {
         ages = new Queue<Age>();
         ages.Enqueue(new MedievalAge());
+        ages.Enqueue(new ModernAge());
         enemyAges = new Queue<Age>();
         enemyAges.Enqueue(new MedievalAge());
+        enemyAges.Enqueue(new ModernAge());
     }
 
     public void Evolve()

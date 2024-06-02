@@ -26,14 +26,19 @@ public class UpgradeUnits
         Queue<UnitUpgrade> antiArmorUpgrades = new Queue<UnitUpgrade>();
         antiArmorUpgrades.Enqueue(new AntiArmorUpgrade1());
         antiArmorUpgrades.Enqueue(new AntiArmorUpgrade2());
-        antiArmorUpgrades.Enqueue(new AntiArmorUpgrade3());
+        antiArmorUpgrades.Enqueue(new AntiArmorUpgrade3());     
+        Queue<UnitUpgrade> extraUpgrades = new Queue<UnitUpgrade>();
+        extraUpgrades.Enqueue(new AntiArmorUpgrade1());
+        extraUpgrades.Enqueue(new AntiArmorUpgrade2());
+        extraUpgrades.Enqueue(new AntiArmorUpgrade3());
 
         unitUpgrades = new Dictionary<EntityTypes, Queue<UnitUpgrade>>
         {
             { EntityTypes.Tank, tankUpgrades },
             { EntityTypes.Infantry, infantryUpgrades },
             { EntityTypes.Support, supportUpgrades },
-            { EntityTypes.AntiArmor, antiArmorUpgrades }
+            { EntityTypes.AntiArmor, antiArmorUpgrades },
+            { EntityTypes.Extra, extraUpgrades }
         };
 
         currentUnitLevels = new Dictionary<EntityTypes, UnitUpgrade>
@@ -41,7 +46,8 @@ public class UpgradeUnits
             { EntityTypes.Tank, null },
             { EntityTypes.Infantry, null },
             { EntityTypes.Support, null },
-            { EntityTypes.AntiArmor, null }
+            { EntityTypes.AntiArmor, null },
+            { EntityTypes.Extra, null }
         };
     }
 

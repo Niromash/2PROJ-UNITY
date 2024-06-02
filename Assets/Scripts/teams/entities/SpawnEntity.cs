@@ -20,6 +20,7 @@ public class SpawnEntity : MonoBehaviour
         {
             new EntityAge(typeof(PrehistoricAge), entities.transform.Find("Prehistoric").gameObject),
             new EntityAge(typeof(MedievalAge), entities.transform.Find("Medieval").gameObject),
+            new EntityAge(typeof(ModernAge), entities.transform.Find("Modern").gameObject),
         };
     }
 

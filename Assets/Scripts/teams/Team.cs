@@ -38,11 +38,11 @@ public class Team
         else ToggleLockEntity(0); // the enemy has no UI
 
         this.side = side;
-        tower = new Tower(500, towerGameObject, this, gameManager);
+        tower = new Tower(2000, towerGameObject, this, gameManager);
         entities = new List<Entity>();
         entitiesToSpawn = new Queue<EntityToSpawn>();
-        gold = 50000;
-        experience = 50000;
+        gold = 200;
+        experience = 0;
         maxExperience = 500; // exemple d'expérience maximale pour remplir la barre
         GameObject expBar = GameObject.Find(side.Equals(Side.Player) ? "TowerLeftExpBar" : "TowerRightExpBar");
         GameObject goldcount = GameObject.Find(side.Equals(Side.Player) ? "GoldLeft" : "GoldRight");
@@ -117,13 +117,15 @@ public class Team
         Team mostAdvancedAgeTeam = gameManager.GetMostAdvancedAgeTeam();
         if (mostAdvancedAgeTeam == null)
         {
-            turretsPositions = currentAge.GetTurretsPositions();
+            if (side.Equals(Side.Player)) turretsPositions = currentAge.GetTurretsPositions();
+            else turretsPositions = currentAge.GetTurretsPositionsOfEnnemy();
         }
         else
         {
-            turretsPositions = mostAdvancedAgeTeam.GetCurrentAge().GetTurretsPositions();
+            if (side.Equals(Side.Player)) turretsPositions = mostAdvancedAgeTeam.GetCurrentAge().GetTurretsPositions();
+            else turretsPositions = mostAdvancedAgeTeam.GetCurrentAge().GetTurretsPositionsOfEnnemy();
         }
-        
+
         List<Turret> turrets = tower.GetTurrets();
         if (turretsPositions.Count != turrets.Count) return;
 
@@ -132,6 +134,7 @@ public class Team
             turrets[i].GetGameObject().transform.position = turretsPositions[i];
         }
     }
+    
 
     public bool AddEntity(GameObject prefab, CharacterStats stats, Vector3 spawnPosition, string entityName)
     {

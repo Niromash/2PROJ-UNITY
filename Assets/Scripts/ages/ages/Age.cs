@@ -17,7 +17,8 @@ public abstract class Age : EntityStatsMultipliable, TurretStatsMultipliable
     public abstract int GetAgeEvolvingCost();
     public abstract int GetAgeLevel();
     public abstract List<Vector3> GetTurretsPositions();
-
+    public abstract List<Vector3> GetTurretsPositionsOfEnnemy();
+    
     public float GetGoldMultiplier()
     {
         return goldMultiplier;
@@ -42,4 +43,5 @@ public abstract class Age : EntityStatsMultipliable, TurretStatsMultipliable
     {
         return turretsMultiplier;
     }
+
 }

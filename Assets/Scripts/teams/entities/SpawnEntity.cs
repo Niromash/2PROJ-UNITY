@@ -7,6 +7,7 @@ public class SpawnEntity : MonoBehaviour
 {
     public GameManager gameManager;
     public Vector2 spawnPosition;
+    public Vector2 enemySpawnPosition;
     private List<EntityAge> entitiesGameObject;
     private int infantryCount;
     private int antiArmorCount;
@@ -32,28 +33,64 @@ public class SpawnEntity : MonoBehaviour
     {
         Team playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
         GameObject tankPrefab = GetCurrentEntitiesGameObject(playerTeam).transform.Find("Tank").gameObject;
-        Spawn(button, tankPrefab, playerTeam, new TankStats());
+        Spawn(button, tankPrefab, playerTeam, new TankStats(), spawnPosition);
     }
-
+    
     public void InfantryPlayerSpawn(Button button)
     {
         Team playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
         GameObject infantryPrefab = GetCurrentEntitiesGameObject(playerTeam).transform.Find("Infantry").gameObject;
-        Spawn(button, infantryPrefab, playerTeam, new InfantryStats());
+        Spawn(button, infantryPrefab, playerTeam, new InfantryStats(), spawnPosition);
     }
-
+    
     public void AntiArmorPlayerSpawn(Button button)
     {
         Team playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
         GameObject antiArmorPrefab = GetCurrentEntitiesGameObject(playerTeam).transform.Find("AntiArmor").gameObject;
-        Spawn(button, antiArmorPrefab, playerTeam, new AntiArmorStats());
+        Spawn(button, antiArmorPrefab, playerTeam, new AntiArmorStats(), spawnPosition);
     }
-
+    
     public void SupportPlayerSpawn(Button button)
     {
         Team playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
         GameObject supportPrefab = GetCurrentEntitiesGameObject(playerTeam).transform.Find("Support").gameObject;
-        Spawn(button, supportPrefab, playerTeam, new SupportStats());
+        Spawn(button, supportPrefab, playerTeam, new SupportStats(), spawnPosition);
+    }
+
+    public void TankEnemySpawn()
+    {
+        Team enemyTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Enemy));
+        GameObject tankPrefab = GetCurrentEntitiesGameObject(enemyTeam).transform.Find("Tank").gameObject;
+        Spawn(null, tankPrefab, enemyTeam, new TankStats(), enemySpawnPosition);
+    }
+    
+    public void InfantryEnemySpawn()
+    {
+        Team enemyTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Enemy));
+        GameObject infantryPrefab = GetCurrentEntitiesGameObject(enemyTeam).transform.Find("Infantry").gameObject;
+        Spawn(null, infantryPrefab, enemyTeam, new InfantryStats(), enemySpawnPosition);
+    }
+    
+    public void AntiArmorEnemySpawn()
+    {
+        Team enemyTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Enemy));
+        GameObject antiArmorPrefab = GetCurrentEntitiesGameObject(enemyTeam).transform.Find("AntiArmor").gameObject;
+        Spawn(null, antiArmorPrefab, enemyTeam, new AntiArmorStats(), enemySpawnPosition);
+    }
+    
+    public void SupportEnemySpawn()
+    {
+        Team enemyTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Enemy));
+        GameObject supportPrefab = GetCurrentEntitiesGameObject(enemyTeam).transform.Find("Support").gameObject;
+        Spawn(null, supportPrefab, enemyTeam, new SupportStats(), enemySpawnPosition);
+    }
+    
+    public void ExtraEntityEnemySpawn()
+    {
+        Team enemyTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Enemy));
+        GameObject extraEntityPrefab =
+            GetCurrentEntitiesGameObject(enemyTeam).transform.Find("ExtraEntity").gameObject;
+        Spawn(null, extraEntityPrefab, enemyTeam, new ExtraEntityStats(), enemySpawnPosition);
     }
 
     public void ExtraEntityPlayerSpawn(Button button)
@@ -61,23 +98,21 @@ public class SpawnEntity : MonoBehaviour
         Team playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
         GameObject extraEntityPrefab =
             GetCurrentEntitiesGameObject(playerTeam).transform.Find("ExtraEntity").gameObject;
-        Spawn(button, extraEntityPrefab, playerTeam, new ExtraEntityStats());
+        Spawn(button, extraEntityPrefab, playerTeam, new ExtraEntityStats(), spawnPosition);
     }
 
-    private void Spawn(Button spawnButton, GameObject prefab, Team team, CharacterStats stats)
+    private void Spawn(Button spawnButton, GameObject prefab, Team team, CharacterStats stats, Vector2 spawnPosition)
     {
         if (!GameManager.GetGameState().Equals(GameState.Playing)) return;
 
-        if (team.GetLockedEntityIndex() == spawnButton.transform.GetSiblingIndex())
+        if (spawnButton != null && team.GetLockedEntityIndex() == spawnButton.transform.GetSiblingIndex())
         {
-            Debug.Log("Entity locked, please upgrade to unlock");
             return;
         }
 
         CharacterStats multipliedStats = stats.GetMultipliedStats(team);
         if (multipliedStats.deploymentCost > team.GetGold())
         {
-            Debug.Log("Not enough gold to spawn entity " + prefab.name);
             return;
         }
 

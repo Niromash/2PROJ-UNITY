@@ -64,4 +64,14 @@ public class PrehistoricAge : Age
 
         return new List<Vector3> { turretPosition1, turretPosition2, turretPosition3, turretPosition4 };
     }
+    
+    public override List<Vector3> GetTurretsPositionsOfEnnemy()
+    {
+        Vector3 turretPosition1 = new Vector3(31.5f, 5, 0);
+        Vector3 turretPosition2 = new Vector3(32.5f, 6, 0);
+        Vector3 turretPosition3 = new Vector3(33.5f, 7, 0);
+        Vector3 turretPosition4 = new Vector3(34.5f, 8, 0);
+
+        return new List<Vector3> { turretPosition1, turretPosition2, turretPosition3, turretPosition4 };
+    }
 }

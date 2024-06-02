@@ -400,7 +400,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 871198561}
         m_TargetAssemblyTypeName: SpawnTurret, Assembly-CSharp
-        m_MethodName: ShowNextTurret
+        m_MethodName: ShowPlayerNextTurret
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3169,6 +3169,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 600312218}
   spawnPosition: {x: -14.5, y: 0}
+  enemySpawnPosition: {x: 0, y: 0}
 --- !u!114 &544143591
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3284,7 +3285,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 600312218}
   extraEntityButton: {fileID: 1251834053}
-  extraEntityUpgradeButton: {fileID: 757932782}
+  extraEntityUpgradeButton: {fileID: 0}
 --- !u!114 &544143598
 MonoBehaviour:
   m_ObjectHideFlags: 0

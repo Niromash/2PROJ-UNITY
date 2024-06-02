@@ -5,7 +5,7 @@ public class TurretStats : DamagerStats, Nameable, ICloneable
 {
     public float damagePerSecond = 50f;
     public float range = 12f;
-    public int deploymentCost = 500;
+    public int deploymentCost = 350;
     public float bulletSpeed = 8f;
 
     public string GetName()

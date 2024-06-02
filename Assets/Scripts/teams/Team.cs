@@ -253,8 +253,7 @@ public class Team
         if (lockedEntityIndex != null) lockedEntityIndex = null;
         else lockedEntityIndex = entityIndexToToggle;
     }
-
-    // Todo refaire parce sinon lolo pas content
+    
     public void ToggleLockEntityUi(int? entityIndexToToggle)
     {
         GameObject spawnEntitiesButtons = GameObject.Find("SpawnEntities");

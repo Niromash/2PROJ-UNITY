@@ -17,16 +17,17 @@ public class Tower : Damageable
 
     public Tower(float maxHealth, GameObject towerGameObject, Team team, GameManager gameManager)
     {
-        GameObject healthBar = GameObject.Find(team.GetSide().Equals(Side.Player) ? "TowerLeftHealthBar" : "TowerRightHealthBar");
+        GameObject healthBar =
+            GameObject.Find(team.GetSide().Equals(Side.Player) ? "TowerLeftHealthBar" : "TowerRightHealthBar");
         healthBarImage = healthBar.GetComponent<Image>();
-    
+
         tileMap = towerGameObject.GetComponent<Tilemap>();
         turrets = new List<Turret>();
-        
+
         for (int i = 0; i < 4; i++)
         {
             GameObject turretGameObject = towerGameObject.transform.GetChild(i).gameObject;
-            Turret newTurret = new Turret(turretGameObject, new FirstTurret(), team, i);
+            Turret newTurret = new Turret(turretGameObject, new TurretStats(), team, i);
             turrets.Add(newTurret);
         }
 
@@ -38,7 +39,7 @@ public class Tower : Damageable
         this.towerGameObject = towerGameObject;
         this.team = team;
         this.gameManager = gameManager;
-        
+
         UpdateHealthBar();
     }
 
@@ -70,7 +71,7 @@ public class Tower : Damageable
         {
             Kill(damager);
         }
-        
+
         DamageIndicator damageIndicator = towerGameObject.AddComponent<DamageIndicator>();
         damageIndicator.damageTextPrefab = GameObject.Find("DamageValue");
         damageIndicator.canvasTransform = GameObject.Find("DamageCanvas").transform;
@@ -129,5 +130,4 @@ public class Tower : Damageable
     {
         return turrets;
     }
-
 }

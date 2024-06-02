@@ -1,14 +1,17 @@
 ﻿using System;
 using UnityEngine;
 
-public abstract class TurretStats : DamagerStats, Nameable, ICloneable
+public class TurretStats : DamagerStats, Nameable, ICloneable
 {
-    public float damagePerSecond = 100f;
-    public float range = 20f;
-    public int deploymentCost = 100;
-    public float bulletSpeed = 5f;
+    public float damagePerSecond = 50f;
+    public float range = 12f;
+    public int deploymentCost = 500;
+    public float bulletSpeed = 8f;
 
-    public abstract string GetName();
+    public string GetName()
+    {
+        return "Turret";
+    }
 
     public float GetDamage()
     {

@@ -47,8 +47,7 @@ public class MedievalAge : Age
 
     public override int GetAgeEvolvingCost()
     {
-        return 0;
-        // return 400;
+        return 400;
     }
 
     public override int GetAgeLevel()
@@ -65,7 +64,7 @@ public class MedievalAge : Age
 
         return new List<Vector3> { turretPosition1, turretPosition2, turretPosition3, turretPosition4 };
     }
-    
+
     public override List<Vector3> GetTurretsPositionsOfEnnemy()
     {
         Vector3 turretPosition1 = new Vector3(31.5f, 8, 0);

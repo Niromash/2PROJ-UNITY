@@ -12,6 +12,6 @@ public class AntiArmorUpgrade3 : AntiArmorUpgrade
             blockPerSecondMovementSpeed = 1f,
             deploymentTime = 1f,
         };
-        upgradeCost = 300;
+        upgradeCost = 1200;
     }
 }

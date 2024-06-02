@@ -1,4 +1,3 @@
-// Franki tanki
 public class InfantryStats : CharacterStats
 {
     public InfantryStats()

@@ -12,6 +12,6 @@ public class SupportUpgrade1 : SupportUpgrade
             blockPerSecondMovementSpeed = 1f,
             deploymentTime = 1f,
         };
-        upgradeCost = 100;
+        upgradeCost = 1500;
     }
 }

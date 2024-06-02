@@ -7,7 +7,7 @@
         damagePerSecond = 300f;
         blockPerSecondMovementSpeed = 0.8f;
         range = 3f;
-        deploymentCost = 50;
+        deploymentCost = 750;
         deploymentTime = 500f;
         deathExperience = 100;
         deathGold = 50;

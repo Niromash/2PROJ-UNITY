@@ -1,5 +1,4 @@
-﻿// Marcel
-public class SupportStats : CharacterStats
+﻿public class SupportStats : CharacterStats
 {
     public SupportStats()
     {

@@ -13,21 +13,23 @@ public class Entity : Damageable, Damager
     private Tower collidedTowerForwards;
     private readonly CharacterStats stats;
     private bool isKilled;
+    private readonly GameManager gameManager;
 
-    public Entity(GameObject go, Team team, CharacterStats stats)
+    public Entity(GameObject go, Team team, CharacterStats stats, GameManager gameManager)
     {
         rb = go.GetComponent<Rigidbody2D>();
         collider2d = go.GetComponent<Collider2D>();
         this.stats = stats;
         gameObject = go;
         this.team = team;
+        this.gameManager = gameManager;
         healthBarImage = gameObject.transform.GetChild(0).GetChild(0).GetComponent<Image>();
 
         stats.ApplyMultiplier(team.GetCurrentAge()); // Update stats with age multiplier
 
         UnitUpgrade unitUpgrade = team.GetUpgradeUnits().GetUnitUpgrade(stats.GetEntityType());
         if (unitUpgrade != null) stats.ApplyMultiplier(unitUpgrade);
-        
+
         UpdateHealthBar();
     }
 
@@ -112,7 +114,16 @@ public class Entity : Damageable, Damager
 
     public void TakeDamage(Damager damager)
     {
-        stats.health -= damager.GetDamagerStats().GetDamage();
+        float factor = 1;
+
+        if (damager is Entity entity)
+        {
+            EntityStrengthWeakness entityStrengthWeakness = gameManager.GetEntityStrengthWeakness();
+            factor = entityStrengthWeakness.GetStrengthWeakness(stats.GetEntityType(),
+                entity.GetStats().GetEntityType());
+        }
+
+        stats.health -= damager.GetDamagerStats().GetDamage() * factor;
         if (stats.health <= 0)
         {
             Kill(damager);
@@ -121,6 +132,7 @@ public class Entity : Damageable, Damager
         DamageIndicator damageIndicator = gameObject.AddComponent<DamageIndicator>();
         damageIndicator.damageTextPrefab = GameObject.Find("DamageValue");
         damageIndicator.canvasTransform = GameObject.Find("DamageCanvas").transform;
+        damageIndicator.efficiency = factor;
         damageIndicator.ShowDamage(damager.GetDamagerStats().GetDamage(), gameObject.transform.position);
 
         UpdateHealthBar();

@@ -78,6 +78,4 @@ public class AttackController : MonoBehaviour
             yield return new WaitForSeconds(1);
         }
     }
-    
-    
 }

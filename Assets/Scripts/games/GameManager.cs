@@ -12,12 +12,14 @@ public class GameManager : MonoBehaviour
     private bool isSceneLoaded;
     private static GameState gameState;
     private List<Spell> spells;
+    private readonly EntityStrengthWeakness entityStrengthWeakness;
 
     public GameManager()
     {
         teams = new List<Team>();
         gameState = GameState.NotStarted;
         spells = new List<Spell>();
+        entityStrengthWeakness = new EntityStrengthWeakness();
     }
 
     private void OnEnable()
@@ -301,5 +303,10 @@ public class GameManager : MonoBehaviour
     public static GameState GetGameState()
     {
         return gameState;
+    }
+
+    public EntityStrengthWeakness GetEntityStrengthWeakness()
+    {
+        return entityStrengthWeakness;
     }
 }

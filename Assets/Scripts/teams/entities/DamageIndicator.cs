@@ -6,6 +6,7 @@ public class DamageIndicator : MonoBehaviour
 {
     public GameObject damageTextPrefab;
     public Transform canvasTransform; // Référence au transform du Canvas
+    public float efficiency = 1f; // Efficacité des dégâts
 
     public void ShowDamage(float damage, Vector3 position)
     {
@@ -21,10 +22,21 @@ public class DamageIndicator : MonoBehaviour
         // Configurer le texte de l'indicateur pour afficher le montant des dégâts
         TextMeshProUGUI text = damageText.GetComponent<TextMeshProUGUI>();
         text.text = damage.ToString();
-        // Vertical Gradient from CF4144FF to E15030FF
-        text.colorGradient = new VertexGradient(new Color(0.811f, 0.255f, 0.267f, 1f),
-            new Color(0.882f, 0.314f, 0.188f, 1f), new Color(0.882f, 0.314f, 0.188f, 1f),
-            new Color(0.811f, 0.255f, 0.267f, 1f));
+
+        // Définir la couleur du texte en fonction de l'efficacité
+        if (efficiency >= 1.5f) // Si c'est super efficace
+        {
+            text.color = Color.green; // Changer la couleur en vert
+        }
+        else if (efficiency <= 0.5f) // Si ce n'est pas du tout efficace
+        {
+            text.color = Color.red; // Changer la couleur en rouge
+        }
+        else // Si c'est moyennement efficace
+        {
+            text.color = Color.yellow; // Changer la couleur en jaune
+        }
+
         text.fontSize = 16; // Ajustez cette valeur selon vos besoins
 
         // Démarrer l'animation de montée du texte
@@ -65,12 +77,27 @@ public class DamageIndicator : MonoBehaviour
             rectTransform.GetComponent<TextMeshProUGUI>().fontSize =
                 initialFontSize * (1 + t * 0.5f); // Augmenter la taille pour plus d'intensité
 
-            // Modifier la couleur du texte
-            Color startColor = new Color(0.811f, 0.255f, 0.267f, 1f); // #CF4144FF
-            Color endColor = new Color(0.882f, 0.314f, 0.188f, 1f); // #E15030FF
-            rectTransform.GetComponent<TextMeshProUGUI>().color = Color.Lerp(startColor, endColor, t);
 
-            // rectTransform.GetComponent<TextMeshProUGUI>().color = Color.Lerp(Color.red, new Color(0.5f, 0, 0), t);
+            // Modifier la couleur du texte
+            Color startColor;
+            Color endColor;
+            if (efficiency >= 1.5f) // Si c'est super efficace
+            {
+                startColor = Color.green; // Changer la couleur en vert
+                endColor = Color.green; // Changer la couleur en vert
+            }
+            else if (efficiency <= 0.5f) // Si ce n'est pas du tout efficace
+            {
+                startColor = Color.red; // Changer la couleur en rouge
+                endColor = Color.red; // Changer la couleur en rouge
+            }
+            else // Si c'est moyennement efficace
+            {
+                startColor = Color.yellow; // Changer la couleur en jaune
+                endColor = Color.yellow; // Changer la couleur en jaune
+            }
+
+            rectTransform.GetComponent<TextMeshProUGUI>().color = Color.Lerp(startColor, endColor, t);
 
             yield return null;
         }

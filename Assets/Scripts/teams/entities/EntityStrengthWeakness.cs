@@ -29,7 +29,7 @@ public class EntityStrengthWeakness
         SetStrengthWeakness(EntityTypes.AntiArmor, EntityTypes.Infantry, 0.5f);
         SetStrengthWeakness(EntityTypes.AntiArmor, EntityTypes.Support, 0.5f);
         SetStrengthWeakness(EntityTypes.AntiArmor, EntityTypes.Extra, 1f);
-        
+
         SetStrengthWeakness(EntityTypes.Extra, EntityTypes.Tank, 1f);
         SetStrengthWeakness(EntityTypes.Extra, EntityTypes.Infantry, 1f);
         SetStrengthWeakness(EntityTypes.Extra, EntityTypes.Support, 1f);

@@ -46,6 +46,22 @@ MonoBehaviour:
     m_Localized: Continuar
     m_Metadata:
       m_Items: []
+  - m_Id: 1171248447877120
+    m_Localized: "Volver al men\xFA principal"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1171720885891072
+    m_Localized: "Se acab\xF3 el juego"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1171913177952256
+    m_Localized: 'Ganador:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1172055952060416
+    m_Localized: 'Asesinado por:'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

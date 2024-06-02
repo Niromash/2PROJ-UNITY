@@ -2869,7 +2869,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 600312218}
-  extraEntityButton: {fileID: 1251834053}
+  extraEntityButton: {fileID: 0}
 --- !u!1 &569673578
 GameObject:
   m_ObjectHideFlags: 0

@@ -78,17 +78,11 @@ public class TurretAttackController : MonoBehaviour
                 Damageable firstEnemy = enemiesInRange[0];
 
                 // Calculate the direction towards the top of the enemy
-                Vector2 enemyTop = firstEnemy.GetPosition() + new Vector3(0, firstEnemy.GetSize().y / 2);
-                Vector2 direction = (enemyTop - (Vector2)transform.position).normalized;
-
-                // Calculate the initial velocity needed to hit the target considering gravity
-                float distance = Vector2.Distance(transform.position, enemyTop);
-                float angle = Vector2.Angle(direction, Vector2.right);
-                float gravity = Mathf.Abs(Physics2D.gravity.y);
-                float initialVelocity = Mathf.Sqrt((distance * gravity) / Mathf.Sin(2 * Mathf.Deg2Rad * angle));
-
-                // Set the velocity of the bullet to move towards the enemy
-                rigidbody2D.velocity = direction * initialVelocity;
+                Vector2 direction = firstEnemy.GetPosition() - transform.position;
+                direction.Normalize();
+                
+                // Add force to the bullet
+                rigidbody2D.AddForce(direction * sourceTurret.GetStats().bulletSpeed, ForceMode2D.Impulse);
 
                 // Add gravity to the bullet
                 rigidbody2D.gravityScale = 1;

@@ -1,19 +1,18 @@
-﻿// tanki
-public class TankStats : CharacterStats
+﻿public class TankStats : CharacterStats
 {
     public TankStats()
     {
-        maxHealth = 300f;
+        maxHealth = 500f;
         health = maxHealth;
-        damagePerSecond = 30f;
-        blockPerSecondMovementSpeed = 0.3f;
-        range = 5f;
-        deploymentCost = 500;
-        deploymentTime = 300f;
-        deathExperience = 100;
-        deathGold = 100;
+        damagePerSecond = 25f;
+        blockPerSecondMovementSpeed = 0.1f;
+        range = 2f;
+        deploymentCost = 300;
+        deploymentTime = 800f;
+        deathExperience = 150;
+        deathGold = 150;
     }
-    
+
     public override EntityTypes GetEntityType()
     {
         return EntityTypes.Tank;

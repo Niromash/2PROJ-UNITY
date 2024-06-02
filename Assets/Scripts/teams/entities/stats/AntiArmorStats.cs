@@ -2,15 +2,15 @@
 {
     public AntiArmorStats()
     {
-        maxHealth = 200f;
+        maxHealth = 250f;
         health = maxHealth;
-        damagePerSecond = 30f;
-        blockPerSecondMovementSpeed = 0.8f;
-        range = 5f;
-        deploymentCost = 50;
-        deploymentTime = 500f;
-        deathExperience = 100;
-        deathGold = 50;
+        damagePerSecond = 60f;
+        blockPerSecondMovementSpeed = 0.3f;
+        range = 2f;
+        deploymentCost = 150;
+        deploymentTime = 700f;
+        deathExperience = 120;
+        deathGold = 75;
     }
 
     public override EntityTypes GetEntityType()

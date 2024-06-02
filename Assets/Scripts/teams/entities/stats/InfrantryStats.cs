@@ -4,13 +4,13 @@ public class InfantryStats : CharacterStats
     {
         maxHealth = 200f;
         health = maxHealth;
-        damagePerSecond = 50f;
-        blockPerSecondMovementSpeed = 0.2f;
+        damagePerSecond = 40f;
+        blockPerSecondMovementSpeed = 0.3f;
         range = 2f;
-        deploymentCost = 150;
-        deploymentTime = 1000f;
-        deathExperience = 100;
-        deathGold = 100;
+        deploymentCost = 100;
+        deploymentTime = 500f;
+        deathExperience = 80;
+        deathGold = 50;
     }
 
     public override EntityTypes GetEntityType()

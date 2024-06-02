@@ -7,14 +7,17 @@ public class EvolveAge : MonoBehaviour
 {
     public GameManager gameManager;
     private Queue<Age> ages;
+    private Queue<Age> enemyAges;
     private Age currentAge;
     public Button extraEntityButton;
     public Button extraEntityUpgradeButton;
 
-    public void Start()
+    public EvolveAge()
     {
         ages = new Queue<Age>();
         ages.Enqueue(new MedievalAge());
+        enemyAges = new Queue<Age>();
+        enemyAges.Enqueue(new MedievalAge());
     }
 
     public void Evolve()
@@ -38,7 +41,6 @@ public class EvolveAge : MonoBehaviour
 
         currentAge = ages.Dequeue();
 
-        Debug.Log("Evolving age for team " + team.GetSide() + " to " + currentAge.GetName());
         team.SetCurrentAge(currentAge);
         team.RemoveExperience(currentAge.GetAgeEvolvingCost());
 
@@ -145,5 +147,37 @@ public class EvolveAge : MonoBehaviour
         }
 
         spriteRenderer.sprite = Resources.Load<Sprite>("SpellSprites/" + currentAge.GetName().ToLower() + "/button");
+    }
+
+    public void EvolveEnemyAge()
+    {
+        if (!GameManager.GetGameState().Equals(GameState.Playing)) return;
+
+        Team team = gameManager.GetTeams().Find(t => t.GetSide().Equals(Side.Player));
+        Team enemyTeam = gameManager.GetTeams().Find(t => t.GetSide().Equals(Side.Enemy));
+        if (enemyAges.Count == 0)
+        {
+            return;
+        }
+
+        Age lastAge = enemyAges.Peek();
+        if (enemyTeam.GetExperience() < lastAge.GetAgeEvolvingCost())
+        {
+            return;
+        }
+
+        currentAge = enemyAges.Dequeue();
+
+        enemyTeam.SetCurrentAge(currentAge);
+        enemyTeam.RemoveExperience(currentAge.GetAgeEvolvingCost());
+
+        // Remove the last locked entity of the team and lock a random entity
+        int randomEntityIndexToLock = Random.Range(0, 3);
+        enemyTeam.ToggleLockEntity(randomEntityIndexToLock);
+
+        if (enemyTeam.GreaterAgeThan(team))
+        {
+            ChangeBackground();
+        }
     }
 }

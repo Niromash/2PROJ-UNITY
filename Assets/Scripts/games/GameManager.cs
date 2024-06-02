@@ -15,7 +15,9 @@ public class GameManager : MonoBehaviour
     private List<Spell> spells;
     private readonly EntityStrengthWeakness entityStrengthWeakness;
     private static float audioVolume;
+    private static int iaLevel;
     private Team mostAdvancedAgeTeam;
+    private EnemyAI enemyAI;
 
     public GameManager()
     {
@@ -106,34 +108,40 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator CreateEntity()
     {
-        GameObject frankiTanki = GameObject.Find("Tank");
-        GameObject marcel = GameObject.Find("Infantry");
-
-        Team enemyTeam = teams.Find(team => team.GetSide().Equals(Side.Enemy));
-
-        int entityCount = 0;
-        while (gameState.Equals(GameState.Playing))
-        {
-            CharacterStats stats = entityCount % 2 == 0 ? new TankStats() : new InfantryStats();
-            CharacterStats multipliedStats = stats.GetMultipliedStats(enemyTeam);
-
-            if (multipliedStats.deploymentCost > enemyTeam.GetGold())
-            {
-                Debug.Log("Not enough gold to spawn enemy entity " + stats.GetName());
-            }
-            else
-            {
-                GameObject entityToSpawn = entityCount % 2 == 0 ? frankiTanki : marcel;
-                if (enemyTeam.AddEntity(entityToSpawn, stats, new Vector3(37, 0f, 0), stats.GetName()))
-                {
-                    enemyTeam.RemoveGold(multipliedStats.deploymentCost);
-                    entityCount++;
-                }
-            }
-
-            // Wait for 10 seconds before creating another entity
-            yield return new WaitForSeconds(2);
-        }
+        enemyAI = new EnemyAI(this, iaLevel);
+        
+        
+        StartCoroutine(enemyAI.ManageEnemies());
+        yield return null;
+        
+        // GameObject frankiTanki = GameObject.Find("Tank");
+        // GameObject marcel = GameObject.Find("Infantry");
+        //
+        // Team enemyTeam = teams.Find(team => team.GetSide().Equals(Side.Enemy));
+        //
+        // int entityCount = 0;
+        // while (gameState.Equals(GameState.Playing))
+        // {
+        //     CharacterStats stats = entityCount % 2 == 0 ? new TankStats() : new InfantryStats();
+        //     CharacterStats multipliedStats = stats.GetMultipliedStats(enemyTeam);
+        //
+        //     if (multipliedStats.deploymentCost > enemyTeam.GetGold())
+        //     {
+        //         Debug.Log("Not enough gold to spawn enemy entity " + stats.GetName());
+        //     }
+        //     else
+        //     {
+        //         GameObject entityToSpawn = entityCount % 2 == 0 ? frankiTanki : marcel;
+        //         if (enemyTeam.AddEntity(entityToSpawn, stats, new Vector3(37, 0f, 0), stats.GetName()))
+        //         {
+        //             enemyTeam.RemoveGold(multipliedStats.deploymentCost);
+        //             entityCount++;
+        //         }
+        //     }
+        //
+        //     // Wait for 10 seconds before creating another entity
+        //     yield return new WaitForSeconds(2);
+        // }
     }
 
     public Entity GetEntity(GameObject go)
@@ -322,6 +330,16 @@ public class GameManager : MonoBehaviour
     {
         return audioVolume;
     }
+    
+    public static void SetIaLevel(int level)
+    {
+        iaLevel = level;
+    }
+    
+    public static int GetIaLevel()
+    {
+        return iaLevel;
+    }
 
     public void SetMostAdvancedAgeTeam(Team team)
     {
@@ -332,4 +350,5 @@ public class GameManager : MonoBehaviour
     {
         return mostAdvancedAgeTeam;
     }
+    
 }

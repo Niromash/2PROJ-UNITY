@@ -11,6 +11,12 @@ public class SpawnSpell : MonoBehaviour
         Team team = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
         Spawn(team, team.GetCurrentAge().GetSpellType(), team.GetCurrentAge().GetSpellStats());
     }
+    
+    public void SpawnEnemyAge()
+    {
+        Team team = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Enemy));
+        Spawn(team, team.GetCurrentAge().GetSpellType(), team.GetCurrentAge().GetSpellStats());
+    }
 
     private void Spawn(Team team, Type spellType, SpellStats spellStats)
     {

@@ -188,4 +188,9 @@ public class Entity : Damageable, Damager
     {
         return stats.GetName();
     }
+    
+    public EntityTypes GetEntityType()
+    {
+        return stats.GetEntityType();
+    }
 }

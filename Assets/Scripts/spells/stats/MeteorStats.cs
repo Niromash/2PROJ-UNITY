@@ -3,7 +3,7 @@
     public MeteorStats()
     {
         damage = 60f;
-        spellCount = 20;
+        spellCount = 150;
         wavesCount = 2;
         cooldown = 6 * 1000f; // in millis
         deploymentCost = 100;

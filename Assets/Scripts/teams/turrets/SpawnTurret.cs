@@ -6,19 +6,19 @@ public class SpawnTurret : MonoBehaviour
 {
     public GameManager gameManager;
     private int currentTurretIndex = 0;
+    
 
-    public void ShowNextTurret()
+    public void ShowNextTurret(Team team)
     {
         if (!GameManager.GetGameState().Equals(GameState.Playing)) return;
 
-        var playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
-        if (playerTeam != null)
+        if (team != null)
         {
-            var turrets = playerTeam.GetTower().GetTurrets();
+            var turrets = team.GetTower().GetTurrets();
             if (currentTurretIndex < turrets.Count)
             {
                 Turret turret = turrets[currentTurretIndex];
-                if (turret.GetStats().deploymentCost > playerTeam.GetGold())
+                if (turret.GetStats().deploymentCost > team.GetGold())
                 {
                     Debug.Log("Not enough gold to deploy turret");
                     return;
@@ -32,13 +32,21 @@ public class SpawnTurret : MonoBehaviour
                     return;
                 }
 
-                playerTeam.RemoveGold(turret.GetStats().deploymentCost);
+                team.RemoveGold(turret.GetStats().deploymentCost);
                 turret.GetGameObject().SetActive(true);
-                turret.MakeActive(playerTeam.GetCurrentAge());
+                turret.MakeActive(team.GetCurrentAge());
                 currentTurretIndex++;
             }
         }
     }
+    
+    public void ShowPlayerNextTurret()
+    {
+        var playerTeam = gameManager.GetTeams().Find(team => team.GetSide().Equals(Side.Player));
+
+        ShowNextTurret(playerTeam);
+    }
+    
 
     public void UpgradeTurrets()
     {

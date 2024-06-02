@@ -1866,9 +1866,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e132b17247047fa99edf97f328b4a7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firstTurretSprite: {fileID: 21300000, guid: 4d59badc85694914aa9554d564ad6017, type: 3}
-  secondTurretSprite: {fileID: 21300000, guid: 5062ceff08913c745b887cb73b0ae48f, type: 3}
-  thirdTurretSprite: {fileID: 21300000, guid: 200959a5c39501045a3b8073668f8efe, type: 3}
+  firstTurretSprite: {fileID: 21300000, guid: 292e0f26d5e84f64eb391e6907e5b719, type: 3}
+  secondTurretSprite: {fileID: 21300000, guid: 04ce55e22ae95064882041f07a8fa1a0, type: 3}
+  thirdTurretSprite: {fileID: 21300000, guid: 65bb3a663ab76b540a6044d9fa30cef5, type: 3}
 --- !u!212 &237681110
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2014,9 +2014,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e132b17247047fa99edf97f328b4a7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firstTurretSprite: {fileID: 21300000, guid: 4d59badc85694914aa9554d564ad6017, type: 3}
-  secondTurretSprite: {fileID: 21300000, guid: 5062ceff08913c745b887cb73b0ae48f, type: 3}
-  thirdTurretSprite: {fileID: 21300000, guid: 200959a5c39501045a3b8073668f8efe, type: 3}
+  firstTurretSprite: {fileID: 21300000, guid: 292e0f26d5e84f64eb391e6907e5b719, type: 3}
+  secondTurretSprite: {fileID: 21300000, guid: 04ce55e22ae95064882041f07a8fa1a0, type: 3}
+  thirdTurretSprite: {fileID: 21300000, guid: 65bb3a663ab76b540a6044d9fa30cef5, type: 3}
 --- !u!212 &327936425
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3093,9 +3093,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e132b17247047fa99edf97f328b4a7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firstTurretSprite: {fileID: 21300000, guid: 4d59badc85694914aa9554d564ad6017, type: 3}
-  secondTurretSprite: {fileID: 21300000, guid: 5062ceff08913c745b887cb73b0ae48f, type: 3}
-  thirdTurretSprite: {fileID: 21300000, guid: 200959a5c39501045a3b8073668f8efe, type: 3}
+  firstTurretSprite: {fileID: 21300000, guid: 292e0f26d5e84f64eb391e6907e5b719, type: 3}
+  secondTurretSprite: {fileID: 21300000, guid: 04ce55e22ae95064882041f07a8fa1a0, type: 3}
+  thirdTurretSprite: {fileID: 21300000, guid: 65bb3a663ab76b540a6044d9fa30cef5, type: 3}
 --- !u!1 &543712736
 GameObject:
   m_ObjectHideFlags: 0
@@ -3816,9 +3816,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e132b17247047fa99edf97f328b4a7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firstTurretSprite: {fileID: 21300000, guid: 4d59badc85694914aa9554d564ad6017, type: 3}
-  secondTurretSprite: {fileID: 21300000, guid: 5062ceff08913c745b887cb73b0ae48f, type: 3}
-  thirdTurretSprite: {fileID: 21300000, guid: 200959a5c39501045a3b8073668f8efe, type: 3}
+  firstTurretSprite: {fileID: 21300000, guid: 292e0f26d5e84f64eb391e6907e5b719, type: 3}
+  secondTurretSprite: {fileID: 21300000, guid: 04ce55e22ae95064882041f07a8fa1a0, type: 3}
+  thirdTurretSprite: {fileID: 21300000, guid: 65bb3a663ab76b540a6044d9fa30cef5, type: 3}
 --- !u!212 &631432509
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5164,9 +5164,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e132b17247047fa99edf97f328b4a7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firstTurretSprite: {fileID: 21300000, guid: 4d59badc85694914aa9554d564ad6017, type: 3}
-  secondTurretSprite: {fileID: 21300000, guid: 5062ceff08913c745b887cb73b0ae48f, type: 3}
-  thirdTurretSprite: {fileID: 21300000, guid: 200959a5c39501045a3b8073668f8efe, type: 3}
+  firstTurretSprite: {fileID: 21300000, guid: 292e0f26d5e84f64eb391e6907e5b719, type: 3}
+  secondTurretSprite: {fileID: 21300000, guid: 04ce55e22ae95064882041f07a8fa1a0, type: 3}
+  thirdTurretSprite: {fileID: 21300000, guid: 65bb3a663ab76b540a6044d9fa30cef5, type: 3}
 --- !u!212 &879621070
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -9653,9 +9653,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e132b17247047fa99edf97f328b4a7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firstTurretSprite: {fileID: 21300000, guid: 4d59badc85694914aa9554d564ad6017, type: 3}
-  secondTurretSprite: {fileID: 21300000, guid: 5062ceff08913c745b887cb73b0ae48f, type: 3}
-  thirdTurretSprite: {fileID: 21300000, guid: 200959a5c39501045a3b8073668f8efe, type: 3}
+  firstTurretSprite: {fileID: 21300000, guid: 292e0f26d5e84f64eb391e6907e5b719, type: 3}
+  secondTurretSprite: {fileID: 21300000, guid: 04ce55e22ae95064882041f07a8fa1a0, type: 3}
+  thirdTurretSprite: {fileID: 21300000, guid: 65bb3a663ab76b540a6044d9fa30cef5, type: 3}
 --- !u!1 &1231528178
 GameObject:
   m_ObjectHideFlags: 0
@@ -10615,9 +10615,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e132b17247047fa99edf97f328b4a7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firstTurretSprite: {fileID: 21300000, guid: 4d59badc85694914aa9554d564ad6017, type: 3}
-  secondTurretSprite: {fileID: 21300000, guid: 5062ceff08913c745b887cb73b0ae48f, type: 3}
-  thirdTurretSprite: {fileID: 21300000, guid: 200959a5c39501045a3b8073668f8efe, type: 3}
+  firstTurretSprite: {fileID: 21300000, guid: 292e0f26d5e84f64eb391e6907e5b719, type: 3}
+  secondTurretSprite: {fileID: 21300000, guid: 04ce55e22ae95064882041f07a8fa1a0, type: 3}
+  thirdTurretSprite: {fileID: 21300000, guid: 65bb3a663ab76b540a6044d9fa30cef5, type: 3}
 --- !u!1 &1388806426
 GameObject:
   m_ObjectHideFlags: 0
@@ -12054,9 +12054,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e132b17247047fa99edf97f328b4a7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firstTurretSprite: {fileID: 21300000, guid: 4d59badc85694914aa9554d564ad6017, type: 3}
-  secondTurretSprite: {fileID: 21300000, guid: 5062ceff08913c745b887cb73b0ae48f, type: 3}
-  thirdTurretSprite: {fileID: 21300000, guid: 200959a5c39501045a3b8073668f8efe, type: 3}
+  firstTurretSprite: {fileID: 21300000, guid: 292e0f26d5e84f64eb391e6907e5b719, type: 3}
+  secondTurretSprite: {fileID: 21300000, guid: 04ce55e22ae95064882041f07a8fa1a0, type: 3}
+  thirdTurretSprite: {fileID: 21300000, guid: 65bb3a663ab76b540a6044d9fa30cef5, type: 3}
 --- !u!212 &1534973594
 SpriteRenderer:
   m_ObjectHideFlags: 0

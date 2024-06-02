@@ -32,6 +32,24 @@ public class SpawnTurret : MonoBehaviour
                     return;
                 }
 
+                SpriteRenderer spriteRenderer = turret.GetGameObject().gameObject.GetComponent<SpriteRenderer>();
+                if (spriteRenderer == null)
+                {
+                    Debug.LogError("SpriteRenderer not found");
+                    return;
+                }
+
+                string basePath = "Turrets/" + playerTeam.GetCurrentAge().GetName().ToLower() + "/";
+
+                spriteRenderer.sprite =
+                    Resources.Load<Sprite>(basePath + (turret.GetLevel() + 1));
+
+                // Update changesprite script
+                ChangeSprite changeSprite = turret.GetGameObject().gameObject.GetComponent<ChangeSprite>();
+                changeSprite.firstTurretSprite = Resources.Load<Sprite>(basePath + "1");
+                changeSprite.secondTurretSprite = Resources.Load<Sprite>(basePath + "2");
+                changeSprite.thirdTurretSprite = Resources.Load<Sprite>(basePath + "3");
+
                 playerTeam.RemoveGold(turret.GetStats().deploymentCost);
                 turret.GetGameObject().SetActive(true);
                 turret.MakeActive(playerTeam.GetCurrentAge());

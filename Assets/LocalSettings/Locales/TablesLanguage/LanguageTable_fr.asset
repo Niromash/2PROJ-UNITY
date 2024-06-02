@@ -46,6 +46,22 @@ MonoBehaviour:
     m_Localized: Continuer
     m_Metadata:
       m_Items: []
+  - m_Id: 1171248447877120
+    m_Localized: Retour au menu principal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1171720885891072
+    m_Localized: La partie est finie
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1171913177952256
+    m_Localized: 'Gagnant:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1172055952060416
+    m_Localized: "Tu\xE9 par:"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

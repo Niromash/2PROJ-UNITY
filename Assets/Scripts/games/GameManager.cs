@@ -1,7 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Components;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -286,9 +290,27 @@ public class GameManager : MonoBehaviour
 
     public void EndGame(Damager damager)
     {
+        GameObject gameObjectByName = CustomGameObjects.FindMaybeDisabledGameObjectByName("Menus", "EndGameScreen");
+        gameObjectByName.SetActive(true);
+
+        GameObject winnerGameObject = GameObject.Find("WinnerText");
+        TextMeshProUGUI winnerText = winnerGameObject.GetComponent<TextMeshProUGUI>();
+        winnerText.text = damager.GetTeam().GetSide().ToString();
+
+        GameObject killedByGameObject = GameObject.Find("KilledByText");
+        TextMeshProUGUI killedByText = killedByGameObject.GetComponent<TextMeshProUGUI>();
+        killedByText.text = damager.GetName();
+
         Debug.Log("Game Over! " + damager.GetTeam().GetSide() + " team won, killed by " + damager.GetName());
         gameState = GameState.Finished;
     }
+
+    [Serializable]
+    private class CharacterData
+    {
+        public string winner;
+    }
+
 
     public List<Team> GetTeams()
     {
@@ -314,6 +336,11 @@ public class GameManager : MonoBehaviour
     public static GameState GetGameState()
     {
         return gameState;
+    }
+
+    public static void SetGameState(GameState state)
+    {
+        gameState = state;
     }
 
     public EntityStrengthWeakness GetEntityStrengthWeakness()

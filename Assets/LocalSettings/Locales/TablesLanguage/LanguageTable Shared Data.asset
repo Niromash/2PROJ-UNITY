@@ -43,6 +43,22 @@ MonoBehaviour:
     m_Key: PauseMenuResume
     m_Metadata:
       m_Items: []
+  - m_Id: 1171248447877120
+    m_Key: EndGameMenuBackToMainMenu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1171720885891072
+    m_Key: EndGameMenuTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1171913177952256
+    m_Key: EndGameWinner
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1172055952060416
+    m_Key: EndGameKilledBy
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

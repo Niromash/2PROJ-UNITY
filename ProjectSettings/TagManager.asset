@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Template
+  - EventSystem
   layers:
   - Default
   - TransparentFX

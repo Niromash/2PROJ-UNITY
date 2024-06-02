@@ -46,6 +46,22 @@ MonoBehaviour:
     m_Localized: Resume
     m_Metadata:
       m_Items: []
+  - m_Id: 1171248447877120
+    m_Localized: Back to main menu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1171720885891072
+    m_Localized: Game is over
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1171913177952256
+    m_Localized: 'Winner:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1172055952060416
+    m_Localized: 'Killed by:'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

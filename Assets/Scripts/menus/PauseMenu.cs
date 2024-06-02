@@ -18,7 +18,8 @@ public class PauseMenu : MonoBehaviour
 
     void Update()
     {
-        if (SceneManager.GetActiveScene().name == "SampleScene" && Input.GetKeyDown(KeyCode.Escape))
+        if (SceneManager.GetActiveScene().name == "SampleScene" && Input.GetKeyDown(KeyCode.Escape) &&
+            GameManager.GetGameState().Equals(GameState.Playing))
         {
             if (isPaused)
             {
@@ -51,7 +52,8 @@ public class PauseMenu : MonoBehaviour
 
     public void QuitGame()
     {
-        Resources.UnloadUnusedAssets();
+        GameManager.SetGameState(GameState.NotStarted);
+        Time.timeScale = 1;
         SceneManager.LoadScene("MainMenu");
     }
 

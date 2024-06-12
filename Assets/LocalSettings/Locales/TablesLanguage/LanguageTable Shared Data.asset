@@ -59,6 +59,22 @@ MonoBehaviour:
     m_Key: EndGameKilledBy
     m_Metadata:
       m_Items: []
+  - m_Id: 4656795568959488
+    m_Key: IAChoiceText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4657714905870336
+    m_Key: OptionsMenuText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4658122579636224
+    m_Key: UpgradeTurretMenuText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4658292859990016
+    m_Key: UpgradeUnitsMenuText
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

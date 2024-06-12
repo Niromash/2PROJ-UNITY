@@ -47,12 +47,12 @@ public class ModernAge : Age
 
     public override int GetAgeEvolvingCost()
     {
-        return 400;
+        return 6000;
     }
 
     public override int GetAgeLevel()
     {
-        return 2;
+        return 3;
     }
 
     public override List<Vector3> GetTurretsPositions()

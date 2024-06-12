@@ -15,28 +15,29 @@ public class EntityToSpawn
         this.stats = stats;
         this.spawnPosition = spawnPosition;
         this.entityName = entityName;
+        this.spawnPosition.y += stats.GetEntityType().Equals(EntityTypes.Extra) ? 3.2f : 0;
     }
-    
+
     public GameObject GetPrefab()
     {
         return prefab;
     }
-    
+
     public Team GetTeam()
     {
         return team;
     }
-    
+
     public CharacterStats GetStats()
     {
         return stats;
     }
-    
+
     public Vector3 GetSpawnPosition()
     {
         return spawnPosition;
     }
-    
+
     public string GetEntityName()
     {
         return entityName;

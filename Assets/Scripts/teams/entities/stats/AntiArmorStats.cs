@@ -2,11 +2,11 @@
 {
     public AntiArmorStats()
     {
-        maxHealth = 250f;
+        maxHealth = 120f;
         health = maxHealth;
-        damagePerSecond = 60f;
+        damagePerSecond = 30f;
         blockPerSecondMovementSpeed = 0.3f;
-        range = 2f;
+        range = 3f;
         deploymentCost = 150;
         deploymentTime = 700f;
         deathExperience = 120;

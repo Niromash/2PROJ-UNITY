@@ -22,10 +22,10 @@ public class EnemyAI
         spawnTurret = new SpawnTurret();
         evolveAge = new EvolveAge();
         evolveAge.gameManager = gameManager;
-        this.enemyTeam = gameManager.GetTeams().Find(team => team.GetSide() == Side.Enemy);
+        enemyTeam = gameManager.GetTeams().Find(team => team.GetSide() == Side.Enemy);
         spawnEntity = new SpawnEntity();
         spawnEntity.gameManager = gameManager;
-        spawnEntity.enemySpawnPosition = new Vector2(35, 0);
+        spawnEntity.enemySpawnPosition = new Vector2(38, 0);
         spawnEntity.Start();
         spawnSpell = new SpawnSpell();
         spawnSpell.gameManager = gameManager;
@@ -149,7 +149,7 @@ public class EnemyAI
 
         enemyTeam.SetTeamGoldMultiplier(1.4f);
 
-        List<int> entities = new List<int> { 0, 1, 2, 3 };
+        List<int> entities = new List<int> { 0, 1, 2, 3, 4 };
         entities = entities.OrderBy(x => Random.value).ToList();
 
         var playerEntities = gameManager.GetTeams().Find(team => team.GetSide() == Side.Player).GetEntities();
@@ -215,7 +215,7 @@ public class EnemyAI
 
         TryEvolve();
     }
-    
+
     private IEnumerator Level4AI()
     {
         if (enemyTeam == null)
@@ -225,7 +225,7 @@ public class EnemyAI
 
         enemyTeam.SetTeamGoldMultiplier(1.6f);
 
-        List<int> entities = new List<int> { 0, 1, 2, 3 };
+        List<int> entities = new List<int> { 0, 1, 2, 3, 4 };
         entities = entities.OrderBy(x => Random.value).ToList();
 
         var playerEntities = gameManager.GetTeams().Find(team => team.GetSide() == Side.Player).GetEntities();
@@ -282,9 +282,11 @@ public class EnemyAI
         }
 
 
-        List<int> spellOrNot = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+        List<int> spellOrNot = new List<int>
+            { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
         spellOrNot = spellOrNot.OrderBy(x => Random.value).ToList();
-        if (spellOrNot[0] == 0)
+        if (spellOrNot[0] == 0 && (enemyTeam.GetEntities().Count > 5 ||
+                                   (enemyTeam.GetTower().GetHealth() < 1000 && enemyTeam.GetEntities().Count > 2)))
         {
             spawnSpell.SpawnEnemyAge();
         }

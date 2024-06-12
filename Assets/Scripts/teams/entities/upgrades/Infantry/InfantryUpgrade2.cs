@@ -12,6 +12,6 @@ public class InfantryUpgrade2 : InfantryUpgrade
             blockPerSecondMovementSpeed = 1f,
             deploymentTime = 1f,
         };
-        upgradeCost = 1300;
+        upgradeCost = 600;
     }
 }

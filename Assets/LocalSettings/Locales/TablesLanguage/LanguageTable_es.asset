@@ -62,6 +62,22 @@ MonoBehaviour:
     m_Localized: 'Asesinado por:'
     m_Metadata:
       m_Items: []
+  - m_Id: 4656795568959488
+    m_Localized: "IA SELECCI\xD3N DE DIFICULTAD"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4657714905870336
+    m_Localized: OPCION
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4658122579636224
+    m_Localized: Mejorar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4658292859990016
+    m_Localized: Mejorar
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

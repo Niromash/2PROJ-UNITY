@@ -6,7 +6,7 @@
         health = maxHealth;
         damagePerSecond = 240f;
         blockPerSecondMovementSpeed = 0.1f;
-        range = 1f;
+        range = 5f;
         deploymentCost = 800;
         deploymentTime = 500f;
         deathExperience = 100;

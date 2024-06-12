@@ -25,6 +25,11 @@ public class Entity : Damageable, Damager
         this.gameManager = gameManager;
         healthBarImage = gameObject.transform.GetChild(0).GetChild(0).GetComponent<Image>();
 
+        if (stats.GetEntityType().Equals(EntityTypes.Tank) && this.team.GetCurrentAge().GetAgeLevel() == 2)
+        {
+            this.stats.range = 5f;
+        }
+
         stats.ApplyMultiplier(team.GetCurrentAge()); // Update stats with age multiplier
 
         UnitUpgrade unitUpgrade = team.GetUpgradeUnits().GetUnitUpgrade(stats.GetEntityType());

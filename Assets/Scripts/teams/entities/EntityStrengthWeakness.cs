@@ -9,31 +9,35 @@ public class EntityStrengthWeakness
     {
         strengthWeaknessTable = new Dictionary<Tuple<EntityTypes, EntityTypes>, float>();
 
-        SetStrengthWeakness(EntityTypes.Tank, EntityTypes.Infantry, 1.5f);
-        SetStrengthWeakness(EntityTypes.Tank, EntityTypes.Support, 1f);
-        SetStrengthWeakness(EntityTypes.Tank, EntityTypes.AntiArmor, 0.5f);
-        SetStrengthWeakness(EntityTypes.Tank, EntityTypes.Extra, 1f);
+        SetStrengthWeakness(EntityTypes.Tank, EntityTypes.Tank, 1.0f);
+        SetStrengthWeakness(EntityTypes.Tank, EntityTypes.Infantry, 1.1f);
+        SetStrengthWeakness(EntityTypes.Tank, EntityTypes.Support, 1.1f);
+        SetStrengthWeakness(EntityTypes.Tank, EntityTypes.AntiArmor, 0.8f);
+        SetStrengthWeakness(EntityTypes.Tank, EntityTypes.Extra, 1.0f);
 
-        SetStrengthWeakness(EntityTypes.Infantry, EntityTypes.Tank, 1f);
-        SetStrengthWeakness(EntityTypes.Infantry, EntityTypes.Support, 1.5f);
-        SetStrengthWeakness(EntityTypes.Infantry, EntityTypes.AntiArmor, 0.5f);
-        SetStrengthWeakness(EntityTypes.Infantry, EntityTypes.Extra, 1f);
+        SetStrengthWeakness(EntityTypes.Infantry, EntityTypes.Tank, 0.8f);
+        SetStrengthWeakness(EntityTypes.Infantry, EntityTypes.Infantry, 1.0f);
+        SetStrengthWeakness(EntityTypes.Infantry, EntityTypes.Support, 1.1f);
+        SetStrengthWeakness(EntityTypes.Infantry, EntityTypes.AntiArmor, 0.8f);
+        SetStrengthWeakness(EntityTypes.Infantry, EntityTypes.Extra, 1.0f);
 
-        SetStrengthWeakness(EntityTypes.Support, EntityTypes.Tank, 1.5f);
-        SetStrengthWeakness(EntityTypes.Support, EntityTypes.Infantry, 1f);
-        SetStrengthWeakness(EntityTypes.Support, EntityTypes.AntiArmor, 0.5f);
-        SetStrengthWeakness(EntityTypes.Support, EntityTypes.Extra, 1f);
+        SetStrengthWeakness(EntityTypes.Support, EntityTypes.Tank, 0.8f);
+        SetStrengthWeakness(EntityTypes.Support, EntityTypes.Infantry, 1.1f);
+        SetStrengthWeakness(EntityTypes.Support, EntityTypes.Support, 1.0f);
+        SetStrengthWeakness(EntityTypes.Support, EntityTypes.AntiArmor, 1.1f);
+        SetStrengthWeakness(EntityTypes.Support, EntityTypes.Extra, 1.0f);
 
-        SetStrengthWeakness(EntityTypes.AntiArmor, EntityTypes.Tank, 1.5f);
-        SetStrengthWeakness(EntityTypes.AntiArmor, EntityTypes.Infantry, 1f);
-        SetStrengthWeakness(EntityTypes.AntiArmor, EntityTypes.Support, 0.5f);
-        SetStrengthWeakness(EntityTypes.AntiArmor, EntityTypes.Extra, 1f);
+        SetStrengthWeakness(EntityTypes.AntiArmor, EntityTypes.Tank, 1.2f);
+        SetStrengthWeakness(EntityTypes.AntiArmor, EntityTypes.Infantry, 0.8f);
+        SetStrengthWeakness(EntityTypes.AntiArmor, EntityTypes.Support, 0.8f);
+        SetStrengthWeakness(EntityTypes.AntiArmor, EntityTypes.AntiArmor, 1.0f);
+        SetStrengthWeakness(EntityTypes.AntiArmor, EntityTypes.Extra, 1.0f);
 
-        SetStrengthWeakness(EntityTypes.Extra, EntityTypes.Tank, 1f);
-        SetStrengthWeakness(EntityTypes.Extra, EntityTypes.Infantry, 1f);
-        SetStrengthWeakness(EntityTypes.Extra, EntityTypes.Support, 1f);
-        SetStrengthWeakness(EntityTypes.Extra, EntityTypes.AntiArmor, 1f);
-
+        SetStrengthWeakness(EntityTypes.Extra, EntityTypes.Tank, 1.0f);
+        SetStrengthWeakness(EntityTypes.Extra, EntityTypes.Infantry, 1.0f);
+        SetStrengthWeakness(EntityTypes.Extra, EntityTypes.Support, 1.0f);
+        SetStrengthWeakness(EntityTypes.Extra, EntityTypes.AntiArmor, 1.0f);
+        SetStrengthWeakness(EntityTypes.Extra, EntityTypes.Extra, 1.0f);
     }
 
     private void SetStrengthWeakness(EntityTypes sourceType, EntityTypes targetType, float factor)
@@ -53,7 +57,7 @@ public class EntityStrengthWeakness
             return 1f;
         }
     }
-    
+
     public EntityTypes GetStrongest(EntityTypes targetType)
     {
         EntityTypes strongest = EntityTypes.Tank;
@@ -67,6 +71,7 @@ public class EntityStrengthWeakness
                 strongest = sourceType;
             }
         }
+
         return strongest;
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
 
 public class EvolveAge : MonoBehaviour
@@ -11,6 +10,12 @@ public class EvolveAge : MonoBehaviour
     private Age currentAge;
     public Button extraEntityButton;
     public Button extraEntityUpgradeButton;
+
+    public static List<Age> allAges = new List<Age>
+    {
+        new MedievalAge(),
+        new ModernAge()
+    };
 
     public EvolveAge()
     {
@@ -44,6 +49,7 @@ public class EvolveAge : MonoBehaviour
         currentAge = ages.Dequeue();
 
         team.SetCurrentAge(currentAge);
+        enemyTeam.UpdateTurretPosition(); // Force the enemy team to update its turret position
         team.RemoveExperience(currentAge.GetAgeEvolvingCost());
 
         // Remove the last locked entity of the team and lock a random entity
@@ -51,6 +57,7 @@ public class EvolveAge : MonoBehaviour
         team.ToggleLockEntityUi(randomEntityIndexToLock);
 
         ChangeSpellSprite();
+        ChangeUpgradeEntitySprites();
         ChangeEntitySprites();
 
         if (team.GreaterAgeThan(enemyTeam))
@@ -58,7 +65,6 @@ public class EvolveAge : MonoBehaviour
             ChangeBackground();
 
             // Force all teams to update their turret position according to the most advanced age team
-            gameManager.SetMostAdvancedAgeTeam(team);
             foreach (Team t in gameManager.GetTeams())
             {
                 t.UpdateTurretPosition();
@@ -132,6 +138,31 @@ public class EvolveAge : MonoBehaviour
         }
     }
 
+    private void ChangeUpgradeEntitySprites()
+    {
+        GameObject entities = CustomGameObjects.FindMaybeDisabledGameObjectByName("Menus", "upgradeUnitsMenu");
+        foreach (Transform child in entities.transform)
+        {
+            Image spriteRenderer = child.gameObject.GetComponent<Image>();
+            if (spriteRenderer == null)
+            {
+                Debug.LogError("SpriteRenderer not found");
+                return;
+            }
+
+            Sprite sprite =
+                Resources.Load<Sprite>("EntitySprites/" + currentAge.GetName() + "/" + child.name.ToLower());
+            if (sprite == null)
+            {
+                Debug.LogError("Sprite not found for EntitySprites/" + currentAge.GetName() + "/" +
+                               child.name.ToLower());
+                return;
+            }
+
+            spriteRenderer.sprite = sprite;
+        }
+    }
+
     private void ChangeSpellSprite()
     {
         GameObject button = GameObject.Find("SpawnSpellButton");
@@ -171,6 +202,7 @@ public class EvolveAge : MonoBehaviour
         currentAge = enemyAges.Dequeue();
 
         enemyTeam.SetCurrentAge(currentAge);
+        team.UpdateTurretPosition(); // Force the player team to update its turret position
         enemyTeam.RemoveExperience(currentAge.GetAgeEvolvingCost());
 
         // Remove the last locked entity of the team and lock a random entity

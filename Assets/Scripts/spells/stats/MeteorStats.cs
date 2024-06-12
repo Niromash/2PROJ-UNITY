@@ -3,10 +3,10 @@
     public MeteorStats()
     {
         damage = 60f;
-        spellCount = 150;
+        spellCount = 30;
         wavesCount = 2;
         cooldown = 6 * 1000f; // in millis
-        deploymentCost = 100;
+        deploymentCost = 500;
     }
     
     public override string GetName()

@@ -6,7 +6,7 @@
         spellCount = 30;
         wavesCount = 4;
         cooldown = 3 * 1000f; // in millis
-        deploymentCost = 100;
+        deploymentCost = 600;
     }
 
     public override string GetName()

@@ -43,7 +43,7 @@ public class Team
         entitiesToSpawn = new Queue<EntityToSpawn>();
         gold = 200;
         experience = 0;
-        maxExperience = 500; // exemple d'expérience maximale pour remplir la barre
+        maxExperience = EvolveAge.allAges[0].GetAgeEvolvingCost();
         GameObject expBar = GameObject.Find(side.Equals(Side.Player) ? "TowerLeftExpBar" : "TowerRightExpBar");
         GameObject goldcount = GameObject.Find(side.Equals(Side.Player) ? "GoldLeft" : "GoldRight");
         GameObject expcount = GameObject.Find(side.Equals(Side.Player) ? "ExpLeftText" : "ExpRightText");
@@ -134,7 +134,7 @@ public class Team
             turrets[i].GetGameObject().transform.position = turretsPositions[i];
         }
     }
-    
+
 
     public bool AddEntity(GameObject prefab, CharacterStats stats, Vector3 spawnPosition, string entityName)
     {
@@ -204,7 +204,8 @@ public class Team
     {
         while (GameManager.GetGameState().Equals(GameState.Playing))
         {
-            AddGold(Convert.ToInt32(Math.Round(10 * currentAge.GetGoldMultiplier() * currentAge.GetAdditionalIncomeMultiplier() * teamGoldMultiplier)));
+            AddGold(Convert.ToInt32(Math.Round(10 * currentAge.GetGoldMultiplier() *
+                                               currentAge.GetAdditionalIncomeMultiplier() * teamGoldMultiplier)));
             yield return new WaitForSeconds(1);
         }
     }
@@ -235,6 +236,7 @@ public class Team
     public void SetCurrentAge(Age age)
     {
         currentAge = age;
+        maxExperience = age.GetAgeEvolvingCost();
         UpdateTurretPosition();
     }
 
@@ -253,7 +255,7 @@ public class Team
         if (lockedEntityIndex != null) lockedEntityIndex = null;
         else lockedEntityIndex = entityIndexToToggle;
     }
-    
+
     public void ToggleLockEntityUi(int? entityIndexToToggle)
     {
         GameObject spawnEntitiesButtons = GameObject.Find("SpawnEntities");
@@ -369,7 +371,7 @@ public class Team
     {
         return upgradeTurrets;
     }
-    
+
     public void SetTeamGoldMultiplier(float multiplier)
     {
         teamGoldMultiplier = multiplier;

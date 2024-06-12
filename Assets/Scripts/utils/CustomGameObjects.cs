@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class CustomGameObjects
 {
-    public static GameObject FindMaybeDisabledGameObjectByName(string parentName, string gameObjectName)
+    public static GameObject FindMaybeDisabledGameObjectByName(string notDisabledParentName, string gameObjectName)
     {
-        GameObject go = GameObject.Find(parentName);
+        GameObject go = GameObject.Find(notDisabledParentName);
         if (go == null)
         {
             return null;

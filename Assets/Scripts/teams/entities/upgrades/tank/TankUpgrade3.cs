@@ -12,6 +12,6 @@ public class TankUpgrade3 : TankUpgrade
             blockPerSecondMovementSpeed = 1f,
             deploymentTime = 1f,
         };
-        upgradeCost = 2000;
+        upgradeCost = 1000;
     }
 }

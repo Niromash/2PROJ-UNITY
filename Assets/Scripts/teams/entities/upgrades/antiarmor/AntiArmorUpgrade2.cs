@@ -12,6 +12,6 @@
             blockPerSecondMovementSpeed = 1f,
             deploymentTime = 1f,
         };
-        upgradeCost = 900;
+        upgradeCost = 500;
     }
 }

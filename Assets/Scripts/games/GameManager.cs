@@ -20,7 +20,6 @@ public class GameManager : MonoBehaviour
     private readonly EntityStrengthWeakness entityStrengthWeakness;
     private static float audioVolume;
     private static int iaLevel;
-    private Team mostAdvancedAgeTeam;
     private EnemyAI enemyAI;
 
     public GameManager()
@@ -113,11 +112,11 @@ public class GameManager : MonoBehaviour
     public IEnumerator CreateEntity()
     {
         enemyAI = new EnemyAI(this, iaLevel);
-        
-        
+
+
         StartCoroutine(enemyAI.ManageEnemies());
         yield return null;
-        
+
         // GameObject frankiTanki = GameObject.Find("Tank");
         // GameObject marcel = GameObject.Find("Infantry");
         //
@@ -357,25 +356,20 @@ public class GameManager : MonoBehaviour
     {
         return audioVolume;
     }
-    
+
     public static void SetIaLevel(int level)
     {
         iaLevel = level;
     }
-    
+
     public static int GetIaLevel()
     {
         return iaLevel;
     }
 
-    public void SetMostAdvancedAgeTeam(Team team)
-    {
-        mostAdvancedAgeTeam = team;
-    }
-
     public Team GetMostAdvancedAgeTeam()
     {
-        return mostAdvancedAgeTeam;
+        return teams.Find(team =>
+            team.GetCurrentAge().GetAgeLevel() == teams.Max(t => t.GetCurrentAge().GetAgeLevel()));
     }
-    
 }
